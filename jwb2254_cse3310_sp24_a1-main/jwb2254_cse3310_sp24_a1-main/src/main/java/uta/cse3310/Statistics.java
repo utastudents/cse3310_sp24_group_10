@@ -1,9 +1,15 @@
 package uta.cse3310;
 
-public class Statistics {
-    int xwins;
-    int owins;
-    int draws;
-    int gplayed;
-    int currentg;
+public class InitialLobby {
+    int totalGames;
+    int gameId;
+    Player player;
+    int playerSize;
+
+    public void updateDisplayName(){
+    }
+    public void createLobby(){
+    }
+    public void joinLobby(){
+    }
 }
