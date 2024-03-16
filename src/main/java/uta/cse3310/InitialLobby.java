@@ -4,7 +4,7 @@ public class InitialLobby {
     private int gameID;
     public static int totalGames; //increments and decrements
     public int playerSize; //dependent on button clicked
-    public Player player;
+    public PlayerType player;
    
     public int getGameID(){
         /* Getter for gameID; Necessary for Game Lobby*/
