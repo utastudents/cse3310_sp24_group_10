@@ -17,33 +17,54 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public char grid[][];
-public ArrayList<String> new words ArrayList<String>;
+
+public class OngoingGame extends WebSocketServer {
+
+    private char[][] grid = new char[50][50];
+    private ArrayList<String> words = new ArrayList<String>;
+  
+    public void initializeGrid(){
+
+    }
+
+    public void fillRandom(){
+
+    }
+
+    public void placeWords(){
+
+    }
+
+    public Boolean isWordFound(String word){
+
+    }
+
+    public void highlightWord(){
+    }
 
 
-public class OnGoingGame extends WebSocketServer {
-  public void initializeGrid(){
-  }
-  public void fillRandom(){
-  }
-  public void placeWords(){
-  }
-  public Boolean isWordFound(String word){
-  }
-  public void highlightWord(){
-  }
-  public void timer(){
-  }
-  public void update(){
-  }
-  public void surrender(){
-  }
-  public void backToLobby(){
-  }
+    public void timer(){
+
+    }
+
+    public void update(){
+
+    }
+
+    public void surrender(){
+
+    }
+
+    public void backToLobby(){
+
+    }
+
+    public static void main(String[] args){
+
+    }
 }
 
-public static void main(String[] args){
-}
