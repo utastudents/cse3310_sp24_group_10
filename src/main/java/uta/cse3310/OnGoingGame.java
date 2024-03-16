@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-public class OngoingGame extends WebSocketServer {
+public class OnGoingGame extends WebSocketServer {
 
     private char[][] grid = new char[50][50];
     private ArrayList<String> words = new ArrayList<String>;
