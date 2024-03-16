@@ -1,10 +1,14 @@
-package cse3310;
+package uta.cse3310;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chat{
-  List<String> new messages List<String>;
+  List<String> messages = new ArrayList<>();
 
   public void addMessage(String message){
   }
   public List<String> getMessages(){
+    return messages;
   }
 }
