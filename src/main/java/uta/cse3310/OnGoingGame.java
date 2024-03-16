@@ -16,7 +16,7 @@ import org.java_websocket.server.WebSocketServer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,8 +25,28 @@ import com.google.gson.GsonBuilder;
 public class OnGoingGame extends WebSocketServer {
 
     private char[][] grid = new char[50][50];
-    private ArrayList<String> words = new ArrayList<String>;
+    private ArrayList<String> words = new ArrayList<String>();
   
+    @Override
+    public void onOpen(WebSocket conn, ClientHandshake handshake) {
+    }
+
+    @Override
+    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+    }
+
+    @Override
+    public void onMessage(WebSocket conn, String message) {
+    }
+
+    @Override
+    public void onError(WebSocket conn, Exception ex) {
+    }
+
+    @Override
+    public void onStart() {
+    }
+
     public void initializeGrid(){
 
     }
@@ -40,7 +60,8 @@ public class OnGoingGame extends WebSocketServer {
     }
 
     public Boolean isWordFound(String word){
-
+        boolean wordFound = false;
+        return wordFound;
     }
 
     public void highlightWord(){
@@ -67,4 +88,5 @@ public class OnGoingGame extends WebSocketServer {
 
     }
 }
+
 
