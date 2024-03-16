@@ -11,5 +11,7 @@ public class Lobby {
     public void chatBox(){
     }
     public int leave(){
+        int leave = 0;
+        return leave;
     }
 }
