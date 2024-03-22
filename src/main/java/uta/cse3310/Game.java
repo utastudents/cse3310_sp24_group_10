@@ -1,5 +1,7 @@
 package uta.cse3310;
 
+import java.util.ArrayList;
+
 public class Game {
 
     private char[][] grid = new char[50][50];
