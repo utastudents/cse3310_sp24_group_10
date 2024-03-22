@@ -43,4 +43,8 @@ public class InitialLobby {
     public void leaveServer(){
         /* Allows player to leave the SERVER (different from leaving the in-game lobby) */
     }
+    
+    public static void main(String[] args){
+
+    }
 }
