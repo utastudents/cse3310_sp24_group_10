@@ -30,6 +30,14 @@ public class InitialLobby {
         /* Code for player to be associated with Game Lobby; joining lobby */
     }
     public boolean compareID(){
+        /* Compare gameID to check if there is availability (Max 5 concurrent games) */
        return true;
+    }
+    public void DisplayLeaderboard(){
+        /* Here would display the server leaderboard */
+    }
+    public void sortLeaderboard(){
+        /* Event-driven leaderboard sort */
+        /* Should be called after every game conclusion */
     }
 }
