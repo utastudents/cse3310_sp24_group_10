@@ -83,10 +83,6 @@ public class OnGoingGame extends WebSocketServer {
     public void backToLobby(){
 
     }
-
-    public static void main(String[] args){
-
-    }
 }
 
 
