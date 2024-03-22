@@ -1,10 +1,10 @@
 package uta.cse3310;
 
 public class InitialLobby {
-    private int gameID;
     public static int totalGames; //increments and decrements
-    public int playerSize; //dependent on button clicked
-    public PlayerType player;
+    private int gameID;
+    public Player player;
+    //public int playerSize; //dependent on button clicked
    
     public int getGameID(){
         /* Getter for gameID; Necessary for Game Lobby*/
@@ -33,7 +33,7 @@ public class InitialLobby {
         /* Compare gameID to check if there is availability (Max 5 concurrent games) */
        return true;
     }
-    public void DisplayLeaderboard(){
+    public void displayLeaderboard(){
         /* Here would display the server leaderboard */
     }
     public void sortLeaderboard(){
