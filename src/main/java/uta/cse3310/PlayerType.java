@@ -5,5 +5,6 @@ public class PlayerType {
     int wins;
     String name;
     String color;
+    boolean readyStatus;
 }
 
