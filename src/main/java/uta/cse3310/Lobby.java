@@ -14,4 +14,10 @@ public class Lobby {
         int leave = 0;
         return leave;
     }
+    public void toggleReady(){
+        /* Allow player to toggle their respective ready status */
+    }
+    public bool readyCheck(){
+        /* Return true if all players are ready */
+    }
 }
