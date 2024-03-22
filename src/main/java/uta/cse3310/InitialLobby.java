@@ -40,4 +40,7 @@ public class InitialLobby {
         /* Event-driven leaderboard sort */
         /* Should be called after every game conclusion */
     }
+    public void leaveServer(){
+        /* Allows player to leave the SERVER (different from leaving the in-game lobby) */
+    }
 }
