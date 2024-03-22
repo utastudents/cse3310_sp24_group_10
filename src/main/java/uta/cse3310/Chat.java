@@ -8,7 +8,7 @@ public class Chat{
 
   public void addMessage(String message){
   }
-  public List<String> getMessages(){
+  public List<String>getMessages(){
     return messages;
   }
 }
