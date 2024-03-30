@@ -1,23 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  <title>Word Search Battle Lobby</title>
+  <style>
+      table, tr, th, td{
+          background-color: white;
+          border: 2px solid black;
+          padding: 5px;
+          text-align: center;
+      }
+      td{
+          border: 1px solid black;
+      }
+      button{
+          padding: 5px 30px;
+          margin: 5px 5px;
+          width: 200px;
+          cursor: pointer;
+          transition-duration: 0.25s;
+      }
+      button:hover{
+          background-color: white;
+      }
+  </style>
 </head>
+<body>
 
-</body>
+<!-- Game title  -->
+<h1 style="text-align:center">
+  The Word Search Game
+</h1>
+
+<!-- Nickname window -->
+<h2 id="displayName">Display name:</h2>
+<h3 style="text-align:left">
+  Please enter a nickname:
+</h3>
+<form id="nicknameForm" onsubmit="submitNickname(event)">
+    <label for="nickname">Nickname:</label><br>
+    <input type="text" id="nicknameInput" name="nickname"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+
 
 <script>
 
-    Chat messages;
-    
-    function displayRules(){
-    }
-    
-    function highlight(){
-    }
+var idx = -1;
+class UserEvent {
+  Button = -1;
+  PlayerIdx = 0;
+  PlayerName = '';
+}
 
-    function enterMessage(messages:List<String>){
-    }
-    
-    function buttonclick() {
-    }
+var connection = null;
+
+var serverUrl;
+serverUrl = "ws://" + window.location.hostname + ":9880";
+// Create the connection with the server
+connection = new WebSocket(serverUrl);
+
+connection.onopen = function (evt) {
+  console.log("open");
+}
+
+connection.onclose = function (evt) {
+  console.log("close");
+}
+
+connection.onmessage = function (evt) {
+  var msg;
+  msg = evt.data;
+
+  console.log("Message received: " + msg);
+  const obj = JSON.parse(msg);
+
+  // Handling different types of messages received from the server
+  if ('NumOfPlayers' in obj) { // Message containing player information
+    idx = obj.NumOfPlayers - 1; // Assuming idx starts from 0
+    gameid = obj.GameId;
+  }
+}
+
+
+connection.onopen = function (evt) {
+  console.log("open");
+  // When the connection opens, you can prompt the user to enter their name
+  document.getElementById("nicknameForm").style.display = "block";
+}
+
+connection.onclose = function (evt) {
+  console.log("close");
+}
+
+function submitNickname(event) {
+ event.preventDefault(); // Prevent form submission
+
+  const nickname = document.getElementById("nicknameInput").value;
+  if (!nickname) {
+    alert("Please enter a nickname.");
+    return;
+  }
+
+  const userEvent = {
+    PlayerIdx: idx,
+    Button: -1,
+    PlayerName: nickname
+  };
+
+  connection.send(JSON.stringify(userEvent));
+
+  document.getElementById("nicknameInput").value = "";
+
+  // Display the user's nickname in the "Display name" section
+  document.getElementById("displayName").textContent = "Display name: " + nickname;
+}
+
+function enterGame(gameId) {
+  // Check if the player has entered their name
+  if (document.getElementById("playerName").classList.contains("hidden")) {
+    alert("Please enter your name before joining a game.");
+    return;
+  }
+
+  // Hide the lobby
+  document.getElementById("lobby").style.display = "none";
+  // Show the game screen
+  document.getElementById("gameScreen" + gameId).style.display = "block";
+}
+
+function exitGame(gameId) {
+  // Hide the selected game screen
+  document.getElementById("gameScreen" + gameId).style.display = "none";
+  // Show the lobby
+  document.getElementById("lobby").style.display = "block";
+}
 </script>
+
 </body>
+</html>
