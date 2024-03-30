@@ -23,6 +23,8 @@ import com.google.gson.GsonBuilder;
 
 public class App extends WebSocketServer {
 
+  // Vector<InitialLobby> ActiveIL = new Vector<InitialLobby>();
+
   InitialLobby L = null;
 
   int numOfPlayers = 1;
@@ -47,8 +49,8 @@ public class App extends WebSocketServer {
 
     ServerEvent E = new ServerEvent();
 
-    // search for a game needing a player
-    if (L != null && L.Players == uta.cse3310.PlayerType.PLAYERL && numOfPlayers < 4) {
+    // search for a Initial Lobby needing a player
+    if (L != null && L.Players == uta.cse3310.PlayerType.PLAYERL && numOfPlayers <= 20) {
       L.NumOfPlayers = numOfPlayers;
       L.Players = uta.cse3310.PlayerType.PLAYERL;
       numOfPlayers++;
@@ -59,6 +61,8 @@ public class App extends WebSocketServer {
       L.Players = uta.cse3310.PlayerType.PLAYERL;
       L.NumOfPlayers = numOfPlayers;
       numOfPlayers++;
+      L.InitNames();
+      L.StartInitialLobby();
       System.out.println("Creating a new InitialLobby");
     }
     else {
@@ -69,7 +73,7 @@ public class App extends WebSocketServer {
     E.NumOfPlayers = L.NumOfPlayers;
 
     // allows the websocket to give us the Game when a message arrives
-    conn.setAttachment(L); // was G
+    conn.setAttachment(L);
 
     Gson gson = new Gson();
     // Note only send to the single connection
@@ -78,7 +82,7 @@ public class App extends WebSocketServer {
 
     // The state of the game has changed, so lets send it to everyone
     String jsonString;
-    jsonString = gson.toJson(L); // was G
+    jsonString = gson.toJson(L);
 
     System.out.println(jsonString);
     broadcast(jsonString);
@@ -103,22 +107,18 @@ public class App extends WebSocketServer {
   public void onMessage(WebSocket conn, String message) {
     System.out.println(conn + ": " + message);
 
-    // Bring in the data from the webpage
-    // A UserEvent is all that is allowed at this point
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
-    UserEvent U = gson.fromJson(message, UserEvent.class);
-    System.out.println(U.Button);
+    
+    // Debugging: Print received JSON message
+    System.out.println("Received JSON message: " + message);
 
-    // Get our InitialLobby Object
+    UserEvent U = gson.fromJson(message, UserEvent.class);
+
     InitialLobby L = conn.getAttachment();
     L.Update(U);
 
-    // send out the game state every time
-    // to everyone
-    String jsonString;
-    jsonString = gson.toJson(L);
-
+    String jsonString = gson.toJson(L);
     System.out.println(jsonString);
     broadcast(jsonString);
   }
