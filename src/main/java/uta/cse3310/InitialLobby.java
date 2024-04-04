@@ -4,6 +4,7 @@ import java.util.List;
 
 public class InitialLobby {
 
+    public int PlayerId;
     public PlayerType Players;
     public int NumOfPlayers = 1;
     // public PlayerType[] Button;
@@ -25,8 +26,8 @@ public class InitialLobby {
     }
 
     public void Update(UserEvent U) {
-        if (U.PlayerIdx != null && U.PlayerIdx.ordinal() < PlayerNames.size()) {
-            PlayerNames.set(U.PlayerIdx.ordinal(), U.PlayerName); // Update player name in the list
+        if (U.PlayerId >= 0 && U.PlayerId < PlayerNames.size()) {
+            PlayerNames.set(U.PlayerId, U.PlayerName); // Update player name using PlayerId
         }
     }
 }
