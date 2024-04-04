@@ -43,14 +43,15 @@
     <input type="submit" value="Submit">
 </form>
 
+<label id="bottomMessage"></label>
+
 
 
 <script>
 
 var idx = -1;
 class UserEvent {
-  Button = -1;
-  PlayerIdx = 0;
+  PlayerId = 1;
   PlayerName = '';
 }
 
@@ -104,8 +105,7 @@ function submitNickname(event) {
   }
 
   const userEvent = {
-    PlayerIdx: idx,
-    Button: -1,
+    PlayerId: idx,
     PlayerName: nickname
   };
 
