@@ -50,16 +50,16 @@ public class App extends WebSocketServer {
     ServerEvent E = new ServerEvent();
 
     // search for a Initial Lobby needing a player
-    if (L != null && L.Players == uta.cse3310.PlayerType.PLAYERL && numOfPlayers <= 20) {
+    if (L != null &&  numOfPlayers <= 20) {
       L.NumOfPlayers = numOfPlayers;
-      L.Players = uta.cse3310.PlayerType.PLAYERL;
+      L.PlayerId = numOfPlayers;
       numOfPlayers++;
       System.out.println("Found a match");
     } else if(L == null) {
       // No matches or lobby is full, create a new lobby
       L = new InitialLobby();
-      L.Players = uta.cse3310.PlayerType.PLAYERL;
       L.NumOfPlayers = numOfPlayers;
+      L.PlayerId = numOfPlayers;
       numOfPlayers++;
       L.InitNames();
       L.StartInitialLobby();
@@ -71,6 +71,7 @@ public class App extends WebSocketServer {
     }
 
     E.NumOfPlayers = L.NumOfPlayers;
+    E.PlayerId = L.PlayerId;
 
     // allows the websocket to give us the Game when a message arrives
     conn.setAttachment(L);
@@ -93,7 +94,7 @@ public class App extends WebSocketServer {
     System.out.println(conn + " has closed");
     // Retrieve the game tied to the websocket connection
     InitialLobby L = conn.getAttachment();
-    L = null;
+    //L = null;
     if(extraPlayers > 0)
     {
       extraPlayers--;
