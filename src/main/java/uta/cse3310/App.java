@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.List;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
@@ -52,14 +53,12 @@ public class App extends WebSocketServer {
     // search for a Initial Lobby needing a player
     if (L != null &&  numOfPlayers <= 20) {
       L.NumOfPlayers = numOfPlayers;
-      L.PlayerId = numOfPlayers;
       numOfPlayers++;
       System.out.println("Found a match");
     } else if(L == null) {
       // No matches or lobby is full, create a new lobby
       L = new InitialLobby();
       L.NumOfPlayers = numOfPlayers;
-      L.PlayerId = numOfPlayers;
       numOfPlayers++;
       L.InitNames();
       L.StartInitialLobby();
@@ -70,8 +69,12 @@ public class App extends WebSocketServer {
       System.out.println("Initial lobby full");
     }
 
+    int idx = L.PlayerToIdx();
+
     E.NumOfPlayers = L.NumOfPlayers;
-    E.PlayerId = L.PlayerId;
+    E.PlayerIdx = idx;
+
+    L.associateWebSocketWithPlayer(conn, idx);
 
     // allows the websocket to give us the Game when a message arrives
     conn.setAttachment(L);
@@ -92,9 +95,20 @@ public class App extends WebSocketServer {
   @Override
   public void onClose(WebSocket conn, int code, String reason, boolean remote) {
     System.out.println(conn + " has closed");
-    // Retrieve the game tied to the websocket connection
+
+    // Retrieve the game tied to the WebSocket connection
     InitialLobby L = conn.getAttachment();
-    //L = null;
+
+    // Retrieve the player index associated with the WebSocket connection
+    int playerIdx = L.getPlayerIndexForWebSocket(conn);
+
+    if (playerIdx != -1) {
+        // Set the player's name to an empty string
+        L.updatePlayerName(playerIdx, "");
+        System.out.println("Player disconnected: " + playerIdx);
+    } else {
+        System.out.println("Player index not found.");
+    }
     if(extraPlayers > 0)
     {
       extraPlayers--;
