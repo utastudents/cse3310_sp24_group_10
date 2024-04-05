@@ -51,7 +51,7 @@
 
 var idx = -1;
 class UserEvent {
-  PlayerId = 1;
+  PlayerIdx;
   PlayerName = '';
 }
 
@@ -78,9 +78,8 @@ connection.onmessage = function (evt) {
   const obj = JSON.parse(msg);
 
   // Handling different types of messages received from the server
-  if ('NumOfPlayers' in obj) { // Message containing player information
-    idx = obj.NumOfPlayers - 1; // Assuming idx starts from 0
-    gameid = obj.GameId;
+  if ('PlayerIdx' in obj) { // Message containing player information
+    idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
 }
 
@@ -105,7 +104,7 @@ function submitNickname(event) {
   }
 
   const userEvent = {
-    PlayerId: idx,
+    PlayerIdx: idx,
     PlayerName: nickname
   };
 
