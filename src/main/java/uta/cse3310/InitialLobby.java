@@ -1,17 +1,30 @@
 package uta.cse3310;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Map;
+import org.java_websocket.WebSocket;
 
 public class InitialLobby {
 
-    public int PlayerId;
     public PlayerType Players;
     public int NumOfPlayers = 1;
-    // public PlayerType[] Button;
     public List<String> PlayerNames;
+    private Map<WebSocket, Integer> connectionToPlayerIndexMap;
 
     InitialLobby() {
-       
+        connectionToPlayerIndexMap = new HashMap<>();
+    }
+
+    // Method to associate WebSocket connection with player index
+    public void associateWebSocketWithPlayer(WebSocket conn, int playerIndex) {
+        connectionToPlayerIndexMap.put(conn, playerIndex);
+    }
+
+    // Method to retrieve player index associated with WebSocket connection
+    public int getPlayerIndexForWebSocket(WebSocket conn) {
+        return connectionToPlayerIndexMap.getOrDefault(conn, -1);
     }
 
     public void InitNames(){
@@ -25,9 +38,43 @@ public class InitialLobby {
         // Any initialization logic you want to perform when starting the lobby
     }
 
-    public void Update(UserEvent U) {
-        if (U.PlayerId >= 0 && U.PlayerId < PlayerNames.size()) {
-            PlayerNames.set(U.PlayerId, U.PlayerName); // Update player name using PlayerId
+    public int PlayerToIdx() {
+        int idx = -1;
+        for (int i = 0; i < PlayerNames.size(); i++) {
+            // Check if the current player's name is empty
+            if (PlayerNames.get(i).isEmpty()) {
+                // Update name so its not found in loop again.
+                PlayerNames.set(i, "WaitingForName");
+                idx = i;
+                break;
+            }
         }
+        return idx;
+    }
+
+    public int getPlayerIdx(WebSocket conn) {
+        // Retrieve the string representation of the WebSocket connection
+        String connString = conn.toString();
+        System.out.println("WebSocket connection string: " + connString);
+
+        // Iterate through the list of player names and find the index associated with the connection
+        for (int i = 0; i < PlayerNames.size(); i++) {
+            System.out.println("Player name at index " + i + ": " + PlayerNames.get(i));
+            if (PlayerNames.get(i).equals(connString)) {
+                return i;
+            }
+        }
+        return -1; // If the player index is not found
+    }
+
+    
+
+    public void updatePlayerName(int playerIdx, String newName) {
+        // Update the player's name at the specified index
+        PlayerNames.set(playerIdx, newName);
+    }
+
+    public void Update(UserEvent U) {
+        PlayerNames.set(U.PlayerIdx, U.PlayerName);
     }
 }
