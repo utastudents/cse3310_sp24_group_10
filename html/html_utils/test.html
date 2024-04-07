@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Test </title>
+    </head>
+    <style>
+        .ready{
+            background-color: greenyellow;
+            border: none;
+            margin: 10px;
+            padding: 10px;
+        }
+        .notReady{
+            background-color: lightcoral;
+            border: none;
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+    <body>
+        <h1> How button toggle works </h1>
+        <hr>
+        <!-- Labels for buttons -->
+        <input class="notReady"; type="button"; value="Not Ready"; id="top">
+        <label for="top">Toggle 1</label><br>
+        <input class="notReady"; type="button"; value="Not Ready"; id="mid">
+        <label id="mid">Toggle 2</label><br>
+        <input class="notReady"; type="button"; value="Not Ready"; id="bot">
+        <label id="bot">Toggle 3</label><br>
+        <!-- Labels for a section -->
+
+        <p id="msg"></p>
+
+        <script>
+            const arr = {color: "red", type: "dog", size: "large"};
+            const myJSON = JSON.stringify(arr);
+            /* Store the message */
+            localStorage.setItem("msgStore", myJSON);
+
+            /* Load the message */
+            let inbox = localStorage.getItem("msgStore");
+            let putMsg = JSON.parse(inbox);
+
+            document.getElementById("msg").innerHTML = putMsg.color;
+
+        </script>
+
+    </body>
+</html>
