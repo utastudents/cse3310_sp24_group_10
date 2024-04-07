@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <Title>The Word Search Game Lobby</Title>
+        <style>
+            table{
+                background-color: rgb(162, 185, 249);
+                border: hidden;
+                width: 100%;
+                margin: 2px;
+            }
+            tr, td{
+                text-align: center;
+            }
+            .ready{
+                background-color: lightgreen;
+                padding: 50px;
+                margin: 2px;
+                cursor: pointer;
+                border: hidden;
+                width: 200px;
+            }
+            .ready:hover{
+                outline-style: solid;
+                transition-duration: 100ms;
+            }
+            .notReady{
+                background-color: lightcoral;
+                padding: 50px;
+                margin: 2px;
+                cursor: pointer;
+                border: hidden;
+                width: 200px;
+            }
+            .notReady:hover{
+                outline-style: solid;
+                transition-duration: 100ms;
+            }
+            .chat{
+                background-color: white;
+                cursor: scroll;
+                text-align: left;
+                margin: 2px;
+            }
+            .textBox{
+                background-color: white;
+                color: grey;
+                cursor: text;
+                text-align: left;
+                margin: 2px;
+            }
+            .leave{
+                float: right;
+                padding: 5px;
+                width: 250px;
+            }
+            button:hover{
+                background-color: white;
+            }
+
+        </style>
+        
+    </head>
+    <body>
+        <!-- This is the game title -->
+        <h1 style="text-align:center;">
+            The Word Search Game
+        </h1">
+        <hr>
+        <div>
+            <button class="leave">Leave lobby </button>
+        </div>
+        
+
+        <h2 style="text-align: left;"> Waiting for all players to ready. . .</h2>
+
+        <!-- First row, where the player info and ready button is  -->
+        <table>
+            <!-- Player information -->
+            <th>Bob (YOU)</th>
+            <th>John</th>
+            <th>Toby</th>
+            <th>Waiting for a Player. . .</th>
+            <tr>
+                <td>Wins: 10</td>
+                <td>Wins: 8</td>
+                <td>Wins: 4</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <!-- Ready button (toggle) -->
+                <td style="background-color: white;">
+                    <input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">
+                </td>
+                <td style="background-color: white;">
+                    <input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">
+                </td>
+                <td style="background-color: white;">
+                    <input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">
+                </td>
+                <td style="background-color: white;">
+                    <input class="notReady"; type="button"; value="Not Ready"; id="fourth"; onclick="toggleButton(this)">
+                </td>
+            </tr>
+        </table>
+
+        <br><br><br>
+        
+        <!-- This is the chat box -->
+        <table style="width: 100%">
+            <tr>
+                <td style="text-align:center;">
+                    Chat
+                </td>
+            </tr>
+            <tr>
+                <td class="chat">
+                    [Bob]: Hello! <br>
+                    [Toby]: Greetings! <br>
+                    [Bob]: I am ready to play! <br>
+                    [Toby]: Not me!
+                </td>
+            </tr><tr>
+                <td class="textBox">
+                    Type here...
+                </td>
+            </tr>
+            
+        </table>
+
+        <h2> DEBUG (remove if necessary)</h2>
+        <p>status for player 1:</p> <p id="status1"></p>
+        <p>status for player 2:</p> <p id="status2"></p>
+        <p>status for player 3:</p> <p id="status3"></p>
+        <p>status for player 4:</p> <p id="status4"></p>
+
+        <script>
+            /* Start of section for toggle buttons */
+            updateStatus(); //unconditional call; always update status of player
+            checkGameStart(); //unconditional call; check if all players are ready
+
+            function toggleButton(id){
+                var buttonClass = id.className;
+                if(buttonClass == "notReady"){ 
+                    id.className = "ready";
+                    id.value = "Ready";
+                }
+                else{
+                    id.className = "notReady"; 
+                    id.value = "Not Ready";
+                }
+                updateStatus(); //not necessary for toggle button
+                checkGameStart();
+            }
+
+
+            function updateStatus(){ //this function will update the status of variables declared above (not necessary for toggle button)
+                document.getElementById("status1").innerHTML = readStatus(first);
+                document.getElementById("status2").innerHTML = readStatus(second);
+                document.getElementById("status3").innerHTML = readStatus(third);
+                document.getElementById("status4").innerHTML = readStatus(fourth);
+            }
+            
+            function readStatus(id){ //Display status of variables declared above (not necessary for toggle button)
+                if(id.className == "notReady"){
+                    return "User is NOT READY";
+                }
+                else{
+                    return "User is READY";
+                }
+
+            }
+
+            function checkGameStart(){ //Check if all players are ready; checks every time a ready button is toggled. 
+                if((first.className == "ready") && (second.className == "ready") && (third.className == "ready") && (fourth.className == "ready")){
+                    alert("All players are ready"); //once all players are ready, an alert will play
+                }
+            }
+
+        </script>
+       
+    </body>
+</html>

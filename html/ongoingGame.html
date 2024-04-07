@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Word Search Game</title>
+    </head>
+    <style>
+        .unselected{
+            background-color: white;
+            width: 50px;
+            height: 50px;
+        }
+        .wordBank{
+            width: 100%;
+        }
+        .playerTable{
+            width: 100%;
+            margin: 2px;
+            text-align: center;
+            table-layout: fixed;
+        }
+        td{
+            background-color: white;
+            padding-left: 5px;
+            padding-bottom: 5px;
+            text-align: left;
+        }
+        th{
+            background-color: rgb(249, 240, 162);
+            border: 2px solid darkblue;
+            text-align: center;
+        }
+    </style>
+    <body>
+        <div align="center"> <!-- Divider for game title -->
+            <h1>The Word Search Game</h1>
+            <hr>
+        </div>
+
+        <div> <!-- Divider for player info -->
+            <table class="playerTable">
+                <!-- Player information -->
+                <th style="background-color: lightcoral;">Player 1</th>
+                <th style="background-color: lightskyblue;">Player 2</th>
+                <th style="background-color: lightgreen;">PLayer 3</th>
+                <th style="background-color: plum;">Player 4</th>
+                <tr>
+                    <td>SCORE: </td>
+                    <td>SCORE: </td>
+                    <td>SCORE: </td>
+                    <td>SCORE: </td>
+                </tr>
+                <tr>
+                    <td>Words Found: </td>
+                    <td>Words Found: </td>
+                    <td>Words Found: </td>
+                    <td>Words Found: </td>
+                </tr>
+            </table>
+        </div>
+
+        <hr>
+
+        <div align="center"> <!-- Divider for Word Search Box -->
+            <table>
+                <tr>
+                    <td><input id="a1"; type="button"; class="unselected"></td>
+                    <td><input id="a2"; type="button"; class="unselected"></td>
+                    <td><input id="a3"; type="button"; class="unselected"></td>
+                    
+                </tr>
+                    
+                <tr>
+                    <td><input id="b1"; type="button"; class="unselected"></td>
+                    <td><input id="b2"; type="button"; class="unselected"></td>
+                    <td><input id="b3"; type="button"; class="unselected"></td>
+                </tr>
+                    
+                <tr>
+                    <td><input id="c1"; type="button"; class="unselected"></td>
+                    <td><input id="c2"; type="button"; class="unselected"></td>
+                    <td><input id="c3"; type="button"; class="unselected"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div align="center"> <!-- Divider for surrender button -->
+            <table >
+                <input id="surrender"; type="button"; value="SURRENDER";>
+            </table>
+        </div>
+
+        <hr>
+
+        <div align="center"> <!-- Divider for Word Bank -->
+            <table class="wordBank">
+                <tr><th>Word Bank</th></tr>
+                <tr><td style="border: 1px solid black"><p id="wordList"></p></td></tr>
+                
+                    
+            </table>
+        </div>
+
+        <hr>
+
+        <div> <!-- For chat -->
+            <table style="width: 100%">
+                <tr><th>Chat</th></tr>
+                <tr>
+                    <td style="border: 1px solid black">
+                        [Bob]: Hello! <br>
+                        [Toby]: Greetings! <br>
+                        [Bob]: I am ready to play! <br>
+                        [Toby]: Not me!
+                    </td>
+                </tr><tr>
+                    <td style="border: 1px solid black">
+                        Type here...
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+
+        
+
+        
+
+        <script>
+            getWords();
+
+            function getWords(){
+                const arr = ["apple","cherry","grapes"];
+                document.getElementById("wordList").innerHTML = arr;
+            }
+
+        </script>
+    </body>
+</html>
