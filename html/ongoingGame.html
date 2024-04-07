@@ -18,6 +18,16 @@
             text-align: center;
             table-layout: fixed;
         }
+        .surrenderButton{
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            width: 200px;
+        }
+        .surrenderButton:hover{
+            outline: red solid;
+            transition-duration: 100ms;
+        }
         td{
             background-color: white;
             padding-left: 5px;
@@ -41,7 +51,7 @@
                 <!-- Player information -->
                 <th style="background-color: lightcoral;">Player 1</th>
                 <th style="background-color: lightskyblue;">Player 2</th>
-                <th style="background-color: lightgreen;">PLayer 3</th>
+                <th style="background-color: lightgreen;">Player 3</th>
                 <th style="background-color: plum;">Player 4</th>
                 <tr>
                     <td>SCORE: </td>
@@ -85,7 +95,7 @@
 
         <div align="center"> <!-- Divider for surrender button -->
             <table >
-                <input id="surrender"; type="button"; value="SURRENDER";>
+                <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
             </table>
         </div>
 
