@@ -26,7 +26,7 @@ public class App extends WebSocketServer {
 
   // Vector<InitialLobby> ActiveIL = new Vector<InitialLobby>();
 
-  InitialLobby L = null;
+  InitialLobby IL = null;
 
   int numOfPlayers = 1;
   int extraPlayers = 0;
@@ -51,17 +51,17 @@ public class App extends WebSocketServer {
     ServerEvent E = new ServerEvent();
 
     // search for a Initial Lobby needing a player
-    if (L != null &&  numOfPlayers <= 20) {
-      L.NumOfPlayers = numOfPlayers;
+    if (IL != null &&  numOfPlayers <= 20) {
+      IL.NumOfPlayers = numOfPlayers;
       numOfPlayers++;
       System.out.println("Found a match");
-    } else if(L == null) {
+    } else if(IL == null) {
       // No matches or lobby is full, create a new lobby
-      L = new InitialLobby();
-      L.NumOfPlayers = numOfPlayers;
+      IL = new InitialLobby();
+      IL.NumOfPlayers = numOfPlayers;
       numOfPlayers++;
-      L.InitNames();
-      L.StartInitialLobby();
+      IL.InitNames();
+      IL.StartInitialLobby();
       System.out.println("Creating a new InitialLobby");
     }
     else {
@@ -69,15 +69,15 @@ public class App extends WebSocketServer {
       System.out.println("Initial lobby full");
     }
 
-    int idx = L.PlayerToIdx();
+    int idx = IL.PlayerToIdx();
 
-    E.NumOfPlayers = L.NumOfPlayers;
+    E.NumOfPlayers = IL.NumOfPlayers;
     E.PlayerIdx = idx;
 
-    L.associateWebSocketWithPlayer(conn, idx);
+    IL.associateWebSocketWithPlayer(conn, idx);
 
     // allows the websocket to give us the Game when a message arrives
-    conn.setAttachment(L);
+    conn.setAttachment(IL);
 
     Gson gson = new Gson();
     // Note only send to the single connection
@@ -86,7 +86,7 @@ public class App extends WebSocketServer {
 
     // The state of the game has changed, so lets send it to everyone
     String jsonString;
-    jsonString = gson.toJson(L);
+    jsonString = gson.toJson(IL);
 
     System.out.println(jsonString);
     broadcast(jsonString);
@@ -109,6 +109,8 @@ public class App extends WebSocketServer {
     } else {
         System.out.println("Player index not found.");
     }
+
+    //Decrease amount of players
     if(extraPlayers > 0)
     {
       extraPlayers--;
@@ -130,10 +132,11 @@ public class App extends WebSocketServer {
 
     UserEvent U = gson.fromJson(message, UserEvent.class);
 
-    InitialLobby L = conn.getAttachment();
-    L.Update(U);
+    InitialLobby IL = conn.getAttachment();
+    IL.Update(U);
 
-    String jsonString = gson.toJson(L);
+    //State of the game has changed so send it to everyone
+    String jsonString = gson.toJson(IL);
     System.out.println(jsonString);
     broadcast(jsonString);
   }
@@ -141,9 +144,9 @@ public class App extends WebSocketServer {
   @Override
   public void onMessage(WebSocket conn, ByteBuffer message) {
     System.out.println(conn + ": " + message);
-      }
+  }
 
-    @Override
+  @Override
   public void onError(WebSocket conn, Exception ex) {
     ex.printStackTrace();
     if (conn != null) {
