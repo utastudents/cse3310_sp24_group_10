@@ -3,18 +3,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Map;
 import org.java_websocket.WebSocket;
 
 public class InitialLobby {
 
     public PlayerType Players;
     public int NumOfPlayers = 1;
+    public int NumOfPlayersInLobby;
     public List<String> PlayerNames;
-    private Map<WebSocket, Integer> connectionToPlayerIndexMap;
+    public Map<WebSocket, Integer> connectionToPlayerIndexMap;
+
+    Lobby Lobby1 = null;
+    Lobby Lobby2 = null;
+    Lobby Lobby3 = null;
+    Lobby Lobby4 = null;
+
 
     InitialLobby() {
         connectionToPlayerIndexMap = new HashMap<>();
+        Lobby1 = new Lobby();
     }
 
     // Method to associate WebSocket connection with player index
@@ -75,6 +82,34 @@ public class InitialLobby {
     }
 
     public void Update(UserEvent U) {
-        PlayerNames.set(U.PlayerIdx, U.PlayerName);
+        //set player names
+        if(U.LobbyNum == 0)
+        {
+            PlayerNames.set(U.PlayerIdx, U.PlayerName);
+        }
+
+        if(U.LobbyNum != 0)
+        {
+            System.out.println("CHOOSING LOBBY NOW");
+            switch(U.LobbyNum)
+            {
+                case 1:
+                    Lobby1.AddPlayers(U);
+                    this.NumOfPlayersInLobby++; // Increment the global variable
+                    System.out.println("JOINED LOBBY1");
+                    break;
+                case 2:
+                    Lobby2.AddPlayers(U);
+                    break;
+                case 3:
+                    Lobby3.AddPlayers(U);
+                    break;
+                case 4:
+                    Lobby4.AddPlayers(U);
+                    break;
+                default:
+                    System.out.println("NO LOBBY FOUND");
+            }
+        }
     }
 }
