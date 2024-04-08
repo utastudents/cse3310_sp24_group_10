@@ -32,28 +32,42 @@
   The Word Search Game
 </h1>
 
-<!-- Nickname window -->
-<h2 id="displayName">Display name:</h2>
-<h3 style="text-align:left">
-  Please enter a nickname:
-</h3>
-<form id="nicknameForm" onsubmit="submitNickname(event)">
+
+<div>
+  <!-- Nickname window -->
+  <h2 id="displayName">Display name:</h2>
+  <h3 style="text-align:left">
+    Please enter a nickname:
+  </h3>
+  <form id="nicknameForm" onsubmit="submitNickname(event)">
     <label for="nickname">Nickname:</label><br>
     <input type="text" id="nicknameInput" name="nickname"><br><br>
     <input type="submit" value="Submit">
-</form>
+  </form>
 
-<label id="bottomMessage"></label>
+  <!-- Buttons for joining lobbies -->
+  <button id="button0" onclick="joinLobby(1)">0/4</button>
+  <!-- <button id="button1">1/4</button>
+  <button id="button2">2/4</button>
+  <button id="button3">3/4</button> -->
+
+  <!-- Lobby information -->
+  <div id="lobbyInfo" style="display: none;">
+    <h2>Lobby 1</h2>
+    <p id="lobbyPlayers">0/4</p>
+  </div>
+</div>
 
 
 
 <script>
 
+var playersJoined = 0; // Initialize the number of players joined to 0
+var maxPlayers = 4; // Set the maximum number of players
+var lobby1NumOfPlayers = 0;
+var nickname;
+
 var idx = -1;
-class UserEvent {
-  PlayerIdx;
-  PlayerName = '';
-}
 
 var connection = null;
 
@@ -81,13 +95,20 @@ connection.onmessage = function (evt) {
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
+
+  if(obj.NumOfPlayersInLobby != null)
+  {
+    lobby1NumOfPlayers = obj.NumOfPlayersInLobby
+  }
+
+  //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
+  var displayName = document.getElementById("displayName").textContent;
+  nickname = displayName.replace("Display name:", "").trim();
 }
 
 
 connection.onopen = function (evt) {
   console.log("open");
-  // When the connection opens, you can prompt the user to enter their name
-  document.getElementById("nicknameForm").style.display = "block";
 }
 
 connection.onclose = function (evt) {
@@ -116,26 +137,22 @@ function submitNickname(event) {
   document.getElementById("displayName").textContent = "Display name: " + nickname;
 }
 
-function enterGame(gameId) {
-  // Check if the player has entered their name
-  if (document.getElementById("playerName").classList.contains("hidden")) {
-    alert("Please enter your name before joining a game.");
+// Function to join the lobby
+function joinLobby(lobby) {
+  if (!nickname) {
+    alert("Please enter a nickname.");
     return;
   }
 
-  // Hide the lobby
-  document.getElementById("lobby").style.display = "none";
-  // Show the game screen
-  document.getElementById("gameScreen" + gameId).style.display = "block";
-}
-
-function exitGame(gameId) {
-  // Hide the selected game screen
-  document.getElementById("gameScreen" + gameId).style.display = "none";
-  // Show the lobby
-  document.getElementById("lobby").style.display = "block";
+  lobby1NumOfPlayers++;
+  const userEvent = {
+    PlayerIdx: idx,
+    PlayerName: nickname,
+    LobbyNum: lobby,
+    NumOfPlayersInLobby: lobby1NumOfPlayers 
+  };
+  connection.send(JSON.stringify(userEvent));
 }
 </script>
-
 </body>
 </html>
