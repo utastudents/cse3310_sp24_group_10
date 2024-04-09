@@ -9,7 +9,15 @@ public class InitialLobby {
 
     public PlayerType Players;
     public int NumOfPlayers = 1;
-    public int NumOfPlayersInLobby;
+
+    public int[] NumOfPlayersInLobby = {0, 0, 0, 0, 0};
+
+    // public int NumOfPlayersInLobby1;
+    // public int NumOfPlayersInLobby2;
+    // public int NumOfPlayersInLobby3;
+    // public int NumOfPlayersInLobby4;
+    // public int NumOfPlayersInLobby5;
+
     public List<String> PlayerNames;
     public Map<WebSocket, Integer> connectionToPlayerIndexMap;
 
@@ -17,11 +25,16 @@ public class InitialLobby {
     Lobby Lobby2 = null;
     Lobby Lobby3 = null;
     Lobby Lobby4 = null;
+    Lobby Lobby5 = null;
 
 
     InitialLobby() {
         connectionToPlayerIndexMap = new HashMap<>();
         Lobby1 = new Lobby();
+        Lobby2 = new Lobby();
+        Lobby3 = new Lobby();
+        Lobby4 = new Lobby();
+        Lobby5 = new Lobby();
     }
 
     // Method to associate WebSocket connection with player index
@@ -95,17 +108,24 @@ public class InitialLobby {
             {
                 case 1:
                     Lobby1.AddPlayers(U);
-                    this.NumOfPlayersInLobby++; // Increment the global variable
+                    this.NumOfPlayersInLobby[0]++; // Increment the global variable
                     System.out.println("JOINED LOBBY1");
                     break;
                 case 2:
                     Lobby2.AddPlayers(U);
+                    this.NumOfPlayersInLobby[1]++;
                     break;
                 case 3:
                     Lobby3.AddPlayers(U);
+                    this.NumOfPlayersInLobby[2]++;
                     break;
                 case 4:
                     Lobby4.AddPlayers(U);
+                    this.NumOfPlayersInLobby[3]++;
+                    break;
+                case 5:
+                    Lobby5.AddPlayers(U);
+                    this.NumOfPlayersInLobby[4]++;
                     break;
                 default:
                     System.out.println("NO LOBBY FOUND");
