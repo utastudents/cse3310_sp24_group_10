@@ -5,7 +5,6 @@
   <title>Word Search Battle Lobby</title>
   <style>
       table, tr, th, td{
-          background-color: white;
           border: 2px solid black;
           padding: 5px;
           text-align: center;
@@ -23,6 +22,87 @@
       }
       .lobby-button:hover{
           background-color: white;
+      }
+      /* Start of Lobby HTML classes */
+      .readyTable{
+        border: hidden;
+        width: 100%;
+        margin: 2px;
+      }
+      .ready{
+        background-color: lightgreen;
+        padding: 50px;
+        margin: 2px;
+        cursor: pointer;
+        border: hidden;
+        width: 200px;
+      }
+      .ready:hover{
+          outline-style: solid;
+          transition-duration: 100ms;
+      }
+      .notReady{
+          background-color: lightcoral;
+          padding: 50px;
+          margin: 2px;
+          cursor: pointer;
+          border: hidden;
+          width: 200px;
+      }
+      .notReady:hover{
+          outline-style: solid;
+          transition-duration: 100ms;
+      }
+      .chat{
+        background-color: white;
+        cursor: scroll;
+        text-align: left;
+        margin: 2px;
+        width: 100%;
+        border: none;
+      }
+      .textBox{
+        background-color: white;
+        color: grey;
+        cursor: text;
+        text-align: left;
+        margin: 2px;
+      }
+      /* Start of Ongoing Game HTML classes */
+      .unselected{
+        background-color: white;
+        width: 50px;
+        height: 50px;
+        border: none;
+      }
+      .unselected:hover{
+       border: 2px solid black;
+       transition-duration: 100ms;
+      }
+      .wordBank{
+        border: none;
+        width: 100%;
+      }
+      .playerTable{
+        border: none;
+        width: 100%;
+        margin: 2px;
+        text-align: center;
+        table-layout: fixed;
+      }
+      .surrenderButton{
+        cursor: pointer;
+        background-color: black;
+        color: white;
+        width: 200px;
+      }
+      .surrenderButton:hover{
+        outline: red solid;
+        transition-duration: 100ms;
+      }
+      .statistic{
+        text-align: left;
+        border: none;
       }
   </style>
 </head>
@@ -60,7 +140,124 @@
   </div>
 </div>
 
+<!-- Start of lobby HTML ------------------------------------------------------->
+<hr>
+<!-- First row, where the player info and ready button is  -->
+<table class="readyTable";>
+  <!-- Player information -->
+  <tr style="background-color:rgb(162, 185, 249);">
+    <th>Player 1</th>
+    <th>Player 2</th>
+    <th>Player 3</th>
+    <th>Player 4</th>
+  </tr>
+  
+  <tr>
+      <td style="border: none">Wins: #</td>
+      <td style="border: none">Wins: #</td>
+      <td style="border: none">Wins: #</td>
+      <td style="border: none">Wins: #</td>
+  </tr>
+  <tr>
+      <!-- Ready button (toggle) -->
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="fourth"; onclick="toggleButton(this)">
+      </td>
+  </tr>
+</table>
 
+<br><br><br>
+
+<!-- Start of Ongoing Game HTML ----------------------------------------------->
+<hr>
+
+<div> <!-- Divider for player info -->
+  <table class="playerTable">
+      <!-- Player information -->
+      <th style="background-color: lightcoral;">Player 1</th>
+      <th style="background-color: lightskyblue;">Player 2</th>
+      <th style="background-color: lightgreen;">Player 3</th>
+      <th style="background-color: plum;">Player 4</th>
+      <tr>
+          <td class="statistic">SCORE: </td>
+          <td class="statistic">SCORE: </td>
+          <td class="statistic">SCORE: </td>
+          <td class="statistic">SCORE: </td>
+      </tr>
+      <tr>
+          <td class="statistic">Words Found: </td>
+          <td class="statistic">Words Found: </td>
+          <td class="statistic">Words Found: </td>
+          <td class="statistic">Words Found: </td>
+      </tr>
+  </table>
+</div>
+
+<hr>
+
+<div align="center"> <!-- Divider for Word Search Box -->
+  <table style="border:none">
+      <tr>
+          <td><input id="a1"; type="button"; class="unselected"; value="?"></td>
+          <td><input id="a2"; type="button"; class="unselected"; value="?"></td>
+          <td><input id="a3"; type="button"; class="unselected"; value="?"></td>
+          
+      </tr>
+          
+      <tr>
+          <td><input id="b1"; type="button"; class="unselected"; value="?"></td>
+          <td><input id="b2"; type="button"; class="unselected"; value="?"></td>
+          <td><input id="b3"; type="button"; class="unselected"; value="?"></td>
+      </tr>
+          
+      <tr>
+          <td><input id="c1"; type="button"; class="unselected"; value="?"></td>
+          <td><input id="c2"; type="button"; class="unselected"; value="?"></td>
+          <td><input id="c3"; type="button"; class="unselected"; value="?"></td>
+      </tr>
+  </table>
+</div>
+
+<div align="center"> <!-- Divider for surrender button -->
+  <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
+</div>
+
+<hr>
+
+<div align="center"> <!-- Divider for Word Bank -->
+  <table class="wordBank">
+      <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
+      <tr><td style="border: 1px solid black"><p id="wordList"></p></td></tr>
+      
+          
+  </table>
+</div>
+
+<!-- This is the chat box -->
+<div> <!-- For chat -->
+  <table class="chat">
+      <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
+      <tr>
+          <td style="text-align: left;">
+              messages go here
+          </td>
+      </tr><tr>
+          <td class="textBox">
+              Type here...
+          </td>
+      </tr>
+      
+  </table>
+</div>
 
 <script>
 
@@ -173,6 +370,31 @@ function joinLobby(lobby) {
   userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
   connection.send(JSON.stringify(userEvent));
 }
+
+/* Start of script for Lobby --------------------------------------------------*/
+checkGameStart(); //unconditional call; check if all players are ready
+
+function toggleButton(id){
+  var buttonClass = id.className;
+  if(buttonClass == "notReady"){ 
+      id.className = "ready";
+      id.value = "Ready";
+  }
+  else{
+      id.className = "notReady"; 
+      id.value = "Not Ready";
+  }
+  checkGameStart();
+}
+
+function checkGameStart(){ //Check if all players are ready; checks every time a ready button is toggled. 
+    if((first.className == "ready") && (second.className == "ready") && (third.className == "ready") && (fourth.className == "ready")){
+        alert("All players are ready"); //once all players are ready, an alert will play
+    }
+}
+
+/* Start of script for Ongoing Game -------------------------------------------*/
+
 </script>
 </body>
 </html>
