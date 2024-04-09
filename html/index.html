@@ -13,14 +13,15 @@
       td{
           border: 1px solid black;
       }
-      button{
-          padding: 5px 30px;
-          margin: 5px 5px;
-          width: 200px;
+      .lobby-button {
+          padding: 5px 10px; /* Adjust padding as needed */
+          margin: 5px 0; /* Change margin to stack buttons vertically */
+          width: 100px; /* Adjust width as needed */
           cursor: pointer;
           transition-duration: 0.25s;
+          display: block; /* Ensure each button takes full width */
       }
-      button:hover{
+      .lobby-button:hover{
           background-color: white;
       }
   </style>
@@ -33,7 +34,7 @@
 </h1>
 
 
-<div>
+<div id = "InitialLobby">
   <!-- Nickname window -->
   <h2 id="displayName">Display name:</h2>
   <h3 style="text-align:left">
@@ -46,10 +47,11 @@
   </form>
 
   <!-- Buttons for joining lobbies -->
-  <button id="button0" onclick="joinLobby(1)">0/4</button>
-  <!-- <button id="button1">1/4</button>
-  <button id="button2">2/4</button>
-  <button id="button3">3/4</button> -->
+  <button class="lobby-button" id="button0" onclick="joinLobby(1)">0/4</button>
+  <button class="lobby-button" id="button1" onclick="joinLobby(2)">0/4</button>
+  <button class="lobby-button" id="button2" onclick="joinLobby(3)">0/4</button>
+  <button class="lobby-button" id="button3" onclick="joinLobby(4)">0/4</button>
+  <button class="lobby-button" id="button4" onclick="joinLobby(5)">0/4</button>
 
   <!-- Lobby information -->
   <div id="lobbyInfo" style="display: none;">
@@ -64,8 +66,8 @@
 
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
-var lobby1NumOfPlayers = 0;
 var nickname;
+let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 
 var idx = -1;
 
@@ -96,14 +98,19 @@ connection.onmessage = function (evt) {
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
 
-  if(obj.NumOfPlayersInLobby != null)
-  {
-    lobby1NumOfPlayers = obj.NumOfPlayersInLobby
-  }
+  // Sets the arrays equal to each other
+  lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
   nickname = displayName.replace("Display name:", "").trim();
+
+  // Update the numbers on the buttons to display the correct number of players
+  document.getElementById("button0").textContent = lobbyNumOfPlayers[0] + "/4";
+  document.getElementById("button1").textContent = lobbyNumOfPlayers[1] + "/4";
+  document.getElementById("button2").textContent = lobbyNumOfPlayers[2] + "/4";
+  document.getElementById("button3").textContent = lobbyNumOfPlayers[3] + "/4";
+  document.getElementById("button4").textContent = lobbyNumOfPlayers[4] + "/4";
 }
 
 
@@ -144,13 +151,26 @@ function joinLobby(lobby) {
     return;
   }
 
-  lobby1NumOfPlayers++;
+  if(lobbyNumOfPlayers[lobby-1] >= 4)
+  {
+    document.getElementById("button" + (lobby -1)).disabled = true;
+    return;
+  }
+
+  // Hide the InitialLobby elements
+  document.getElementById("InitialLobby").style.display = "none";
+
+  lobbyNumOfPlayers[lobby-1]++;
+
+  // Update the text content of the button to display the number of players joined
+  document.getElementById("button" + (lobby - 1)).textContent = lobbyNumOfPlayers[lobby - 1] + "/4";
+
   const userEvent = {
     PlayerIdx: idx,
     PlayerName: nickname,
     LobbyNum: lobby,
-    NumOfPlayersInLobby: lobby1NumOfPlayers 
   };
+  userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
   connection.send(JSON.stringify(userEvent));
 }
 </script>
