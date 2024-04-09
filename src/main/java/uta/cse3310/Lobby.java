@@ -1,19 +1,17 @@
 package uta.cse3310;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Lobby {
-    private Player ready;
+
+    public List<String> PlayerNames;
+    Lobby(){
+        PlayerNames = new ArrayList<>();
+    }
     
-    public void isReady(Player ready){
-        /* Allow player to toggle their respective ready status */
+    public void AddPlayers(UserEvent U){
+        PlayerNames.add(U.PlayerName);
+        System.out.println("PLAYER SUCCESFULLY ADDED");
     }
-    public int leave(){
-        int leave = 0;
-        return leave;
-    }
-/*
-    public boolean readyCheck(){
-        // Return true if all players are ready
-        return true;
-    }
-*/
 }
