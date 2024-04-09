@@ -1,4 +1,8 @@
 package uta.cse3310;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Lobby {
     private Player ready;
@@ -22,10 +26,32 @@ public class Lobby {
 
         
     }
-    public int leave(){
+   /* public int leave(){
         int leave = 0;
         return leave;
     }
+    */
+public class GameGUI extends JFrame {
+     public GameGUI() {
+    JButton leaveButton = new JButton("leave");
+        leaveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("exiting game");
+                System.exit(0); 
+            }
+        }
+
+        getContentPane().add(leaveButton);
+        setVisible(true);
+}
+}    
+public static void(){
+    new GameGUI();
+}
+    
+
+    
 /*
     public boolean readyCheck(){
         // Return true if all players are ready
