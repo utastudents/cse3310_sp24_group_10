@@ -173,6 +173,24 @@ function joinLobby(lobby) {
   userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
   connection.send(JSON.stringify(userEvent));
 }
+
+/*
+function LeaveButton(event){
+<button id="leave">Leave</button>
+
+<script>
+
+var serverUrl = "ws://" + window.location.hostname + ":9880";
+
+
+document.getElementById("leave").addEventListener("click", function() {
+    console.log("Leaving game");
+    window.location.href = serverUrl; // Navigate to WebSocket URL
+}}
+*/
+
+
+  
 </script>
 </body>
 </html>
