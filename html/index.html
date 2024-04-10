@@ -15,10 +15,11 @@
       .lobby-button {
           padding: 5px 10px; /* Adjust padding as needed */
           margin: 5px 0; /* Change margin to stack buttons vertically */
-          width: 100px; /* Adjust width as needed */
+          width: 200px; /* Adjust width as needed */
           cursor: pointer;
           transition-duration: 0.25s;
           display: block; /* Ensure each button takes full width */
+          background-color: rgb(255, 241, 83);
       }
       .lobby-button:hover{
           background-color: white;
@@ -113,7 +114,6 @@
   The Word Search Game
 </h1>
 
-
 <div id = "InitialLobby">
   <!-- Nickname window -->
   <h2 id="displayName">Display name:</h2>
@@ -126,7 +126,10 @@
     <input type="submit" value="Submit">
   </form>
 
+  <hr>
+
   <!-- Buttons for joining lobbies -->
+  <h2> Join Lobbies: </h2>
   <button class="lobby-button" id="button0" onclick="joinLobby(1)">0/4</button>
   <button class="lobby-button" id="button1" onclick="joinLobby(2)">0/4</button>
   <button class="lobby-button" id="button2" onclick="joinLobby(3)">0/4</button>
@@ -141,109 +144,111 @@
 </div>
 
 <!-- Start of lobby HTML ------------------------------------------------------->
-<hr>
-<!-- First row, where the player info and ready button is  -->
-<table class="readyTable";>
-  <!-- Player information -->
-  <tr style="background-color:rgb(162, 185, 249);">
-    <th>Player 1</th>
-    <th>Player 2</th>
-    <th>Player 3</th>
-    <th>Player 4</th>
-  </tr>
-  
-  <tr>
-      <td style="border: none">Wins: #</td>
-      <td style="border: none">Wins: #</td>
-      <td style="border: none">Wins: #</td>
-      <td style="border: none">Wins: #</td>
-  </tr>
-  <tr>
-      <!-- Ready button (toggle) -->
-      <td style="background-color: white;">
-          <input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">
-      </td>
-      <td style="background-color: white;">
-          <input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">
-      </td>
-      <td style="background-color: white;">
-          <input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">
-      </td>
-      <td style="background-color: white;">
-          <input class="notReady"; type="button"; value="Not Ready"; id="fourth"; onclick="toggleButton(this)">
-      </td>
-  </tr>
-</table>
-
-<br><br><br>
-
-<!-- Start of Ongoing Game HTML ----------------------------------------------->
-<hr>
-
-<div> <!-- Divider for player info -->
-  <table class="playerTable">
-      <!-- Player information -->
+<div id="gameLobby">
+  <hr>
+  <!-- First row, where the player info and ready button is  -->
+  <table class="readyTable";>
+    <!-- Player information -->
+    <tr>
       <th style="background-color: lightcoral;">Player 1</th>
       <th style="background-color: lightskyblue;">Player 2</th>
       <th style="background-color: lightgreen;">Player 3</th>
       <th style="background-color: plum;">Player 4</th>
-      <tr>
-          <td class="statistic">SCORE: </td>
-          <td class="statistic">SCORE: </td>
-          <td class="statistic">SCORE: </td>
-          <td class="statistic">SCORE: </td>
-      </tr>
-      <tr>
-          <td class="statistic">Words Found: </td>
-          <td class="statistic">Words Found: </td>
-          <td class="statistic">Words Found: </td>
-          <td class="statistic">Words Found: </td>
-      </tr>
+    </tr>
+    
+    <tr>
+        <td style="border: none">Wins: #</td>
+        <td style="border: none">Wins: #</td>
+        <td style="border: none">Wins: #</td>
+        <td style="border: none">Wins: #</td>
+    </tr>
+    <tr>
+        <!-- Ready button (toggle) -->
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">
+        </td>
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">
+        </td>
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">
+        </td>
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="fourth"; onclick="toggleButton(this)">
+        </td>
+    </tr>
   </table>
 </div>
 
-<hr>
+<!-- Start of Ongoing Game HTML ----------------------------------------------->
+<div id="ongoingGame">
+    <hr>
 
-<div align="center"> <!-- Divider for Word Search Box -->
-  <table style="border:none">
-      <tr>
-          <td><input id="a1"; type="button"; class="unselected"; value="?"></td>
-          <td><input id="a2"; type="button"; class="unselected"; value="?"></td>
-          <td><input id="a3"; type="button"; class="unselected"; value="?"></td>
-          
-      </tr>
-          
-      <tr>
-          <td><input id="b1"; type="button"; class="unselected"; value="?"></td>
-          <td><input id="b2"; type="button"; class="unselected"; value="?"></td>
-          <td><input id="b3"; type="button"; class="unselected"; value="?"></td>
-      </tr>
-          
-      <tr>
-          <td><input id="c1"; type="button"; class="unselected"; value="?"></td>
-          <td><input id="c2"; type="button"; class="unselected"; value="?"></td>
-          <td><input id="c3"; type="button"; class="unselected"; value="?"></td>
-      </tr>
-  </table>
-</div>
+  <div> <!-- Divider for player info -->
+    <table class="playerTable">
+        <!-- Player information -->
+        <th style="background-color: lightcoral;">Player 1</th>
+        <th style="background-color: lightskyblue;">Player 2</th>
+        <th style="background-color: lightgreen;">Player 3</th>
+        <th style="background-color: plum;">Player 4</th>
+        <tr>
+            <td class="statistic">SCORE: </td>
+            <td class="statistic">SCORE: </td>
+            <td class="statistic">SCORE: </td>
+            <td class="statistic">SCORE: </td>
+        </tr>
+        <tr>
+            <td class="statistic">Words Found: </td>
+            <td class="statistic">Words Found: </td>
+            <td class="statistic">Words Found: </td>
+            <td class="statistic">Words Found: </td>
+        </tr>
+    </table>
+  </div>
 
-<div align="center"> <!-- Divider for surrender button -->
-  <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
-</div>
+  <hr>
 
-<hr>
+  <div align="center"> <!-- Divider for Word Search Box -->
+    <table style="border:none">
+        <tr>
+            <td><input id="a1"; type="button"; class="unselected"; value="?"></td>
+            <td><input id="a2"; type="button"; class="unselected"; value="?"></td>
+            <td><input id="a3"; type="button"; class="unselected"; value="?"></td>
+            
+        </tr>
+            
+        <tr>
+            <td><input id="b1"; type="button"; class="unselected"; value="?"></td>
+            <td><input id="b2"; type="button"; class="unselected"; value="?"></td>
+            <td><input id="b3"; type="button"; class="unselected"; value="?"></td>
+        </tr>
+            
+        <tr>
+            <td><input id="c1"; type="button"; class="unselected"; value="?"></td>
+            <td><input id="c2"; type="button"; class="unselected"; value="?"></td>
+            <td><input id="c3"; type="button"; class="unselected"; value="?"></td>
+        </tr>
+    </table>
+  </div>
 
-<div align="center"> <!-- Divider for Word Bank -->
-  <table class="wordBank">
-      <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
-      <tr><td style="border: 1px solid black"><p id="wordList"></p></td></tr>
-      
-          
-  </table>
+  <div align="center"> <!-- Divider for surrender button -->
+    <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
+  </div>
+
+  <hr>
+
+  <div align="center"> <!-- Divider for Word Bank -->
+    <table class="wordBank">
+        <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
+        <tr><td style="border: 1px solid black"><p id="wordList"></p></td></tr>
+        
+            
+    </table>
+  </div>
 </div>
 
 <!-- This is the chat box -->
-<div> <!-- For chat -->
+<div id="chatBox"> <!-- For chat -->
   <table class="chat">
       <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
       <tr>
@@ -260,7 +265,7 @@
 </div>
 
 <script>
-
+  
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
 var nickname;
@@ -294,7 +299,7 @@ connection.onmessage = function (evt) {
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
-
+  
   // Sets the arrays equal to each other
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
 
