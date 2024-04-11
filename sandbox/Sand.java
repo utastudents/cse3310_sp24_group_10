@@ -1,29 +1,64 @@
 import java.util.Random;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 public class Sand {
   public static void main(String[] args) {
     try
     {
+      // I/O possibilities:
+      // Get desired amount of words (should skew to greater than desired)
+      // Generate a random number for each desired
+      // Sort random numbers.  Then walk through the word_filter.txt, copying those lines of words to memory
       BufferedReader word_file = new BufferedReader(new FileReader("words_filter.txt"));
       String fline = word_file.readLine();
-      System.out.println("fline: " + fline);
-      fline = word_file.readLine();
-      System.out.println("fline: " + fline);
-      fline = word_file.readLine();
-      System.out.println("fline: " + fline);
     }
     catch(Exception e) {
       e.getStackTrace();
     }
+    ArrayList<String> word_list = new ArrayList<String>();
+    word_list.add("aaron");
+    word_list.add("abandoned");
+    word_list.add("aberdeen");
+    word_list.add("abilities");
+    word_list.add("ability");
+    word_list.add("able");
+    word_list.add("aboriginal");
+    word_list.add("abortion");
+    word_list.add("about");
+    word_list.add("above");
+    word_list.add("abraham");
+    word_list.add("abroad");
+    word_list.add("absence");
+    word_list.add("absent");
+    word_list.add("absolute");
+    word_list.add("absolutely");
+    word_list.add("absorption");
+    word_list.add("abstract");
+    word_list.add("abstracts");
+    word_list.add("abuse");
+    word_list.add("academic");
+    word_list.add("academics");
+    word_list.add("academy");
+    word_list.add("accent");
+    word_list.add("accept");
+    word_list.add("acceptable");
+    word_list.add("acceptance");
+    word_list.add("accepted");
+    word_list.add("accepting");
+    word_list.add("accepts");
+    word_list.add("access");
+    word_list.add("accessed");
+    word_list.add("accessibility");
+    printWords(word_list);
     //printGrid(createGrid(word_file));
   }
 
   public static char[][] createGrid(BufferedReader br)
   {
     final int size = 10;
-    
+
     Random rand_num = new Random();
     char[][] my_array = new char[size][size];
 
@@ -48,6 +83,16 @@ public class Sand {
         System.out.format("%c ", my_array[i][j]);
       }
       System.out.format("\n");
+    }
+  }
+
+
+
+  public static void printWords(ArrayList<String> words)
+  {
+    for (var single_word : words)
+    {
+      System.out.format("%s ", single_word);
     }
   }
 }
