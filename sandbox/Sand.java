@@ -51,17 +51,20 @@ public class Sand {
     word_list.add("access");
     word_list.add("accessed");
     word_list.add("accessibility");
-    printWords(word_list);
-    //printGrid(createGrid(word_file));
+    //printWords(word_list);
+    // TODO: word_list should be randomized before being passed to createGrid
+    printGrid(createGrid(word_list));
   }
 
-  public static char[][] createGrid(BufferedReader br)
+  //public static char[][] createGrid(BufferedReader br)
+  public static char[][] createGrid(ArrayList<String> words)
   {
     final int size = 10;
 
     Random rand_num = new Random();
     char[][] my_array = new char[size][size];
 
+    // Create initial random board
     for ( int x = 0; x < size; x ++)
     {
       for ( int y = 0; y < size; y ++)
@@ -69,6 +72,36 @@ public class Sand {
         // Upper bound is exclusive, therefor skew 'z' by one
         my_array[x][y] = (char) (rand_num.nextInt('z' + 1 - 'a') + 'a');
       }
+    }
+
+    // Populate words
+    int head_x = 0; 
+    int head_y = 0; 
+    int sel_word = 0;
+    while (sel_word < words.size())
+    {
+      // If at max X 
+      // x = 0, y += 1;
+
+      // If at max Y
+      // break
+
+      // Four in five chance to create word
+      //if (rand_num.nextInt(5) != 0);
+      {
+        switch (rand_num.nextInt(5))
+        {
+          case 0: // Horizontal
+          case 1: // Vertical
+          case 2: // Diagonal down
+          case 3: // Diagonal up
+          case 4: // No action
+        } 
+        // Check edges
+        sel_word ++;
+      }
+      
+      head_x ++;
     }
 
     return my_array;
