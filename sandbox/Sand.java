@@ -1,12 +1,26 @@
-import java.util.ArrayList;
 import java.util.Random;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Sand {
   public static void main(String[] args) {
-    printGrid(createGrid());
+    try
+    {
+      BufferedReader word_file = new BufferedReader(new FileReader("words_filter.txt"));
+      String fline = word_file.readLine();
+      System.out.println("fline: " + fline);
+      fline = word_file.readLine();
+      System.out.println("fline: " + fline);
+      fline = word_file.readLine();
+      System.out.println("fline: " + fline);
+    }
+    catch(Exception e) {
+      e.getStackTrace();
+    }
+    //printGrid(createGrid(word_file));
   }
 
-  public static char[][] createGrid()
+  public static char[][] createGrid(BufferedReader br)
   {
     final int size = 10;
     
