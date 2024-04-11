@@ -1,13 +1,24 @@
 public class Sand {
   public static void main(String[] args) {
-    System.out.println("hello world!");
     printGrid(createGrid());
   }
 
   public static char[][] createGrid()
   {
-    char[][] my_array = { {'a','a','c'},
-                          {'b','b','c','b'} };
+    int size = 50;
+    //char[][] my_array = { {'a','a','c'},
+                          //{'b','b','c','b'} };
+    char[][] my_array = {};
+
+    for ( int x = 0; x < size; x ++)
+    {
+      for ( int y = 0; y < size; y ++)
+      {
+        my_array[x][y] = 'a';
+      }
+    }
+
+
     return my_array;
   }
 
