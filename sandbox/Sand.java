@@ -77,8 +77,9 @@ public class Sand {
     // Populate words
     int head_x = 0; 
     int head_y = 0; 
-    int sel_word = 0;
-    while (sel_word < words.size())
+    int word_index = 0;
+    boolean completed = false;
+    while (word_index < words.size())
     {
       // If at max X 
       // x = 0, y += 1;
@@ -87,20 +88,39 @@ public class Sand {
       // break
 
       // Four in five chance to create word
-      //if (rand_num.nextInt(5) != 0);
+      if (rand_num.nextInt(5) != 0);
       {
-        switch (rand_num.nextInt(5))
+        System.out.format("Length is: %02d, word: '%s'\n", words.get(word_index).length(), words.get(word_index));
+        int word_len = words.get(word_index).length();
+        int rand_dir = rand_num.nextInt(4);
+        // Horizontal
+        // If each char word.length away from the head is valid, then action and set completed to true
+        if (!completed)
         {
-          case 0: // Horizontal
-          case 1: // Vertical
-          case 2: // Diagonal down
-          case 3: // Diagonal up
-          case 4: // No action
-        } 
-        // Check edges
-        sel_word ++;
+          boolean is_valid = true;
+          for (int i = head_x; i < word_len; i ++)
+          {
+            // Invalid word position
+            if (i == size - 1/* || is part of taken_index list */)
+            {
+              is_valid = false;
+            }
+          }
+          if (is_valid)
+{
+// Place word
+} else
+{
+completed = false;
+}
+        }
       }
-      
+      // Vertical
+      // Diagonal down
+      // Diagonal up
+      word_index ++;
+      // Check edges
+
       head_x ++;
     }
 
