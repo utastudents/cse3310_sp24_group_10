@@ -2,6 +2,8 @@ import java.util.Random;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 public class Sand {
   public static void main(String[] args) {
@@ -56,7 +58,6 @@ public class Sand {
     printGrid(createGrid(word_list));
   }
 
-  //public static char[][] createGrid(BufferedReader br)
   public static char[][] createGrid(ArrayList<String> words)
   {
     final int size = 10;
@@ -81,18 +82,27 @@ public class Sand {
     boolean completed = false;
     while (word_index < words.size())
     {
-      // If at max X 
-      // x = 0, y += 1;
-
-      // If at max Y
-      // break
-
       // Four in five chance to create word
       if (rand_num.nextInt(5) != 0);
       {
         System.out.format("Length is: %02d, word: '%s'\n", words.get(word_index).length(), words.get(word_index));
         int word_len = words.get(word_index).length();
-        int rand_dir = rand_num.nextInt(4);
+
+        List<Integer> valid = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+
+        // Check if horizontal is valid
+        for (int i = head_x; i < word_len; i ++)
+        {
+          // Invalid word position
+          if (i == size - 1/* || is part of taken_index list */)
+          {
+            valid.remove(Integer.valueOf(1));
+          }
+        }
+        System.out.println("valid array: " + valid);
+
+        // Is horizontal possible?  If not, remove it from valid[] list
+        int rand_dir = rand_num.nextInt(4); // Randomly pick an item that is valid
         // Horizontal
         // If each char word.length away from the head is valid, then action and set completed to true
         if (!completed)
@@ -107,12 +117,10 @@ public class Sand {
             }
           }
           if (is_valid)
-{
-// Place word
-} else
-{
-completed = false;
-}
+          {
+            // Place word
+            completed = true;
+          } 
         }
       }
       // Vertical
