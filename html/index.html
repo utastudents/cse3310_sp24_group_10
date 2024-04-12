@@ -18,7 +18,7 @@
           width: 200px; /* Adjust width as needed */
           cursor: pointer;
           transition-duration: 0.25s;
-          display: block; /* Ensure each button takes full width */
+          display: inline-block; /* Ensure each button takes full width */
           background-color: rgb(255, 241, 83);
       }
       .lobby-button:hover{
@@ -134,12 +134,26 @@
   <hr>
 
   <!-- Buttons for joining lobbies -->
-  <h2> Join Lobbies: </h2>
-  <button class="lobby-button" id="button0" onclick="joinLobby(1)">0/4</button>
-  <button class="lobby-button" id="button1" onclick="joinLobby(2)">0/4</button>
-  <button class="lobby-button" id="button2" onclick="joinLobby(3)">0/4</button>
-  <button class="lobby-button" id="button3" onclick="joinLobby(4)">0/4</button>
-  <button class="lobby-button" id="button4" onclick="joinLobby(5)">0/4</button>
+  <div class="lobby-container">
+    <button class="lobby-button" id="button0" onclick="joinLobby(1)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay1"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button1" onclick="joinLobby(2)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay2"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button2" onclick="joinLobby(3)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay3"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button3" onclick="joinLobby(4)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay4"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button4" onclick="joinLobby(5)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay5"></div> <!-- Modified line -->
+</div>
 
   <!-- Lobby information -->
   <div id="lobbyInfo" style="display: none;">
@@ -266,14 +280,15 @@ hide("chatBox");
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
 var nickname;
+var playerNames = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
-
+var pla
 var idx = -1;
 
 var connection = null;
 
 var serverUrl;
-serverUrl = "ws://" + window.location.hostname + ":9880";
+serverUrl = "ws://" + window.location.hostname + ":9110";
 // Create the connection with the server
 connection = new WebSocket(serverUrl);
 
@@ -296,9 +311,25 @@ connection.onmessage = function (evt) {
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
-  
+
+  // Get the players in each lobby
+  var playerNamesInLobby1 = obj.Lobby1.PlayerNames;
+  var playerNamesInLobby2 = obj.Lobby2.PlayerNames;
+  var playerNamesInLobby3 = obj.Lobby3.PlayerNames;
+  var playerNamesInLobby4 = obj.Lobby4.PlayerNames;
+  var playerNamesInLobby5 = obj.Lobby5.PlayerNames;
+
+  // Display the names of the players in each lobby
+  updatePlayerNamesDisplay(playerNamesInLobby1, "playerNamesDisplay1");
+  updatePlayerNamesDisplay(playerNamesInLobby2, "playerNamesDisplay2");
+  updatePlayerNamesDisplay(playerNamesInLobby3, "playerNamesDisplay3");
+  updatePlayerNamesDisplay(playerNamesInLobby4, "playerNamesDisplay4");
+  updatePlayerNamesDisplay(playerNamesInLobby5, "playerNamesDisplay5");
+
   // Sets the arrays equal to each other
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
+
+  playerNames = obj.PlayerNames;
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
@@ -323,10 +354,19 @@ connection.onclose = function (evt) {
 function submitNickname(event) {
  event.preventDefault(); // Prevent form submission
 
-  const nickname = document.getElementById("nicknameInput").value;
+  nickname = document.getElementById("nicknameInput").value;
   if (!nickname) {
     alert("Please enter a nickname.");
     return;
+  }
+
+  for(var i = 0; i < 20; i++)
+  {
+    if(nickname == playerNames[i])
+    {
+      alert("Nickname is taken. Please enter a different one.");
+      return;
+    }
   }
 
   const userEvent = {
