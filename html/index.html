@@ -70,15 +70,16 @@
         margin: 2px;
       }
       /* Start of Ongoing Game HTML classes */
-      .unselected{
+      .wordButton{
+        cursor: pointer;
         background-color: white;
-        width: 50px;
-        height: 50px;
-        border: none;
+        border: 1px solid lightgray;
+        width: 2px;
+        height: 2px;
       }
-      .unselected:hover{
-       border: 2px solid black;
-       transition-duration: 100ms;
+      .wordButton:hover{
+        outline: black solid 2px;
+        transition-duration: 100ms;
       }
       .wordBank{
         border: none;
@@ -104,6 +105,10 @@
       .statistic{
         text-align: left;
         border: none;
+      }
+      .pageSplit::after{
+        clear: both;
+        content: "";
       }
   </style>
 </head>
@@ -205,66 +210,58 @@
         </tr>
     </table>
   </div>
-
   <hr>
 
-  <div align="center"> <!-- Divider for Word Search Box -->
-    <table style="border:none">
-        <tr>
-            <td><input id="a1"; type="button"; class="unselected"; value="?"></td>
-            <td><input id="a2"; type="button"; class="unselected"; value="?"></td>
-            <td><input id="a3"; type="button"; class="unselected"; value="?"></td>
+  <div id="pageSplit"> <!-- Section where the page will split into two -->
+    <div style="float: left; width: 50%; height: 100%"> <!-- Divider for Word Search Box -->
+        <label id = "wordButton"></label>
+    </div>
+
+    <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
+      <div align="center";> <!-- Divider for surrender button -->
+        <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
+      </div>
+
+      <div align="right";> <!-- Divider for Word Bank -->
+        <table class="wordBank">
+            <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
+            <tr><td style="border: 1px solid black"><p id="wordList"></p></td></tr>
+        </table>
+      </div>
+
+      <!-- This is the chat box -->
+      <div align="right"; id="chatBox";> <!-- For chat -->
+        <table class="chat">
+            <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
+            <tr>
+                <td style="text-align: left;">
+                    messages go here
+                </td>
+            </tr><tr>
+                <td class="textBox">
+                    Type here...
+                </td>
+            </tr>
             
-        </tr>
-            
-        <tr>
-            <td><input id="b1"; type="button"; class="unselected"; value="?"></td>
-            <td><input id="b2"; type="button"; class="unselected"; value="?"></td>
-            <td><input id="b3"; type="button"; class="unselected"; value="?"></td>
-        </tr>
-            
-        <tr>
-            <td><input id="c1"; type="button"; class="unselected"; value="?"></td>
-            <td><input id="c2"; type="button"; class="unselected"; value="?"></td>
-            <td><input id="c3"; type="button"; class="unselected"; value="?"></td>
-        </tr>
-    </table>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <div align="center"> <!-- Divider for surrender button -->
-    <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
-  </div>
-
-  <hr>
-
-  <div align="center"> <!-- Divider for Word Bank -->
-    <table class="wordBank">
-        <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
-        <tr><td style="border: 1px solid black"><p id="wordList"></p></td></tr>
-        
-            
-    </table>
-  </div>
-</div>
-
-<!-- This is the chat box -->
-<div id="chatBox"> <!-- For chat -->
-  <table class="chat">
-      <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
-      <tr>
-          <td style="text-align: left;">
-              messages go here
-          </td>
-      </tr><tr>
-          <td class="textBox">
-              Type here...
-          </td>
-      </tr>
-      
-  </table>
 </div>
 
 <script>
+/*Util functions*/
+function hide(id){
+  document.getElementById(id).style.display = "none";
+}
+function unhide(id){
+  document.getElementById(id).style.display = "inline";
+}
+
+hide("gameLobby");
+hide("ongoingGame");
+hide("chatBox");
   
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
@@ -315,7 +312,6 @@ connection.onmessage = function (evt) {
   document.getElementById("button4").textContent = lobbyNumOfPlayers[4] + "/4";
 }
 
-
 connection.onopen = function (evt) {
   console.log("open");
 }
@@ -360,7 +356,13 @@ function joinLobby(lobby) {
   }
 
   // Hide the InitialLobby elements
-  document.getElementById("InitialLobby").style.display = "none";
+  //document.getElementById("InitialLobby").style.display = "none";
+  hide("InitialLobby");
+  if(document.getElementById("InitialLobby").style.display == "none"){
+    unhide("gameLobby");
+    unhide("chatBox");
+  }
+  
 
   lobbyNumOfPlayers[lobby-1]++;
 
@@ -390,16 +392,34 @@ function toggleButton(id){
       id.value = "Not Ready";
   }
   checkGameStart();
+
+}
+
+function genTable(id){ /*Function to generate word search table*/
+  let newTable = '<table style="width: 100%; border: none">'; 
+  for(var i = 0; i < 25; i++){ //number of rows
+    newTable += '<tr>';
+    for(var j = 0; j < 25; j++){ //number of columns
+      newTable += '<td class="wordButton">';
+      newTable += '?'; //change this value with input
+      newTable += '</td>';
+    }
+    newTable += '</tr>';
+  }
+  newTable += '</table>'
+
+  document.getElementById(id).innerHTML = newTable;
 }
 
 function checkGameStart(){ //Check if all players are ready; checks every time a ready button is toggled. 
     if((first.className == "ready") && (second.className == "ready") && (third.className == "ready") && (fourth.className == "ready")){
-        alert("All players are ready"); //once all players are ready, an alert will play
+      hide("gameLobby");
+      unhide("ongoingGame");
+      genTable("wordButton");
     }
 }
 
 /* Start of script for Ongoing Game -------------------------------------------*/
-
 </script>
 </body>
 </html>
