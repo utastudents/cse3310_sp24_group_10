@@ -94,11 +94,8 @@ public class Sand {
         List<Integer> valid = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
 
 
-
 /*
-        int x = head_x;
-        int y = head_y;
-        while (x < word_len || y < word_len)
+        while ((x - head_x) < word_len || (y - head_y) < word_len)
         {}
         // Invalid word position
         if (i == size - 1 || taken_index.contains((Integer) i))
@@ -108,16 +105,16 @@ public class Sand {
 */
 
         // Check if horizontal is valid
-        for (int i = head_x; i < word_len; i ++)
+        for (int i = head_x; (i - head_x) < word_len; i ++)
         {
           // Invalid word position
-          if (i == size - 1 || taken_index.contains((Integer) i))
+          if (i == size - 1)
           {
             valid.remove(Integer.valueOf(1));
           }
         }
         // Check if vertical is valid
-        for (int i = head_y; i < word_len; i ++)
+        for (int i = head_y; (i - head_x) < word_len; i ++)
         {
           // Invalid word position
           if (i == size - 1 || taken_index.contains((Integer) i))
@@ -127,7 +124,7 @@ public class Sand {
         }
         // Check if diagnal up is valid
         int j = head_y;
-        for (int i = head_x; i < word_len; i ++)
+        for (int i = head_x; (i - head_x) < word_len; i ++)
         {
           // Invalid word position
           if (i == size - 1 || taken_index.contains((Integer) i))
@@ -136,7 +133,7 @@ public class Sand {
           }
         }
         // Check if diagnal down is valid
-        for (int i = head_x; i < word_len; i ++)
+        for (int i = head_x; (i - head_x) < word_len; i ++)
         {
           // Invalid word position
           if (i == size - 1 || taken_index.contains((Integer) i))
