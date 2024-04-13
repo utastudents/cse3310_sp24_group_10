@@ -1,22 +1,26 @@
 package uta.cse3310;
 
 public class Player {
-    int score;
+    private int score;
     int wins;
     String name;
     String color;
     boolean readyStatus;
 
     public int getScore() {
-      return 0;
+      return score;
     } 
     public void setScore(int score) {
 
+      this.score = score;
+
     }
     public int getWins() {
-      return 0;
+      return wins;
     }
     public void setWins(int wins) {
+
+      this.wins = wins;
 
     }
     public String getName() {
