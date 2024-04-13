@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Map;
 
 public class Sand {
   public static void main(String[] args) {
@@ -79,8 +80,10 @@ public class Sand {
     int head_x = 0; 
     int head_y = 0; 
     int word_index = 0;
-    boolean completed = false;
+    boolean running = true;
+    List<Map<Integer, Integer>> taken_index = new ArrayList<>();
     while (word_index < words.size())
+    //while (running)
     {
       // Four in five chance to create word
       if (rand_num.nextInt(5) != 0);
@@ -90,11 +93,53 @@ public class Sand {
 
         List<Integer> valid = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
 
+
+
+/*
+        int x = head_x;
+        int y = head_y;
+        while (x < word_len || y < word_len)
+        {}
+        // Invalid word position
+        if (i == size - 1 || taken_index.contains((Integer) i))
+        {
+          valid.remove(Integer.valueOf(1));
+        }
+*/
+
         // Check if horizontal is valid
         for (int i = head_x; i < word_len; i ++)
         {
           // Invalid word position
-          if (i == size - 1/* || is part of taken_index list */)
+          if (i == size - 1 || taken_index.contains((Integer) i))
+          {
+            valid.remove(Integer.valueOf(1));
+          }
+        }
+        // Check if vertical is valid
+        for (int i = head_y; i < word_len; i ++)
+        {
+          // Invalid word position
+          if (i == size - 1 || taken_index.contains((Integer) i))
+          {
+            valid.remove(Integer.valueOf(1));
+          }
+        }
+        // Check if diagnal up is valid
+        int j = head_y;
+        for (int i = head_x; i < word_len; i ++)
+        {
+          // Invalid word position
+          if (i == size - 1 || taken_index.contains((Integer) i))
+          {
+            valid.remove(Integer.valueOf(1));
+          }
+        }
+        // Check if diagnal down is valid
+        for (int i = head_x; i < word_len; i ++)
+        {
+          // Invalid word position
+          if (i == size - 1 || taken_index.contains((Integer) i))
           {
             valid.remove(Integer.valueOf(1));
           }
@@ -105,7 +150,7 @@ public class Sand {
         int rand_dir = rand_num.nextInt(4); // Randomly pick an item that is valid
         // Horizontal
         // If each char word.length away from the head is valid, then action and set completed to true
-        if (!completed)
+        //if (!completed)
         {
           boolean is_valid = true;
           for (int i = head_x; i < word_len; i ++)
@@ -119,7 +164,7 @@ public class Sand {
           if (is_valid)
           {
             // Place word
-            completed = true;
+            //completed = true;
           } 
         }
       }
@@ -141,7 +186,7 @@ public class Sand {
     {
       for ( int j = 0; j < my_array[i].length; j ++)
       {
-        System.out.format("%c ", my_array[i][j]);
+        System.out.format("%c, %d, %d ", my_array[i][j], i, j);
       }
       System.out.format("\n");
     }
