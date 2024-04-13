@@ -81,7 +81,14 @@ public class Sand {
     int head_y = 0; 
     int word_index = 0;
     boolean running = true;
-    List<Map<Integer, Integer>> taken_index = new ArrayList<>();
+    List<Point> taken_index = new ArrayList<>();
+    Point point = new Point(1, 2);
+    //point.x = 4;
+    taken_index.add(point);
+    taken_index.add(new Point(1, 8));
+    System.out.format("point.x is %d\n\n", point.x);
+    System.out.format("arraylist x %d, y %d\n\n", taken_index.get(0).x, taken_index.get(0).y);
+    System.out.format("arraylist contains " + taken_index.contains(new Point(1, 8)) + "\n");
     while (word_index < words.size())
     //while (running)
     {
@@ -188,3 +195,6 @@ public class Sand {
     }
   }
 }
+
+
+
