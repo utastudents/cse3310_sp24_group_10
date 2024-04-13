@@ -21,39 +21,39 @@ public class Sand {
       e.getStackTrace();
     }
     ArrayList<String> word_list = new ArrayList<String>();
-    word_list.add("aaron");
-    word_list.add("abandoned");
-    word_list.add("aberdeen");
-    word_list.add("abilities");
-    word_list.add("ability");
-    word_list.add("able");
-    word_list.add("aboriginal");
-    word_list.add("abortion");
-    word_list.add("about");
-    word_list.add("above");
-    word_list.add("abraham");
-    word_list.add("abroad");
-    word_list.add("absence");
-    word_list.add("absent");
-    word_list.add("absolute");
-    word_list.add("absolutely");
-    word_list.add("absorption");
-    word_list.add("abstract");
-    word_list.add("abstracts");
-    word_list.add("abuse");
-    word_list.add("academic");
-    word_list.add("academics");
-    word_list.add("academy");
-    word_list.add("accent");
-    word_list.add("accept");
-    word_list.add("acceptable");
-    word_list.add("acceptance");
-    word_list.add("accepted");
-    word_list.add("accepting");
-    word_list.add("accepts");
-    word_list.add("access");
-    word_list.add("accessed");
-    word_list.add("accessibility");
+   //word_list.add("aaron");
+   //word_list.add("abandoned");
+   //word_list.add("aberdeen");
+   //word_list.add("abilities");
+   //word_list.add("ability");
+   word_list.add("able");
+   //word_list.add("aboriginal");
+   //word_list.add("abortion");
+   //word_list.add("about");
+   //word_list.add("above");
+   //word_list.add("abraham");
+   //word_list.add("abroad");
+   //word_list.add("absence");
+   //word_list.add("absent");
+   //word_list.add("absolute");
+   //word_list.add("absolutely");
+   //word_list.add("absorption");
+   //word_list.add("abstract");
+   //word_list.add("abstracts");
+   //word_list.add("abuse");
+   //word_list.add("academic");
+   //word_list.add("academics");
+   //word_list.add("academy");
+   //word_list.add("accent");
+   //word_list.add("accept");
+   //word_list.add("acceptable");
+   //word_list.add("acceptance");
+   //word_list.add("accepted");
+   //word_list.add("accepting");
+   //word_list.add("accepts");
+   //word_list.add("access");
+   //word_list.add("accessed");
+   //word_list.add("accessibility");
     //printWords(word_list);
     // TODO: word_list should be randomized before being passed to createGrid
     printGrid(createGrid(word_list));
@@ -72,7 +72,8 @@ public class Sand {
       for ( int y = 0; y < size; y ++)
       {
         // Upper bound is exclusive, therefor skew 'z' by one
-        my_array[x][y] = (char) (rand_num.nextInt('z' + 1 - 'a') + 'a');
+        //my_array[x][y] = (char) (rand_num.nextInt('z' + 1 - 'a') + 'a');
+        my_array[x][y] = '_';
       }
     }
 
@@ -123,19 +124,27 @@ public class Sand {
           {
             valid.remove(Integer.valueOf(2));
           }
+          System.out.format("down Runner.y is: %d, i: %d\n", runner.y, i);
           runner.x ++;
           runner.y ++;
         }
+        runner = new Point(0, 0);
         // Check if diagnal up is valid
         for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
-          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
+          if (runner.y == -1 || runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
           {
             valid.remove(Integer.valueOf(3));
           }
-          runner.x --;
+          System.out.format("Runner.y is: %d, i: %d\n", runner.y, i);
+          runner.x ++;
           runner.y --;
+          // Invalid word position
+          if (runner.y == -1 || runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
+          {
+            valid.remove(Integer.valueOf(3));
+          }
         }
 
         System.out.println("valid array: " + valid);
@@ -147,6 +156,53 @@ public class Sand {
           rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
         }
         System.out.format("valid random: %d, valid.size: %d\n", rand_dir, valid.size());
+
+        /* Create word */
+        runner = new Point(head.x, head.y);
+        switch (rand_dir)
+        {
+          case 0:
+            for (int i = 0; i < word_len; i ++)
+            {
+              //int word_len = words.get(word_index).length();
+              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              runner.x ++;
+            }
+            break;
+
+          case 1:
+            for (int i = 0; i < word_len; i ++)
+            {
+              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              runner.y ++;
+            }
+            break;
+          case 2:
+            for (int i = 0; i < word_len; i ++)
+            {
+              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              runner.x ++;
+              runner.y ++;
+            }
+            break;
+          case 3:
+            for (int i = 0; i < word_len; i ++)
+            {
+              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              runner.x ++;
+              runner.y --;
+            }
+            break;
+          default:
+            break;
+        }
+
+
+        // Check if diagnal down is valid
+        // Check if diagnal up is valid
+
+
+
       }
 
       word_index ++; // Go to next word in list
