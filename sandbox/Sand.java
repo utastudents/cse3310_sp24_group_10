@@ -87,7 +87,7 @@ public class Sand {
     while (word_index < words.size())
     //while (head.x != size - 1 && head.y != size - 1)
     {
-      List<Integer> valid = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+      List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
       // Four in five chance to create word
       if (rand_num.nextInt(5) != 0);
       {
@@ -99,71 +99,54 @@ public class Sand {
         for (int i = head.x; (i - head.x) < word_len; i ++)
         {
           // Invalid word position
-          Point point = new Point(i, head.y);
           if (taken_index.contains(new Point(i, head.y)) || i == (size - 1))
           {
-          //System.out.format("Called, i: %02d, size - 1: %02d, point x: %02d, point y: %02d\n", i, size - 1, point.x, point.y);
-          System.out.format("Called\n\n");
-            valid.remove(Integer.valueOf(1));
+            valid.remove(Integer.valueOf(0));
           }
         }
-/*
         // Check if vertical is valid
         for (int i = head.y; (i - head.y) < word_len; i ++)
         {
           // Invalid word position
-          if (i == size - 1 || taken_index.contains(new Point(head.x, i)));
+          if (taken_index.contains(new Point(head.x, i)) || i == (size - 1))
           {
-            valid.remove(Integer.valueOf(2));
+            valid.remove(Integer.valueOf(1));
           }
         }
+
         Point runner = new Point(head.x, head.y);
-        // Check if diagnal up is valid
-        for (int i = 0; i < word_len; i ++)
-        {
-          runner.x ++;
-          runner.y ++;
-          // Invalid word position
-          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)));
-          {
-            valid.remove(Integer.valueOf(3));
-          }
-        }
         // Check if diagnal down is valid
         for (int i = 0; i < word_len; i ++)
         {
+          // Invalid word position
+          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
+          {
+            valid.remove(Integer.valueOf(2));
+          }
+          runner.x ++;
+          runner.y ++;
+        }
+        // Check if diagnal up is valid
+        for (int i = 0; i < word_len; i ++)
+        {
+          // Invalid word position
+          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
+          {
+            valid.remove(Integer.valueOf(3));
+          }
           runner.x --;
           runner.y --;
-          // Invalid word position
-          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)));
-          {
-            valid.remove(Integer.valueOf(4));
-          }
         }
-*/
+
         System.out.println("valid array: " + valid);
 
-        // Is horizontal possible?  If not, remove it from valid[] list
-        int rand_dir = rand_num.nextInt(4); // Randomly pick an item that is valid
-        // Horizontal
-        // If each char word.length away from the head is valid, then action and set completed to true
-        //if (!completed)
+        //System.out.format("valid.size: %d\n", valid.size());
+        int rand_dir = -1;
+        if (valid.size() != 0)
         {
-          boolean is_valid = true;
-          for (int i = head_x; i < word_len; i ++)
-          {
-            // Invalid word position
-            if (i == size - 1/* || is part of taken_index list */)
-            {
-              is_valid = false;
-            }
-          }
-          if (is_valid)
-          {
-            // Place word
-            //completed = true;
-          } 
+          rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
         }
+        System.out.format("valid random: %d, valid.size: %d\n", rand_dir, valid.size());
       }
 
       word_index ++; // Go to next word in list
