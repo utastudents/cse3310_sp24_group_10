@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lobby {
-
-    public List<String> PlayerNames;
-    Lobby(){
-        PlayerNames = new ArrayList<>();
-    }
     
+    ArrayList<Player> PlayersInLobby = new ArrayList<>();
+
     public void AddPlayers(UserEvent U){
-        PlayerNames.add(U.PlayerName);
+        Player newPlayer = new Player(U.PlayerName, 0, 0, "color", false);
+
+        PlayersInLobby.add(newPlayer);
         System.out.println("PLAYER SUCCESFULLY ADDED");
     }
 }

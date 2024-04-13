@@ -135,25 +135,25 @@
 
   <!-- Buttons for joining lobbies -->
   <div class="lobby-container">
-    <button class="lobby-button" id="button0" onclick="joinLobby(1)">0/4</button>
-    <div class="player-names" id="playerNamesDisplay1"></div> <!-- Modified line -->
-</div>
-<div class="lobby-container">
-    <button class="lobby-button" id="button1" onclick="joinLobby(2)">0/4</button>
-    <div class="player-names" id="playerNamesDisplay2"></div> <!-- Modified line -->
-</div>
-<div class="lobby-container">
-    <button class="lobby-button" id="button2" onclick="joinLobby(3)">0/4</button>
-    <div class="player-names" id="playerNamesDisplay3"></div> <!-- Modified line -->
-</div>
-<div class="lobby-container">
-    <button class="lobby-button" id="button3" onclick="joinLobby(4)">0/4</button>
-    <div class="player-names" id="playerNamesDisplay4"></div> <!-- Modified line -->
-</div>
-<div class="lobby-container">
-    <button class="lobby-button" id="button4" onclick="joinLobby(5)">0/4</button>
-    <div class="player-names" id="playerNamesDisplay5"></div> <!-- Modified line -->
-</div>
+    <button class="lobby-button" id="button0" onclick="joinLobby(1);">0/4</button>
+    <div class="player-names" id="PlayerNamesInServerDisplay1"></div> <!-- Modified line -->
+  </div>
+  <div class="lobby-container">
+      <button class="lobby-button" id="button1" onclick="joinLobby(2);">0/4</button>
+      <div class="player-names" id="PlayerNamesInServerDisplay2"></div> <!-- Modified line -->
+  </div>
+  <div class="lobby-container">
+      <button class="lobby-button" id="button2" onclick="joinLobby(3);">0/4</button>
+      <div class="player-names" id="PlayerNamesInServerDisplay3"></div> <!-- Modified line -->
+  </div>
+  <div class="lobby-container">
+      <button class="lobby-button" id="button3" onclick="joinLobby(4);">0/4</button>
+      <div class="player-names" id="PlayerNamesInServerDisplay4"></div> <!-- Modified line -->
+  </div>
+  <div class="lobby-container">
+      <button class="lobby-button" id="button4" onclick="joinLobby(5);">0/4</button>
+      <div class="player-names" id="PlayerNamesInServerDisplay5"></div> <!-- Modified line -->
+  </div>
 
   <!-- Lobby information -->
   <div id="lobbyInfo" style="display: none;">
@@ -166,13 +166,13 @@
 <div id="gameLobby">
   <hr>
   <!-- First row, where the player info and ready button is  -->
-  <table class="readyTable";>
+  <table class="readyTable">
     <!-- Player information -->
     <tr>
-      <th style="background-color: lightcoral;">Player 1</th>
-      <th style="background-color: lightskyblue;">Player 2</th>
-      <th style="background-color: lightgreen;">Player 3</th>
-      <th style="background-color: plum;">Player 4</th>
+      <th style="background-color: lightcoral;" id="readyP0">Player 1</th>
+      <th style="background-color: lightskyblue;" id="readyP1">Player 2</th>
+      <th style="background-color: lightgreen;" id="readyP2">Player 3</th>
+      <th style="background-color: plum;" id="readyP3"> Player 4</th>
     </tr>
     
     <tr>
@@ -239,7 +239,7 @@
       <div align="right";> <!-- Divider for Word Bank -->
         <table class="wordBank">
             <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
-            <tr><td style="border: 1px solid black"><p id="wordList"></p></td></tr>
+            <tr><td style="border: 1px solid black; height: 200px"><p id="wordList"></p></td></tr>
         </table>
       </div>
 
@@ -248,7 +248,7 @@
         <table class="chat">
             <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
             <tr>
-                <td style="text-align: left;">
+                <td style="text-align: left; height: 450px">
                     messages go here
                 </td>
             </tr><tr>
@@ -280,24 +280,27 @@ hide("chatBox");
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
 var nickname;
-var playerNames = [];
+var playerNamesInServer = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
-var pla
 var idx = -1;
 
-var connection = null;
+var score;
+var wins;
+var color;
+var status;
 
+var connection = null;
 var serverUrl;
 serverUrl = "ws://" + window.location.hostname + ":9110";
 // Create the connection with the server
 connection = new WebSocket(serverUrl);
 
 connection.onopen = function (evt) {
-  console.log("open");
+  console.log("Client open!");
 }
 
 connection.onclose = function (evt) {
-  console.log("close");
+  console.log("Client close.");
 }
 
 connection.onmessage = function (evt) {
@@ -312,24 +315,15 @@ connection.onmessage = function (evt) {
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
 
-  // Get the players in each lobby
-  var playerNamesInLobby1 = obj.Lobby1.PlayerNames;
-  var playerNamesInLobby2 = obj.Lobby2.PlayerNames;
-  var playerNamesInLobby3 = obj.Lobby3.PlayerNames;
-  var playerNamesInLobby4 = obj.Lobby4.PlayerNames;
-  var playerNamesInLobby5 = obj.Lobby5.PlayerNames;
-
-  // Display the names of the players in each lobby
-  updatePlayerNamesDisplay(playerNamesInLobby1, "playerNamesDisplay1");
-  updatePlayerNamesDisplay(playerNamesInLobby2, "playerNamesDisplay2");
-  updatePlayerNamesDisplay(playerNamesInLobby3, "playerNamesDisplay3");
-  updatePlayerNamesDisplay(playerNamesInLobby4, "playerNamesDisplay4");
-  updatePlayerNamesDisplay(playerNamesInLobby5, "playerNamesDisplay5");
-
   // Sets the arrays equal to each other
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
+  playerNamesInServer = obj.PlayerNamesInServer;
 
-  playerNames = obj.PlayerNames;
+  // Initialize player variables
+  score = "0";
+  wins = "0";
+  color = "color";
+  status = "false";
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
@@ -341,14 +335,8 @@ connection.onmessage = function (evt) {
   document.getElementById("button2").textContent = lobbyNumOfPlayers[2] + "/4";
   document.getElementById("button3").textContent = lobbyNumOfPlayers[3] + "/4";
   document.getElementById("button4").textContent = lobbyNumOfPlayers[4] + "/4";
-}
 
-connection.onopen = function (evt) {
-  console.log("open");
-}
 
-connection.onclose = function (evt) {
-  console.log("close");
 }
 
 function submitNickname(event) {
@@ -362,7 +350,7 @@ function submitNickname(event) {
 
   for(var i = 0; i < 20; i++)
   {
-    if(nickname == playerNames[i])
+    if(nickname == playerNamesInServer[i])
     {
       alert("Nickname is taken. Please enter a different one.");
       return;
@@ -371,11 +359,13 @@ function submitNickname(event) {
 
   const userEvent = {
     PlayerIdx: idx,
-    PlayerName: nickname
+    PlayerName: nickname,
+    PlayerScore: score,
+    PlayerColor: color,
+    PlayerStatus: status
   };
 
   connection.send(JSON.stringify(userEvent));
-
   document.getElementById("nicknameInput").value = "";
 
   // Display the user's nickname in the "Display name" section
@@ -396,13 +386,11 @@ function joinLobby(lobby) {
   }
 
   // Hide the InitialLobby elements
-  //document.getElementById("InitialLobby").style.display = "none";
   hide("InitialLobby");
   if(document.getElementById("InitialLobby").style.display == "none"){
     unhide("gameLobby");
     unhide("chatBox");
   }
-  
 
   lobbyNumOfPlayers[lobby-1]++;
 
@@ -414,12 +402,13 @@ function joinLobby(lobby) {
     PlayerName: nickname,
     LobbyNum: lobby,
   };
+
   userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
   connection.send(JSON.stringify(userEvent));
+  
 }
 
 /* Start of script for Lobby --------------------------------------------------*/
-checkGameStart(); //unconditional call; check if all players are ready
 
 function toggleButton(id){
   var buttonClass = id.className;
