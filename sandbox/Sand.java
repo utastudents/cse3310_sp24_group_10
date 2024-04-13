@@ -93,17 +93,6 @@ public class Sand {
 
         List<Integer> valid = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
 
-
-/*
-        while ((x - head_x) < word_len || (y - head_y) < word_len)
-        {}
-        // Invalid word position
-        if (i == size - 1 || taken_index.contains((Integer) i))
-        {
-          valid.remove(Integer.valueOf(1));
-        }
-*/
-
         // Check if horizontal is valid
         for (int i = head_x; (i - head_x) < word_len; i ++)
         {
