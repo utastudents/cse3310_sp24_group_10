@@ -79,64 +79,68 @@ public class Sand {
     // Populate words
     int head_x = 0; 
     int head_y = 0; 
+    Point head = new Point(0, 0);
     int word_index = 0;
     boolean running = true;
     List<Point> taken_index = new ArrayList<>();
-    Point point = new Point(1, 2);
-    //point.x = 4;
-    taken_index.add(point);
-    taken_index.add(new Point(1, 8));
-    System.out.format("point.x is %d\n\n", point.x);
-    System.out.format("arraylist x %d, y %d\n\n", taken_index.get(0).x, taken_index.get(0).y);
-    System.out.format("arraylist contains " + taken_index.contains(new Point(1, 8)) + "\n");
+
     while (word_index < words.size())
-    //while (running)
+    //while (head.x != size - 1 && head.y != size - 1)
     {
+      List<Integer> valid = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
       // Four in five chance to create word
       if (rand_num.nextInt(5) != 0);
       {
         System.out.format("Length is: %02d, word: '%s'\n", words.get(word_index).length(), words.get(word_index));
         int word_len = words.get(word_index).length();
 
-        List<Integer> valid = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
 
         // Check if horizontal is valid
-        for (int i = head_x; (i - head_x) < word_len; i ++)
+        for (int i = head.x; (i - head.x) < word_len; i ++)
         {
           // Invalid word position
-          if (i == size - 1)
+          Point point = new Point(i, head.y);
+          if (taken_index.contains(new Point(i, head.y)) || i == (size - 1))
           {
+          //System.out.format("Called, i: %02d, size - 1: %02d, point x: %02d, point y: %02d\n", i, size - 1, point.x, point.y);
+          System.out.format("Called\n\n");
             valid.remove(Integer.valueOf(1));
           }
         }
+/*
         // Check if vertical is valid
-        for (int i = head_y; (i - head_x) < word_len; i ++)
+        for (int i = head.y; (i - head.y) < word_len; i ++)
         {
           // Invalid word position
-          if (i == size - 1 || taken_index.contains((Integer) i))
+          if (i == size - 1 || taken_index.contains(new Point(head.x, i)));
           {
-            valid.remove(Integer.valueOf(1));
+            valid.remove(Integer.valueOf(2));
           }
         }
+        Point runner = new Point(head.x, head.y);
         // Check if diagnal up is valid
-        int j = head_y;
-        for (int i = head_x; (i - head_x) < word_len; i ++)
+        for (int i = 0; i < word_len; i ++)
         {
+          runner.x ++;
+          runner.y ++;
           // Invalid word position
-          if (i == size - 1 || taken_index.contains((Integer) i))
+          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)));
           {
-            valid.remove(Integer.valueOf(1));
+            valid.remove(Integer.valueOf(3));
           }
         }
         // Check if diagnal down is valid
-        for (int i = head_x; (i - head_x) < word_len; i ++)
+        for (int i = 0; i < word_len; i ++)
         {
+          runner.x --;
+          runner.y --;
           // Invalid word position
-          if (i == size - 1 || taken_index.contains((Integer) i))
+          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)));
           {
-            valid.remove(Integer.valueOf(1));
+            valid.remove(Integer.valueOf(4));
           }
         }
+*/
         System.out.println("valid array: " + valid);
 
         // Is horizontal possible?  If not, remove it from valid[] list
@@ -161,13 +165,8 @@ public class Sand {
           } 
         }
       }
-      // Vertical
-      // Diagonal down
-      // Diagonal up
-      word_index ++;
-      // Check edges
 
-      head_x ++;
+      word_index ++; // Go to next word in list
     }
 
     return my_array;
@@ -179,7 +178,7 @@ public class Sand {
     {
       for ( int j = 0; j < my_array[i].length; j ++)
       {
-        System.out.format("%c, %d, %d ", my_array[i][j], i, j);
+        System.out.format("%c ", my_array[i][j]);
       }
       System.out.format("\n");
     }
