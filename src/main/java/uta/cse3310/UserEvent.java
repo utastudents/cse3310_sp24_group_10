@@ -5,5 +5,7 @@ public class UserEvent {
     int PlayerIdx;
     String PlayerName; //name inputed by the player
     int LobbyNum;
+    boolean AddPlayer;
     int[] NumOfPlayersInLobby;
+    boolean Ready;
 }

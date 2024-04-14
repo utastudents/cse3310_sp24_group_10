@@ -1,41 +1,54 @@
 package uta.cse3310;
 
 public class Player {
+    String name;
     int score;
     int wins;
-    String name;
     String color;
     boolean readyStatus;
 
+    Player(String name, int score, int wins, String color, boolean readyStatus){
+      this.name = name;
+      this.score = score;
+      this.wins = wins;
+      this.color = color;
+      this.readyStatus = readyStatus;
+    }
+
     public int getScore() {
-      return 0;
+      return score;
     } 
     public void setScore(int score) {
-
+      this.score = score;
     }
     public int getWins() {
-      return 0;
+      return wins;
     }
     public void setWins(int wins) {
-
+      this.wins = wins;
     }
     public String getName() {
-      return "";
+      return name;
     } 
     public void setName(String name) {
-
+      this.name = name;
     }
     public String getColor() {
-      return "";
+      return color;
     } 
     public void setColor(String color) {
-
+      this.color = color;
     }
     public boolean getReady() {
-      return true;
+      return readyStatus;
     } 
-    public void setReady(String name) {
-
+    public void setReady(boolean input) {
+      if(input){
+        this.readyStatus = true;
+      }
+      else{
+        this.readyStatus = false;
+      }
     }
 
 }
