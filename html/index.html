@@ -282,11 +282,11 @@ connection.onmessage = function (evt) {
   var playerNamesInLobby5 = obj.Lobby5.PlayerNames;
 
   // Display the names of the players in each lobby
-  updatePlayerNamesDisplay(playerNamesInLobby1, "playerNamesDisplay1");
-  updatePlayerNamesDisplay(playerNamesInLobby2, "playerNamesDisplay2");
-  updatePlayerNamesDisplay(playerNamesInLobby3, "playerNamesDisplay3");
-  updatePlayerNamesDisplay(playerNamesInLobby4, "playerNamesDisplay4");
-  updatePlayerNamesDisplay(playerNamesInLobby5, "playerNamesDisplay5");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby1, "playerNamesDisplay1");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby2, "playerNamesDisplay2");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby3, "playerNamesDisplay3");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby4, "playerNamesDisplay4");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby5, "playerNamesDisplay5");
 
   // Sets the arrays equal to each other
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
@@ -501,7 +501,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     }
 }
 
-function updatePlayerNamesDisplay(playerNamesInLobby, displayId) {
+function updateDisplayPlayersInMainMenu(playerNamesInLobby, displayId) {
   var playerNamesDisplay = document.getElementById(displayId);
   var playerNamesHTML = "";
 
