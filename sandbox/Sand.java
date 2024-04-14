@@ -21,31 +21,33 @@ public class Sand {
       e.getStackTrace();
     }
     ArrayList<String> word_list = new ArrayList<String>();
-   //word_list.add("aaron");
-   //word_list.add("abandoned");
-   //word_list.add("aberdeen");
-   //word_list.add("abilities");
-   //word_list.add("ability");
+   word_list.add("aaron");
+   word_list.add("abandoned");
+   word_list.add("aberdeen");
+   word_list.add("abilities");
+   word_list.add("ability");
    word_list.add("able");
    //word_list.add("A");
-   //word_list.add("aboriginal");
-   //word_list.add("abortion");
-   //word_list.add("about");
-   //word_list.add("above");
-   //word_list.add("abraham");
-   //word_list.add("abroad");
-   //word_list.add("absence");
-   //word_list.add("absent");
-   //word_list.add("absolute");
-   //word_list.add("absolutely");
-   //word_list.add("absorption");
-   //word_list.add("abstract");
-   //word_list.add("abstracts");
-   //word_list.add("abuse");
-   //word_list.add("academic");
-   //word_list.add("academics");
-   //word_list.add("academy");
-   //word_list.add("accent");
+   //word_list.add("789abcd");
+   //word_list.add("IOPABCD");
+   word_list.add("aboriginal");
+   word_list.add("abortion");
+   word_list.add("about");
+   word_list.add("above");
+   word_list.add("abraham");
+   word_list.add("abroad");
+   word_list.add("absence");
+   word_list.add("absent");
+   word_list.add("absolute");
+   word_list.add("absolutely");
+   word_list.add("absorption");
+   word_list.add("abstract");
+   word_list.add("abstracts");
+   word_list.add("abuse");
+   word_list.add("academic");
+   word_list.add("academics");
+   word_list.add("academy");
+   word_list.add("accent");
    //word_list.add("accept");
    //word_list.add("acceptable");
    //word_list.add("acceptance");
@@ -62,7 +64,8 @@ public class Sand {
 
   public static char[][] createGrid(ArrayList<String> words)
   {
-    final int size = 15;
+    final int size = 50;
+    final boolean debug = true;
 
     Random rand_num = new Random();
     char[][] my_array = new char[size][size];
@@ -72,9 +75,14 @@ public class Sand {
     {
       for ( int y = 0; y < size; y ++)
       {
-        // Upper bound is exclusive, therefor skew 'z' by one
-        //my_array[x][y] = (char) (rand_num.nextInt('z' + 1 - 'a') + 'a');
-        my_array[x][y] = '_';
+        if (debug)
+        {
+          my_array[x][y] = (char) (rand_num.nextInt('Z' + 1 - 'A') + 'A');
+        } else 
+        {
+          // Upper bound is exclusive, therefor skew 'z' by one
+          my_array[x][y] = (char) (rand_num.nextInt('z' + 1 - 'a') + 'a');
+        }
       }
     }
 
@@ -91,10 +99,10 @@ public class Sand {
     {
       List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
       // Four in five chance to create word
-      if (rand_num.nextInt(5) != 0);
+      if (rand_num.nextInt(3) == 0)
       {
         int word_index = rand_num.nextInt(words.size());
-        System.out.format("Length is: %02d, word: '%s'\n", words.get(word_index).length(), words.get(word_index));
+        //System.out.format("Length is: %02d, word: '%s'\n", words.get(word_index).length(), words.get(word_index));
         int word_len = words.get(word_index).length();
 
 
@@ -149,63 +157,44 @@ public class Sand {
 
         System.out.println("valid array: " + valid);
 
-        int direction = -1;
+
+        /* Create word */
         if (valid.size() != 0)
         {
           int rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
-          direction = valid.get(rand_dir);
+          int direction = valid.get(rand_dir);
+          System.out.format("valid direction: %d, valid.size: %d\n", direction, valid.size());
+          //System.out.format("runner.x is: %d, runner.y: %d, head.x: %d, head.y: %d\n", new_runner.x, new_runner.y, head.x, head.y);
+
+          Point new_runner = new Point(head.x, head.y);
+          runner = new Point(head.x, head.y);
+
+          for (int i = 0; i < word_len; i ++)
+          {
+            my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+            taken_index.add(new Point(runner.x, runner.y)); // Add the positions of word chars to used list
+            switch (direction)
+            {
+              case 0:
+                runner.x ++;
+                break;
+              case 1:
+                runner.y ++;
+                break;
+              case 2:
+                runner.x ++;
+                runner.y ++;
+                break;
+              case 3:
+                runner.x ++;
+                runner.y --;
+                break;
+            }
+          }
         }
-        System.out.format("valid direction: %d, valid.size: %d\n", direction, valid.size());
-
-
-        /* Create word */
-        my_array[14][13] = words.get(word_index).charAt(0); 
-        Point new_runner = new Point(head.x, head.y);
-        runner = new Point(head.x, head.y);
-        switch (direction)
-        {
-          case 0:
-            for (int i = 0; i < word_len; i ++)
-            {
-              System.out.format("runner.x is: %d, runner.y: %d, head.x: %d, head.y: %d\n", new_runner.x, new_runner.y, head.x, head.y);
-              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
-              taken_index.add(new Point(runner.x, runner.y)); // Add the positions of word chars to used list
-              runner.x ++;
-            }
-            break;
-
-          case 1:
-            for (int i = 0; i < word_len; i ++)
-            {
-              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
-              taken_index.add(new Point(runner.x, runner.y));
-              runner.y ++;
-            }
-            break;
-          case 2:
-            for (int i = 0; i < word_len; i ++)
-            {
-              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
-              taken_index.add(new Point(runner.x, runner.y));
-              runner.x ++;
-              runner.y ++;
-            }
-            break;
-          case 3:
-            for (int i = 0; i < word_len; i ++)
-            {
-              my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
-              taken_index.add(new Point(runner.x, runner.y));
-              runner.x ++;
-              runner.y --;
-            }
-            break;
-          default:
-            break;
-        }
-
       }
       head.x ++;
+      // Check end of array
       if (head.x == size && head.y == size - 1)
       {
         running = false;
@@ -216,6 +205,7 @@ public class Sand {
         head.y ++;
       }
     }
+    System.out.format("Size of taken_index: %d, percentage: %f\n", taken_index.size(), 100.0 * taken_index.size() / (size * size));
 
     return my_array;
   }
