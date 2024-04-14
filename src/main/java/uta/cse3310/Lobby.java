@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Lobby {
     
-    ArrayList<Player> PlayersInLobby = new ArrayList<>();
+    ArrayList<Player> PlayersInLobby = new ArrayList<>(4);
 
     public void AddPlayers(UserEvent U){
         Player newPlayer = new Player(U.PlayerName, 0, 0, "color", false);

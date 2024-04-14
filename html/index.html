@@ -265,7 +265,7 @@
 </div>
 
 <script>
-/*Util functions*/
+/*Util hide/unhide functions*/
 function hide(id){
   document.getElementById(id).style.display = "none";
 }
@@ -279,15 +279,25 @@ hide("chatBox");
   
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
-var nickname;
+var nickname = "";
 var playerNamesInServer = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 var idx = -1;
 
-var score;
-var wins;
-var color;
-var status;
+var score = 0;
+var wins = 0;
+var color = "";
+var status = false;
+
+var newPlayer = [nickname, score, wins, color, status];
+
+var lobby1Info = [newPlayer, newPlayer, newPlayer, newPlayer];
+var lobby2Info = [newPlayer, newPlayer, newPlayer, newPlayer];
+var lobby3Info = [newPlayer, newPlayer, newPlayer, newPlayer];
+var lobby4Info = [newPlayer, newPlayer, newPlayer, newPlayer];
+var lobby5Info = [newPlayer, newPlayer, newPlayer, newPlayer];
+
+console.log["initial: "+lobby1Info[0]];
 
 var connection = null;
 var serverUrl;
@@ -319,11 +329,58 @@ connection.onmessage = function (evt) {
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
   playerNamesInServer = obj.PlayerNamesInServer;
 
-  // Initialize player variables
-  score = "0";
-  wins = "0";
-  color = "color";
-  status = "false";
+  // Grab player information. Update every event. 
+  addPlayer2Array();
+  function addPlayer2Array(){
+    for(var i = 0; i < lobbyNumOfPlayers[0]; i++){
+      lobby1Info[i][0] = obj.Lobby1.PlayersInLobby[i].name;
+      lobby1Info[i][1] = obj.Lobby1.PlayersInLobby[i].score;
+      lobby1Info[i][2] = obj.Lobby1.PlayersInLobby[i].wins;
+      lobby1Info[i][3] = obj.Lobby1.PlayersInLobby[i].color;
+      lobby1Info[i][4] = obj.Lobby1.PlayersInLobby[i].readyStatus;
+
+      console.log("[Lobby 1 -> Player"+(i+1)+"]: "+lobby1Info[i][0]+" "+lobby1Info[i][1]+" "+lobby1Info[i][2]+" "+lobby1Info[i][3]+" "+lobby1Info[i][4]);
+    }
+        
+    for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
+      lobby2Info[i][0] = obj.Lobby2.PlayersInLobby[i].name;
+      lobby2Info[i][1] = obj.Lobby2.PlayersInLobby[i].score;
+      lobby2Info[i][2] = obj.Lobby2.PlayersInLobby[i].wins;
+      lobby2Info[i][3] = obj.Lobby2.PlayersInLobby[i].color;
+      lobby2Info[i][4] = obj.Lobby2.PlayersInLobby[i].readyStatus;
+      console.log("[Lobby 2 -> Player"+(i+1)+"]: "+lobby2Info[i][0]+" "+lobby2Info[i][1]+" "+lobby2Info[i][2]+" "+lobby2Info[i][3]+" "+lobby2Info[i][4]);
+    }
+    
+    for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
+      lobby3Info[i][0] = obj.Lobby3.PlayersInLobby[i].name;
+      lobby3Info[i][1] = obj.Lobby3.PlayersInLobby[i].score;
+      lobby3Info[i][2] = obj.Lobby3.PlayersInLobby[i].wins;
+      lobby3Info[i][3] = obj.Lobby3.PlayersInLobby[i].color;
+      lobby3Info[i][4] = obj.Lobby3.PlayersInLobby[i].readyStatus;
+      console.log("[Lobby 3 -> Player"+(i+1)+"]: "+lobby3Info[i][0]+" "+lobby3Info[i][1]+" "+lobby3Info[i][2]+" "+lobby3Info[i][3]+" "+lobby3Info[i][4]);
+    }
+
+    for(var i = 0; i < lobbyNumOfPlayers[3]; i++){
+      lobby4Info[i][0] = obj.Lobby4.PlayersInLobby[i].name;
+      lobby4Info[i][1] = obj.Lobby4.PlayersInLobby[i].score;
+      lobby4Info[i][2] = obj.Lobby4.PlayersInLobby[i].wins;
+      lobby4Info[i][3] = obj.Lobby4.PlayersInLobby[i].color;
+      lobby4Info[i][4] = obj.Lobby4.PlayersInLobby[i].readyStatus;
+      console.log("[Lobby 4 -> Player"+(i+1)+"]: "+lobby4Info[i][0]+" "+lobby4Info[i][1]+" "+lobby4Info[i][2]+" "+lobby4Info[i][3]+" "+lobby4Info[i][4]);
+    }
+
+    for(var i = 0; i < lobbyNumOfPlayers[4]; i++){
+      lobby5Info[i][0] = obj.Lobby5.PlayersInLobby[i].name;
+      lobby5Info[i][1] = obj.Lobby5.PlayersInLobby[i].score;
+      lobby5Info[i][2] = obj.Lobby5.PlayersInLobby[i].wins;
+      lobby5Info[i][3] = obj.Lobby5.PlayersInLobby[i].color;
+      lobby5Info[i][4] = obj.Lobby5.PlayersInLobby[i].readyStatus;
+      console.log("[Lobby 5 -> Player"+(i+1)+"]: "+lobby5Info[i][0]+" "+lobby5Info[i][1]+" "+lobby5Info[i][2]+" "+lobby5Info[i][3]+" "+lobby5Info[i][4]);
+    }
+    
+
+  }
+
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
@@ -410,6 +467,12 @@ function joinLobby(lobby) {
 
 /* Start of script for Lobby --------------------------------------------------*/
 
+function updateDisplayPlayers(){
+  for(var i = 0; i < 4; i++){
+    document.getElementById("ready"+i).textContent = lobby1Info[i][0];
+  }
+}
+
 function toggleButton(id){
   var buttonClass = id.className;
   if(buttonClass == "notReady"){ 
@@ -447,6 +510,39 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
       genTable("wordButton");
     }
 }
+
+function genReadyTable(id, lobby){
+  let newDisplay = '<div id="gameLobby'+lobby+'">';
+    newDisplay += '<tr>'
+    newDisplay +=  '<th style="background-color: lightcoral;" id="readyP'+lobby+'0">Player 1</th>';
+    newDisplay +=  '<th style="background-color: lightskyblue;" id="readyP'+lobby+'1">Player 2</th>';
+    newDisplay +=  '<th style="background-color: lightgreen;" id="readyP'+lobby+'2">Player 3</th>';
+    newDisplay +=  '<th style="background-color: plum;" id="readyP'+lobby+'3"> Player 4</th>';
+    newDisplay += '<tr>'
+    newDisplay +=  '<td style="border: none">Wins: #</td>'
+    newDisplay +=  '<td style="border: none">Wins: #</td>'
+    newDisplay +=  '<td style="border: none">Wins: #</td>'
+    newDisplay +=  '<td style="border: none">Wins: #</td>'
+    newDisplay +=  '</tr>'
+    newDisplay +=  '<tr>'
+    newDisplay +=  '<td style="background-color: white;">'
+    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">'
+    newDisplay +=  '</td>'
+    newDisplay +=  '<td style="background-color: white;">'
+    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">'
+    newDisplay +=  '</td>'
+    newDisplay +=  '<td style="background-color: white;">'
+    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">'
+    newDisplay +=  '</td>'
+    newDisplay +=  '<td style="background-color: white;">'
+    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="fourth"; onclick="toggleButton(this)">'
+    newDisplay +=  '</td>'
+    newDisplay +=  '</tr>'
+    newDisplay +=  '</table>'
+    newDisplay +=  '</div>'
+
+    document.getElementById(id).innerHTML = newDisplay;
+  }
 
 /* Start of script for Ongoing Game -------------------------------------------*/
 </script>
