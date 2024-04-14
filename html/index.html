@@ -135,23 +135,23 @@
 
   <!-- Buttons for joining lobbies -->
   <div class="lobby-container">
-    <button class="lobby-button" id="button0" onclick="joinLobby(1);">0/4</button>
+    <button class="lobby-button" id="button0" onclick="joinLobby(1); updateDisplayPlayers(1)">0/4</button>
     <div class="player-names" id="PlayerNamesInServerDisplay1"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button1" onclick="joinLobby(2);">0/4</button>
+      <button class="lobby-button" id="button1" onclick="joinLobby(2); updateDisplayPlayers(1)">0/4</button>
       <div class="player-names" id="PlayerNamesInServerDisplay2"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button2" onclick="joinLobby(3);">0/4</button>
+      <button class="lobby-button" id="button2" onclick="joinLobby(3); updateDisplayPlayers(1)">0/4</button>
       <div class="player-names" id="PlayerNamesInServerDisplay3"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button3" onclick="joinLobby(4);">0/4</button>
+      <button class="lobby-button" id="button3" onclick="joinLobby(4); updateDisplayPlayers(1)">0/4</button>
       <div class="player-names" id="PlayerNamesInServerDisplay4"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button4" onclick="joinLobby(5);">0/4</button>
+      <button class="lobby-button" id="button4" onclick="joinLobby(5); updateDisplayPlayers(1)">0/4</button>
       <div class="player-names" id="PlayerNamesInServerDisplay5"></div> <!-- Modified line -->
   </div>
 
@@ -279,7 +279,7 @@ hide("chatBox");
   
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
-var nickname = "";
+var nickname = "(You)";
 var playerNamesInServer = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 var idx = -1;
@@ -289,15 +289,22 @@ var wins = 0;
 var color = "";
 var status = false;
 
+//Create an array that stores player information as reference for display
 var newPlayer = [nickname, score, wins, color, status];
+var lobby1Info = new Array();
+var lobby2Info = new Array();
+var lobby3Info = new Array();
+var lobby4Info = new Array();
+var lobby5Info = new Array();
 
-var lobby1Info = [newPlayer, newPlayer, newPlayer, newPlayer];
-var lobby2Info = [newPlayer, newPlayer, newPlayer, newPlayer];
-var lobby3Info = [newPlayer, newPlayer, newPlayer, newPlayer];
-var lobby4Info = [newPlayer, newPlayer, newPlayer, newPlayer];
-var lobby5Info = [newPlayer, newPlayer, newPlayer, newPlayer];
+for(var i = 0; i < 5; i++){
+  lobby1Info[i] = Array.from(newPlayer);
+  lobby2Info[i] = Array.from(newPlayer);
+  lobby3Info[i] = Array.from(newPlayer);
+  lobby4Info[i] = Array.from(newPlayer);
+  lobby5Info[i] = Array.from(newPlayer);
+}
 
-console.log["initial: "+lobby1Info[0]];
 
 var connection = null;
 var serverUrl;
@@ -330,7 +337,6 @@ connection.onmessage = function (evt) {
   playerNamesInServer = obj.PlayerNamesInServer;
 
   // Grab player information. Update every event. 
-  addPlayer2Array();
   function addPlayer2Array(){
     for(var i = 0; i < lobbyNumOfPlayers[0]; i++){
       lobby1Info[i][0] = obj.Lobby1.PlayersInLobby[i].name;
@@ -338,8 +344,6 @@ connection.onmessage = function (evt) {
       lobby1Info[i][2] = obj.Lobby1.PlayersInLobby[i].wins;
       lobby1Info[i][3] = obj.Lobby1.PlayersInLobby[i].color;
       lobby1Info[i][4] = obj.Lobby1.PlayersInLobby[i].readyStatus;
-
-      console.log("[Lobby 1 -> Player"+(i+1)+"]: "+lobby1Info[i][0]+" "+lobby1Info[i][1]+" "+lobby1Info[i][2]+" "+lobby1Info[i][3]+" "+lobby1Info[i][4]);
     }
         
     for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
@@ -348,7 +352,6 @@ connection.onmessage = function (evt) {
       lobby2Info[i][2] = obj.Lobby2.PlayersInLobby[i].wins;
       lobby2Info[i][3] = obj.Lobby2.PlayersInLobby[i].color;
       lobby2Info[i][4] = obj.Lobby2.PlayersInLobby[i].readyStatus;
-      console.log("[Lobby 2 -> Player"+(i+1)+"]: "+lobby2Info[i][0]+" "+lobby2Info[i][1]+" "+lobby2Info[i][2]+" "+lobby2Info[i][3]+" "+lobby2Info[i][4]);
     }
     
     for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
@@ -357,7 +360,6 @@ connection.onmessage = function (evt) {
       lobby3Info[i][2] = obj.Lobby3.PlayersInLobby[i].wins;
       lobby3Info[i][3] = obj.Lobby3.PlayersInLobby[i].color;
       lobby3Info[i][4] = obj.Lobby3.PlayersInLobby[i].readyStatus;
-      console.log("[Lobby 3 -> Player"+(i+1)+"]: "+lobby3Info[i][0]+" "+lobby3Info[i][1]+" "+lobby3Info[i][2]+" "+lobby3Info[i][3]+" "+lobby3Info[i][4]);
     }
 
     for(var i = 0; i < lobbyNumOfPlayers[3]; i++){
@@ -366,7 +368,6 @@ connection.onmessage = function (evt) {
       lobby4Info[i][2] = obj.Lobby4.PlayersInLobby[i].wins;
       lobby4Info[i][3] = obj.Lobby4.PlayersInLobby[i].color;
       lobby4Info[i][4] = obj.Lobby4.PlayersInLobby[i].readyStatus;
-      console.log("[Lobby 4 -> Player"+(i+1)+"]: "+lobby4Info[i][0]+" "+lobby4Info[i][1]+" "+lobby4Info[i][2]+" "+lobby4Info[i][3]+" "+lobby4Info[i][4]);
     }
 
     for(var i = 0; i < lobbyNumOfPlayers[4]; i++){
@@ -375,16 +376,15 @@ connection.onmessage = function (evt) {
       lobby5Info[i][2] = obj.Lobby5.PlayersInLobby[i].wins;
       lobby5Info[i][3] = obj.Lobby5.PlayersInLobby[i].color;
       lobby5Info[i][4] = obj.Lobby5.PlayersInLobby[i].readyStatus;
-      console.log("[Lobby 5 -> Player"+(i+1)+"]: "+lobby5Info[i][0]+" "+lobby5Info[i][1]+" "+lobby5Info[i][2]+" "+lobby5Info[i][3]+" "+lobby5Info[i][4]);
     }
     
-
   }
-
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
   nickname = displayName.replace("Display name:", "").trim();
+
+  addPlayer2Array();
 
   // Update the numbers on the buttons to display the correct number of players
   document.getElementById("button0").textContent = lobbyNumOfPlayers[0] + "/4";
@@ -427,8 +427,11 @@ function submitNickname(event) {
 
   // Display the user's nickname in the "Display name" section
   document.getElementById("displayName").textContent = "Display name: " + nickname;
-}
 
+  obj = JSON.parse(msg);
+
+  addPlayer2Array();
+}
 // Function to join the lobby
 function joinLobby(lobby) {
   if (!nickname) {
@@ -464,12 +467,34 @@ function joinLobby(lobby) {
   connection.send(JSON.stringify(userEvent));
   
 }
-
 /* Start of script for Lobby --------------------------------------------------*/
-
-function updateDisplayPlayers(){
-  for(var i = 0; i < 4; i++){
-    document.getElementById("ready"+i).textContent = lobby1Info[i][0];
+function updateDisplayPlayers(lobby){
+  switch(lobby){
+    case 1:
+      for(var i = 0; i < lobbyNumOfPlayers[0]; i++){
+        document.getElementById("readyP"+i).textContent = (lobby1Info[i][0] || "You");
+      }
+    break;
+    case 2:
+      for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
+        document.getElementById("readyP"+i).textContent = lobby2Info[i][0];
+      }
+    break;
+    case 3:
+      for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
+        document.getElementById("readyP"+i).textContent = lobby3Info[i][0];
+      }
+    break
+    case 4:
+      for(var i = 0; i < lobbyNumOfPlayers[3]; i++){
+        document.getElementById("readyP"+i).textContent = lobby4Info[i][0];
+      }
+    break;
+    case 5:
+      for(var i = 0; i < lobbyNumOfPlayers[4]; i++){
+        document.getElementById("readyP"+i).textContent = lobby5Info[i][0];
+      }
+    break;
   }
 }
 
