@@ -13,16 +13,26 @@
       td{
           border: 1px solid black;
       }
-      button{
-          padding: 5px 30px;
-          margin: 5px 5px;
-          width: 200px;
+      .lobby-button {
+          padding: 5px 10px; /* Adjust padding as needed */
+          margin: 5px 0; /* Change margin to stack buttons vertically */
+          width: 100px; /* Adjust width as needed */
           cursor: pointer;
           transition-duration: 0.25s;
+          display: inline-block; /* Ensure each button takes full width */
       }
-      button:hover{
+      .lobby-button:hover{
           background-color: white;
       }
+      .lobby-container {
+          display: top;
+      }
+
+      .player-names {
+          display: inline-block;
+          margin-left: 10px; /* Adjust margin as needed */
+      }
+
   </style>
 </head>
 <body>
@@ -31,33 +41,70 @@
 <h1 style="text-align:center">
   The Word Search Game
 </h1>
+<button class="leave-button" style="display: block;" onclick="leaveGame()">Leave Game</button>
+<script>
+  function leaveGame() {
+    window.location.href = "index.html"; 
+  }
+</script>
 
-<!-- Nickname window -->
-<h2 id="displayName">Display name:</h2>
-<h3 style="text-align:left">
-  Please enter a nickname:
-</h3>
-<form id="nicknameForm" onsubmit="submitNickname(event)">
+
+
+<div id = "InitialLobby">
+  <!-- Nickname window -->
+  <h2 id="displayName">Display name:</h2>
+  <h3 style="text-align:left">
+    Please enter a nickname:
+  </h3>
+  <form id="nicknameForm" onsubmit="submitNickname(event)">
     <label for="nickname">Nickname:</label><br>
     <input type="text" id="nicknameInput" name="nickname"><br><br>
     <input type="submit" value="Submit">
-</form>
+  </form>
+
+  <!-- Buttons for joining lobbies -->
+  <div class="lobby-container">
+    <button class="lobby-button" id="button0" onclick="joinLobby(1)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay1"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button1" onclick="joinLobby(2)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay2"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button2" onclick="joinLobby(3)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay3"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button3" onclick="joinLobby(4)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay4"></div> <!-- Modified line -->
+</div>
+<div class="lobby-container">
+    <button class="lobby-button" id="button4" onclick="joinLobby(5)">0/4</button>
+    <div class="player-names" id="playerNamesDisplay5"></div> <!-- Modified line -->
+</div>
+
+  <!-- Lobby information -->
+  <div id="lobbyInfo" style="display: none;">
+    <h2>Lobby 1</h2>
+    <p id="lobbyPlayers">0/4</p>
+  </div>
+</div>
 
 
 
 <script>
 
+var nickname;
+var playerNames = [];
+let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
+var pla
 var idx = -1;
-class UserEvent {
-  Button = -1;
-  PlayerIdx = 0;
-  PlayerName = '';
-}
 
 var connection = null;
 
 var serverUrl;
-serverUrl = "ws://" + window.location.hostname + ":9880";
+serverUrl = "ws://" + window.location.hostname + ":9110";
 // Create the connection with the server
 connection = new WebSocket(serverUrl);
 
@@ -77,17 +124,44 @@ connection.onmessage = function (evt) {
   const obj = JSON.parse(msg);
 
   // Handling different types of messages received from the server
-  if ('NumOfPlayers' in obj) { // Message containing player information
-    idx = obj.NumOfPlayers - 1; // Assuming idx starts from 0
-    gameid = obj.GameId;
+  if ('PlayerIdx' in obj) { // Message containing player information
+    idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
+
+  // Get the players in each lobby
+  var playerNamesInLobby1 = obj.Lobby1.PlayerNames;
+  var playerNamesInLobby2 = obj.Lobby2.PlayerNames;
+  var playerNamesInLobby3 = obj.Lobby3.PlayerNames;
+  var playerNamesInLobby4 = obj.Lobby4.PlayerNames;
+  var playerNamesInLobby5 = obj.Lobby5.PlayerNames;
+
+  // Display the names of the players in each lobby
+  updatePlayerNamesDisplay(playerNamesInLobby1, "playerNamesDisplay1");
+  updatePlayerNamesDisplay(playerNamesInLobby2, "playerNamesDisplay2");
+  updatePlayerNamesDisplay(playerNamesInLobby3, "playerNamesDisplay3");
+  updatePlayerNamesDisplay(playerNamesInLobby4, "playerNamesDisplay4");
+  updatePlayerNamesDisplay(playerNamesInLobby5, "playerNamesDisplay5");
+
+  // Sets the arrays equal to each other
+  lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
+
+  playerNames = obj.PlayerNames;
+
+  //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
+  var displayName = document.getElementById("displayName").textContent;
+  nickname = displayName.replace("Display name:", "").trim();
+
+  // Update the numbers on the buttons to display the correct number of players
+  document.getElementById("button0").textContent = lobbyNumOfPlayers[0] + "/4";
+  document.getElementById("button1").textContent = lobbyNumOfPlayers[1] + "/4";
+  document.getElementById("button2").textContent = lobbyNumOfPlayers[2] + "/4";
+  document.getElementById("button3").textContent = lobbyNumOfPlayers[3] + "/4";
+  document.getElementById("button4").textContent = lobbyNumOfPlayers[4] + "/4";
 }
 
 
 connection.onopen = function (evt) {
   console.log("open");
-  // When the connection opens, you can prompt the user to enter their name
-  document.getElementById("nicknameForm").style.display = "block";
 }
 
 connection.onclose = function (evt) {
@@ -97,15 +171,23 @@ connection.onclose = function (evt) {
 function submitNickname(event) {
  event.preventDefault(); // Prevent form submission
 
-  const nickname = document.getElementById("nicknameInput").value;
+  nickname = document.getElementById("nicknameInput").value;
   if (!nickname) {
     alert("Please enter a nickname.");
     return;
   }
 
+  for(var i = 0; i < 20; i++)
+  {
+    if(nickname == playerNames[i])
+    {
+      alert("Nickname is taken. Please enter a different one.");
+      return;
+    }
+  }
+
   const userEvent = {
     PlayerIdx: idx,
-    Button: -1,
     PlayerName: nickname
   };
 
@@ -117,26 +199,47 @@ function submitNickname(event) {
   document.getElementById("displayName").textContent = "Display name: " + nickname;
 }
 
-function enterGame(gameId) {
-  // Check if the player has entered their name
-  if (document.getElementById("playerName").classList.contains("hidden")) {
-    alert("Please enter your name before joining a game.");
+// Function to join the lobby
+function joinLobby(lobby) {
+  if (!nickname) {
+    alert("Please enter a nickname.");
     return;
   }
 
-  // Hide the lobby
-  document.getElementById("lobby").style.display = "none";
-  // Show the game screen
-  document.getElementById("gameScreen" + gameId).style.display = "block";
+  if(lobbyNumOfPlayers[lobby-1] >= 4)
+  {
+    document.getElementById("button" + (lobby -1)).disabled = true;
+    return;
+  }
+
+  // Hide the InitialLobby elements
+  document.getElementById("InitialLobby").style.display = "none";
+
+  lobbyNumOfPlayers[lobby-1]++;
+
+  // Update the text content of the button to display the number of players joined
+  document.getElementById("button" + (lobby - 1)).textContent = lobbyNumOfPlayers[lobby - 1] + "/4";
+
+  const userEvent = {
+    PlayerIdx: idx,
+    PlayerName: nickname,
+    LobbyNum: lobby,
+  };
+  userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
+  connection.send(JSON.stringify(userEvent));
 }
 
-function exitGame(gameId) {
-  // Hide the selected game screen
-  document.getElementById("gameScreen" + gameId).style.display = "none";
-  // Show the lobby
-  document.getElementById("lobby").style.display = "block";
+function updatePlayerNamesDisplay(playerNamesInLobby, displayId) {
+  var playerNamesDisplay = document.getElementById(displayId);
+  var playerNamesHTML = "";
+
+  // Convert array of player names to comma-separated string
+  var playerNamesString = playerNamesInLobby.join(", ");
+  
+  playerNamesHTML += playerNamesString;
+  playerNamesDisplay.innerHTML = playerNamesHTML;
 }
+
 </script>
-
 </body>
 </html>
