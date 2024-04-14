@@ -9,16 +9,8 @@ public class InitialLobby {
 
     public PlayerType Players;
     public int NumOfPlayers = 1;
-
     public int[] NumOfPlayersInLobby = {0, 0, 0, 0, 0};
-
-    // public int NumOfPlayersInLobby1;
-    // public int NumOfPlayersInLobby2;
-    // public int NumOfPlayersInLobby3;
-    // public int NumOfPlayersInLobby4;
-    // public int NumOfPlayersInLobby5;
-
-    public List<String> PlayerNames;
+    public List<String> PlayerNamesInServer;
     public Map<WebSocket, Integer> connectionToPlayerIndexMap;
 
     Lobby Lobby1 = null;
@@ -48,9 +40,9 @@ public class InitialLobby {
     }
 
     public void InitNames(){
-        PlayerNames = new ArrayList<>(); // Initialize as ArrayList
+        PlayerNamesInServer = new ArrayList<>(); // Initialize as ArrayList
         for (int i = 0; i < 20; i++) { // Assuming a lobby can have up to 20 players
-            PlayerNames.add(""); // Add empty string to the list
+            PlayerNamesInServer.add(""); // Add empty string to the list
         }
     }
 
@@ -60,11 +52,11 @@ public class InitialLobby {
 
     public int PlayerToIdx() {
         int idx = -1;
-        for (int i = 0; i < PlayerNames.size(); i++) {
+        for (int i = 0; i < PlayerNamesInServer.size(); i++) {
             // Check if the current player's name is empty
-            if (PlayerNames.get(i).isEmpty()) {
+            if (PlayerNamesInServer.get(i).isEmpty()) {
                 // Update name so its not found in loop again.
-                PlayerNames.set(i, "WaitingForName");
+                PlayerNamesInServer.set(i, "WaitingForName");
                 idx = i;
                 break;
             }
@@ -78,9 +70,9 @@ public class InitialLobby {
         System.out.println("WebSocket connection string: " + connString);
 
         // Iterate through the list of player names and find the index associated with the connection
-        for (int i = 0; i < PlayerNames.size(); i++) {
-            System.out.println("Player name at index " + i + ": " + PlayerNames.get(i));
-            if (PlayerNames.get(i).equals(connString)) {
+        for (int i = 0; i < PlayerNamesInServer.size(); i++) {
+            System.out.println("Player name at index " + i + ": " + PlayerNamesInServer.get(i));
+            if (PlayerNamesInServer.get(i).equals(connString)) {
                 return i;
             }
         }
@@ -91,14 +83,14 @@ public class InitialLobby {
 
     public void updatePlayerName(int playerIdx, String newName) {
         // Update the player's name at the specified index
-        PlayerNames.set(playerIdx, newName);
+        PlayerNamesInServer.set(playerIdx, newName);
     }
 
     public void Update(UserEvent U) {
         //set player names
         if(U.LobbyNum == 0)
         {
-            PlayerNames.set(U.PlayerIdx, U.PlayerName);
+            PlayerNamesInServer.set(U.PlayerIdx, U.PlayerName);
         }
 
         if(U.AddPlayer)

@@ -4,15 +4,13 @@ public class Player {
     String name;
     int score;
     int wins;
-    String color;
-    boolean readyStatus;
+    // String color;
+    // boolean readyStatus;
 
-    Player(String name, int score, int wins, String color, boolean readyStatus){
+    Player(String name, int score, int wins){
       this.name = name;
       this.score = score;
       this.wins = wins;
-      this.color = color;
-      this.readyStatus = readyStatus;
     }
 
     public int getScore() {
@@ -33,23 +31,23 @@ public class Player {
     public void setName(String name) {
       this.name = name;
     }
-    public String getColor() {
-      return color;
-    } 
-    public void setColor(String color) {
-      this.color = color;
-    }
-    public boolean getReady() {
-      return readyStatus;
-    } 
-    public void setReady(boolean input) {
-      if(input){
-        this.readyStatus = true;
-      }
-      else{
-        this.readyStatus = false;
-      }
-    }
+    // public String getColor() {
+    //   return color;
+    // } 
+    // public void setColor(String color) {
+    //   this.color = color;
+    // }
+    // public boolean getReady() {
+    //   return readyStatus;
+    // } 
+    // public void setReady(boolean input) {
+    //   if(input){
+    //     this.readyStatus = true;
+    //   }
+    //   else{
+    //     this.readyStatus = false;
+    //   }
+    // }
 
 }
 

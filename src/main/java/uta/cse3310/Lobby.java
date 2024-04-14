@@ -12,12 +12,18 @@ public class Lobby {
         PlayerNames = new ArrayList<>();
     }
 
+    /* Create an array list to store the players of each lobby*/
+    ArrayList<Player> PlayersInLobby = new ArrayList<>(4); 
+
     public void StartGame(){
         System.out.println("GAME HAS BEEN STARTED!!!!!!!!!!!!!!!!!");
     }
     
     public void AddPlayers(UserEvent U) {
+        Player newPlayer = new Player(U.PlayerName, 0,0);
+
         PlayerNames.add(U.PlayerName);
+        PlayersInLobby.add(newPlayer);
         for(int i = 0; i < 4; i++)
         {
             if(PlayerIds[i] == -1)

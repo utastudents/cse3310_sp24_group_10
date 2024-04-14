@@ -1,3 +1,5 @@
+package uta.cse3310;
+
 public class Point implements Comparable<Point>{
 //public class Point {
     public Point(int x, int y) {
