@@ -27,6 +27,7 @@ public class Sand {
    //word_list.add("abilities");
    //word_list.add("ability");
    word_list.add("able");
+   //word_list.add("A");
    //word_list.add("aboriginal");
    //word_list.add("abortion");
    //word_list.add("about");
@@ -61,7 +62,7 @@ public class Sand {
 
   public static char[][] createGrid(ArrayList<String> words)
   {
-    final int size = 10;
+    final int size = 15;
 
     Random rand_num = new Random();
     char[][] my_array = new char[size][size];
@@ -81,17 +82,18 @@ public class Sand {
     int head_x = 0; 
     int head_y = 0; 
     Point head = new Point(0, 0);
-    int word_index = 0;
     boolean running = true;
     List<Point> taken_index = new ArrayList<>();
 
-    while (word_index < words.size())
-    //while (head.x != size - 1 && head.y != size - 1)
+    //while (word_index < words.size())
+    //while (!(head.x == size - 1 && head.y == size - 1))
+    while (running)
     {
       List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
       // Four in five chance to create word
       if (rand_num.nextInt(5) != 0);
       {
+        int word_index = rand_num.nextInt(words.size());
         System.out.format("Length is: %02d, word: '%s'\n", words.get(word_index).length(), words.get(word_index));
         int word_len = words.get(word_index).length();
 
@@ -100,7 +102,7 @@ public class Sand {
         for (int i = head.x; (i - head.x) < word_len; i ++)
         {
           // Invalid word position
-          if (taken_index.contains(new Point(i, head.y)) || i == (size - 1))
+          if ((taken_index.contains(new Point(i, head.y))) || (i == size))
           {
             valid.remove(Integer.valueOf(0));
           }
@@ -109,7 +111,7 @@ public class Sand {
         for (int i = head.y; (i - head.y) < word_len; i ++)
         {
           // Invalid word position
-          if (taken_index.contains(new Point(head.x, i)) || i == (size - 1))
+          if (taken_index.contains(new Point(head.x, i)) || i == size)
           {
             valid.remove(Integer.valueOf(1));
           }
@@ -124,7 +126,6 @@ public class Sand {
           {
             valid.remove(Integer.valueOf(2));
           }
-          System.out.format("down Runner.y is: %d, i: %d\n", runner.y, i);
           runner.x ++;
           runner.y ++;
         }
@@ -137,7 +138,6 @@ public class Sand {
           {
             valid.remove(Integer.valueOf(3));
           }
-          System.out.format("Runner.y is: %d, i: %d\n", runner.y, i);
           runner.x ++;
           runner.y --;
           // Invalid word position
@@ -149,23 +149,27 @@ public class Sand {
 
         System.out.println("valid array: " + valid);
 
-        //System.out.format("valid.size: %d\n", valid.size());
-        int rand_dir = -1;
+        int direction = -1;
         if (valid.size() != 0)
         {
-          rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
+          int rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
+          direction = valid.get(rand_dir);
         }
-        System.out.format("valid random: %d, valid.size: %d\n", rand_dir, valid.size());
+        System.out.format("valid direction: %d, valid.size: %d\n", direction, valid.size());
+
 
         /* Create word */
+        my_array[14][13] = words.get(word_index).charAt(0); 
+        Point new_runner = new Point(head.x, head.y);
         runner = new Point(head.x, head.y);
-        switch (rand_dir)
+        switch (direction)
         {
           case 0:
             for (int i = 0; i < word_len; i ++)
             {
-              //int word_len = words.get(word_index).length();
+              System.out.format("runner.x is: %d, runner.y: %d, head.x: %d, head.y: %d\n", new_runner.x, new_runner.y, head.x, head.y);
               my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              taken_index.add(new Point(runner.x, runner.y)); // Add the positions of word chars to used list
               runner.x ++;
             }
             break;
@@ -174,6 +178,7 @@ public class Sand {
             for (int i = 0; i < word_len; i ++)
             {
               my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              taken_index.add(new Point(runner.x, runner.y));
               runner.y ++;
             }
             break;
@@ -181,6 +186,7 @@ public class Sand {
             for (int i = 0; i < word_len; i ++)
             {
               my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              taken_index.add(new Point(runner.x, runner.y));
               runner.x ++;
               runner.y ++;
             }
@@ -189,6 +195,7 @@ public class Sand {
             for (int i = 0; i < word_len; i ++)
             {
               my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+              taken_index.add(new Point(runner.x, runner.y));
               runner.x ++;
               runner.y --;
             }
@@ -197,15 +204,17 @@ public class Sand {
             break;
         }
 
-
-        // Check if diagnal down is valid
-        // Check if diagnal up is valid
-
-
-
       }
-
-      word_index ++; // Go to next word in list
+      head.x ++;
+      if (head.x == size && head.y == size - 1)
+      {
+        running = false;
+      }
+      if (head.x == size)
+      {
+        head.x = 0;
+        head.y ++;
+      }
     }
 
     return my_array;
@@ -213,11 +222,11 @@ public class Sand {
 
   public static void printGrid(char[][] my_array)
   {
-    for ( int i = 0; i < my_array[0].length; i ++)
+    for ( int y = 0; y < my_array.length; y ++)
     {
-      for ( int j = 0; j < my_array[i].length; j ++)
+      for ( int x = 0; x < my_array[y].length; x ++)
       {
-        System.out.format("%c ", my_array[i][j]);
+        System.out.format("%c ", my_array[x][y], x, y);
       }
       System.out.format("\n");
     }
