@@ -5,64 +5,40 @@ import java.util.TimerTask;
 public class GameTimer
 {
    private int seconds = 0;
-   private int minutes = 0;
-   private int hours = 0;
-
-   private float totalSeconds = 0f;
 
    private Timer time = new Timer();
    
    private TimerTask task = new TimerTask()
    {
-    
-    public void run()
-    {
-        totalSeconds++;
-        seconds++;
-
-        if(seconds > 59)
+        public void run()
         {
-            minutes++;
+            
+            seconds++;
 
-            seconds = 0;
+            //test timer
+            System.out.println("seconds: " + seconds + System.lineSeparator());
+
+            //cancel when at 30 seconds
+            if(seconds >= 30)
+            {
+                time.cancel();
+            }
         }
+    };
 
-        if(minutes > 59)
-        {
-            hours++;
-
-            minutes = 0;
-        }
-
-        if(hours > 23)
-        {
-            hours = 0;
-        }
-
-        //test timer
-        System.out.println("hours: " + hours + " minutes: " + minutes + " seconds: " + seconds + "\n");
-    }
-
-   };
-
-    public float getSeconds()
+    public int getSeconds()
     {
-        return totalSeconds;
-    }
-
-    public float getMinutes()
-    {
-        return totalSeconds/60;
-    }
-
-    public float getHours()
-    {
-        return totalSeconds/3600;
+        return seconds;
     }
 
     public void start()
     {
         time.scheduleAtFixedRate(task,1000,1000);
+    }
+
+    public void stop()
+    {
+        time.cancel();
     }
 
 }

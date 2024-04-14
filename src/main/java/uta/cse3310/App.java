@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
@@ -176,9 +177,13 @@ public class App extends WebSocketServer {
     A.start();
     System.out.println("websocket Server started on port: " + port);
 
-    //testing timer
-    Game game = new Game();
-    game.startGame();
+    //add players
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(new Player("Bob", "Yellow"));
 
+    //testing timer
+    Game game = new Game(players);
+    game.startGame();
+    
   }
 }

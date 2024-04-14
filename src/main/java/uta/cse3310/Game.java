@@ -4,18 +4,35 @@ import java.util.ArrayList;
 
 public class Game {
 
-    private char[][] grid = new char[50][50];
-    private ArrayList<String> words = new ArrayList<String>();
-    private ArrayList<Integer> wordsFound = new ArrayList<Integer>();
-    private ArrayList<Player> Players = new ArrayList<Player>();
-    private GameTimer timer = new GameTimer();
+    private char[][] grid;
+    private ArrayList<String> words;
+    private ArrayList<Player> players;
+    private GameTimer timer;
+    private int numWordsFound;
+
+    public Game(ArrayList<Player> players) {
+        
+        this.grid = new char[50][50];
+        this.words = new ArrayList<String>();
+        this.players = new ArrayList<Player>(players);
+        this.timer = new GameTimer();
+        this.numWordsFound = 0;
+    }
 
     public void startGame(){
 
         timer.start();
+        
+        //testing timer
+        while(timer.getSeconds() <= 30)
+        {
+
+        }
+
     }
 
     public void initializeGrid(){
+
 
     }
 
@@ -46,6 +63,20 @@ public class Game {
 
     public void update(){
 
+        //check to end game
+        for(int i = 0; i < words.size(); i++)
+        {
+            if(words.get(i).equals(""))
+            {
+                numWordsFound++;
+            }
+        }
+
+        if(numWordsFound == words.size())
+        {
+            this.checkWin();
+        }
+
     }
 
     public void surrender(){
@@ -63,24 +94,26 @@ public class Game {
         int winnerIdx = 0;
 
         //determine winner
-        for(int i = 0; i < Players.size(); i++)
+        for(int i = 0; i < players.size(); i++)
         {
-            if(Players.get(i).getScore() > winner)
+            if(players.get(i).getScore() > winner)
             {
-                winner = Players.get(i).getScore(); 
+                winner = players.get(i).getScore(); 
                 winnerIdx = i;
             }
         }
 
         //reset all players scores
-        for(int i = 0; i < Players.size(); i++)
+        for(int i = 0; i < players.size(); i++)
         {
-            Players.get(i).setScore(0); 
+            players.get(i).setScore(0); 
         }
 
-        System.out.println("The Winner is: " + Players.get(winnerIdx).name + System.lineSeparator());
+        Player pWinner = players.get(winnerIdx);
 
-        Players.get(winnerIdx).setWins(++Players.get(winnerIdx).wins);
+        System.out.println("The Winner is: " + pWinner.getName() + System.lineSeparator());
+
+        pWinner.addWin();
 
     }
     
