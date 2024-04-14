@@ -450,8 +450,6 @@ function submitNickname(event) {
     PlayerName: nickname
   };
 
-  addPlayer2Array();
-
   connection.send(JSON.stringify(userEvent));
 
   document.getElementById("nicknameInput").value = "";
