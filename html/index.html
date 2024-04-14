@@ -5,6 +5,7 @@
   <title>Word Search Battle Lobby</title>
   <style>
       table, tr, th, td{
+          background-color: white;
           border: 2px solid black;
           padding: 5px;
           text-align: center;
@@ -15,16 +16,24 @@
       .lobby-button {
           padding: 5px 10px; /* Adjust padding as needed */
           margin: 5px 0; /* Change margin to stack buttons vertically */
-          width: 200px; /* Adjust width as needed */
+          width: 100px; /* Adjust width as needed */
           cursor: pointer;
           transition-duration: 0.25s;
           display: inline-block; /* Ensure each button takes full width */
-          background-color: rgb(255, 241, 83);
       }
       .lobby-button:hover{
           background-color: white;
       }
-      /* Start of Lobby HTML classes */
+      .lobby-container {
+          display: top;
+      }
+
+      .player-names {
+          display: inline-block;
+          margin-left: 10px; /* Adjust margin as needed */
+      }
+
+      * Start of Lobby HTML classes */
       .readyTable{
         border: hidden;
         width: 100%;
@@ -110,6 +119,7 @@
         clear: both;
         content: "";
       }
+
   </style>
 </head>
 <body>
@@ -118,6 +128,14 @@
 <h1 style="text-align:center">
   The Word Search Game
 </h1>
+<button class="leave-button" style="display: block;" onclick="leaveGame()">Leave Game</button>
+<script>
+  function leaveGame() {
+    window.location.href = "index.html"; 
+  }
+</script>
+
+
 
 <div id = "InitialLobby">
   <!-- Nickname window -->
@@ -130,8 +148,6 @@
     <input type="text" id="nicknameInput" name="nickname"><br><br>
     <input type="submit" value="Submit">
   </form>
-
-  <hr>
 
   <!-- Buttons for joining lobbies -->
   <div class="lobby-container">
@@ -162,7 +178,6 @@
   </div>
 </div>
 
-<!-- Start of lobby HTML ------------------------------------------------------->
 <div id="gameLobby">
   <hr>
   <!-- First row, where the player info and ready button is  -->
@@ -184,85 +199,22 @@
     <tr>
         <!-- Ready button (toggle) -->
         <td style="background-color: white;">
-            <input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">
+            <input class="notReady"; type="button"; value="Not Ready"; id="ready1"; onclick="readyUp(1)">
         </td>
         <td style="background-color: white;">
-            <input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">
-        </td>
-        <td style="background-color: white;">
-            <input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">
-        </td>
-        <td style="background-color: white;">
-            <input class="notReady"; type="button"; value="Not Ready"; id="fourth"; onclick="toggleButton(this)">
-        </td>
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready2"; onclick="readyUp(2)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready3"; onclick="readyUp(3)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready4"; onclick="readyUp(4)">
+      </td>
     </tr>
   </table>
 </div>
 
-<!-- Start of Ongoing Game HTML ----------------------------------------------->
-<div id="ongoingGame">
-    <hr>
 
-  <div> <!-- Divider for player info -->
-    <table class="playerTable">
-        <!-- Player information -->
-        <th style="background-color: lightcoral;">Player 1</th>
-        <th style="background-color: lightskyblue;">Player 2</th>
-        <th style="background-color: lightgreen;">Player 3</th>
-        <th style="background-color: plum;">Player 4</th>
-        <tr>
-            <td class="statistic">SCORE: </td>
-            <td class="statistic">SCORE: </td>
-            <td class="statistic">SCORE: </td>
-            <td class="statistic">SCORE: </td>
-        </tr>
-        <tr>
-            <td class="statistic">Words Found: </td>
-            <td class="statistic">Words Found: </td>
-            <td class="statistic">Words Found: </td>
-            <td class="statistic">Words Found: </td>
-        </tr>
-    </table>
-  </div>
-  <hr>
-
-  <div id="pageSplit"> <!-- Section where the page will split into two -->
-    <div style="float: left; width: 50%; height: 100%"> <!-- Divider for Word Search Box -->
-        <label id = "wordButton"></label>
-    </div>
-
-    <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
-      <div align="center";> <!-- Divider for surrender button -->
-        <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
-      </div>
-
-      <div align="right";> <!-- Divider for Word Bank -->
-        <table class="wordBank">
-            <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
-            <tr><td style="border: 1px solid black; height: 200px"><p id="wordList"></p></td></tr>
-        </table>
-      </div>
-
-      <!-- This is the chat box -->
-      <div align="right"; id="chatBox";> <!-- For chat -->
-        <table class="chat">
-            <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
-            <tr>
-                <td style="text-align: left; height: 450px">
-                    messages go here
-                </td>
-            </tr><tr>
-                <td class="textBox">
-                    Type here...
-                </td>
-            </tr>
-            
-        </table>
-      </div>
-    </div>
-  </div>
-
-</div>
 
 <script>
 /*Util hide/unhide functions*/
@@ -281,46 +233,36 @@ var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
 var nickname = "(You)";
 var playerNamesInServer = [];
+
+var currentLobby = null;
+var nickname;
+var playerNames = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 var idx = -1;
+var readyStatus = [0, 0, 0, 0];
+var ready = false;
 
-var score = 0;
-var wins = 0;
-var color = "";
-var status = false;
-
-//Create an array that stores player information as reference for display
-var newPlayer = [nickname, score, wins, color, status];
-var lobby1Info = new Array();
-var lobby2Info = new Array();
-var lobby3Info = new Array();
-var lobby4Info = new Array();
-var lobby5Info = new Array();
-
-for(var i = 0; i < 5; i++){
-  lobby1Info[i] = Array.from(newPlayer);
-  lobby2Info[i] = Array.from(newPlayer);
-  lobby3Info[i] = Array.from(newPlayer);
-  lobby4Info[i] = Array.from(newPlayer);
-  lobby5Info[i] = Array.from(newPlayer);
-}
-
+document.getElementById("gameLobby").style.display = "none";
 
 var connection = null;
+
 var serverUrl;
 serverUrl = "ws://" + window.location.hostname + ":9110";
 // Create the connection with the server
 connection = new WebSocket(serverUrl);
 
 connection.onopen = function (evt) {
-  console.log("Client open!");
+  console.log("open");
 }
 
 connection.onclose = function (evt) {
-  console.log("Client close.");
+  console.log("close");
 }
 
 connection.onmessage = function (evt) {
+
+  var addPlayer = false;
+  var ready = false;
   var msg;
   msg = evt.data;
 
@@ -332,8 +274,24 @@ connection.onmessage = function (evt) {
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
 
+  // Get the players in each lobby
+  var playerNamesInLobby1 = obj.Lobby1.PlayerNames;
+  var playerNamesInLobby2 = obj.Lobby2.PlayerNames;
+  var playerNamesInLobby3 = obj.Lobby3.PlayerNames;
+  var playerNamesInLobby4 = obj.Lobby4.PlayerNames;
+  var playerNamesInLobby5 = obj.Lobby5.PlayerNames;
+
+  // Display the names of the players in each lobby
+  updatePlayerNamesDisplay(playerNamesInLobby1, "playerNamesDisplay1");
+  updatePlayerNamesDisplay(playerNamesInLobby2, "playerNamesDisplay2");
+  updatePlayerNamesDisplay(playerNamesInLobby3, "playerNamesDisplay3");
+  updatePlayerNamesDisplay(playerNamesInLobby4, "playerNamesDisplay4");
+  updatePlayerNamesDisplay(playerNamesInLobby5, "playerNamesDisplay5");
+
   // Sets the arrays equal to each other
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
+
+  playerNames = obj.PlayerNames;
   playerNamesInServer = obj.PlayerNamesInServer;
 
   // Grab player information. Update every event. 
@@ -392,8 +350,15 @@ connection.onmessage = function (evt) {
   document.getElementById("button2").textContent = lobbyNumOfPlayers[2] + "/4";
   document.getElementById("button3").textContent = lobbyNumOfPlayers[3] + "/4";
   document.getElementById("button4").textContent = lobbyNumOfPlayers[4] + "/4";
+}
 
 
+connection.onopen = function (evt) {
+  console.log("open");
+}
+
+connection.onclose = function (evt) {
+  console.log("close");
 }
 
 function submitNickname(event) {
@@ -407,7 +372,7 @@ function submitNickname(event) {
 
   for(var i = 0; i < 20; i++)
   {
-    if(nickname == playerNamesInServer[i])
+    if(nickname == playerNames[i])
     {
       alert("Nickname is taken. Please enter a different one.");
       return;
@@ -416,13 +381,11 @@ function submitNickname(event) {
 
   const userEvent = {
     PlayerIdx: idx,
-    PlayerName: nickname,
-    PlayerScore: score,
-    PlayerColor: color,
-    PlayerStatus: status
+    PlayerName: nickname
   };
 
   connection.send(JSON.stringify(userEvent));
+
   document.getElementById("nicknameInput").value = "";
 
   // Display the user's nickname in the "Display name" section
@@ -445,12 +408,14 @@ function joinLobby(lobby) {
     return;
   }
 
-  // Hide the InitialLobby elements
-  hide("InitialLobby");
-  if(document.getElementById("InitialLobby").style.display == "none"){
-    unhide("gameLobby");
-    unhide("chatBox");
-  }
+  addPlayer = true;
+
+  // Hide the InitialLobby elements and show the GameLobby
+  document.getElementById("InitialLobby").style.display = "none";
+  document.getElementById("gameLobby").style.display = "block";
+
+  // Update the current lobby
+  currentLobby = lobby;
 
   lobbyNumOfPlayers[lobby-1]++;
 
@@ -461,8 +426,8 @@ function joinLobby(lobby) {
     PlayerIdx: idx,
     PlayerName: nickname,
     LobbyNum: lobby,
+    AddPlayer: addPlayer,
   };
-
   userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
   connection.send(JSON.stringify(userEvent));
   
@@ -536,40 +501,39 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     }
 }
 
-function genReadyTable(id, lobby){
-  let newDisplay = '<div id="gameLobby'+lobby+'">';
-    newDisplay += '<tr>'
-    newDisplay +=  '<th style="background-color: lightcoral;" id="readyP'+lobby+'0">Player 1</th>';
-    newDisplay +=  '<th style="background-color: lightskyblue;" id="readyP'+lobby+'1">Player 2</th>';
-    newDisplay +=  '<th style="background-color: lightgreen;" id="readyP'+lobby+'2">Player 3</th>';
-    newDisplay +=  '<th style="background-color: plum;" id="readyP'+lobby+'3"> Player 4</th>';
-    newDisplay += '<tr>'
-    newDisplay +=  '<td style="border: none">Wins: #</td>'
-    newDisplay +=  '<td style="border: none">Wins: #</td>'
-    newDisplay +=  '<td style="border: none">Wins: #</td>'
-    newDisplay +=  '<td style="border: none">Wins: #</td>'
-    newDisplay +=  '</tr>'
-    newDisplay +=  '<tr>'
-    newDisplay +=  '<td style="background-color: white;">'
-    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">'
-    newDisplay +=  '</td>'
-    newDisplay +=  '<td style="background-color: white;">'
-    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">'
-    newDisplay +=  '</td>'
-    newDisplay +=  '<td style="background-color: white;">'
-    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">'
-    newDisplay +=  '</td>'
-    newDisplay +=  '<td style="background-color: white;">'
-    newDisplay +=  '<input class="notReady"; type="button"; value="Not Ready"; id="fourth"; onclick="toggleButton(this)">'
-    newDisplay +=  '</td>'
-    newDisplay +=  '</tr>'
-    newDisplay +=  '</table>'
-    newDisplay +=  '</div>'
+function updatePlayerNamesDisplay(playerNamesInLobby, displayId) {
+  var playerNamesDisplay = document.getElementById(displayId);
+  var playerNamesHTML = "";
 
-    document.getElementById(id).innerHTML = newDisplay;
-  }
+  // Convert array of player names to comma-separated string
+  var playerNamesString = playerNamesInLobby.join(", ");
+  
+  playerNamesHTML += playerNamesString;
+  playerNamesDisplay.innerHTML = playerNamesHTML;
+}
 
-/* Start of script for Ongoing Game -------------------------------------------*/
+function readyUp(i) {
+  ready = true
+
+  // Get the button element by its ID
+  var buttonElement = document.getElementById("ready" + i);
+
+  // Remove the existing class (notReady) and add the new class (ready)
+  buttonElement.classList.remove("notReady");
+  buttonElement.classList.add("ready");
+
+  // Change the value of the button to "Ready"
+  buttonElement.value = "Ready";
+
+  const userEvent = {
+    PlayerIdx: idx,
+    LobbyNum: currentLobby,
+    Ready: ready,
+  };
+
+  connection.send(JSON.stringify(userEvent));
+}
+
 </script>
 </body>
 </html>
