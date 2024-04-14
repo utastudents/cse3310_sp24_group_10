@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Sand {
   public static void main(String[] args) {
+    final boolean debug = true;
     try
     {
       // I/O possibilities:
@@ -27,9 +28,6 @@ public class Sand {
    word_list.add("abilities");
    word_list.add("ability");
    word_list.add("able");
-   //word_list.add("A");
-   //word_list.add("789abcd");
-   //word_list.add("IOPABCD");
    word_list.add("aboriginal");
    word_list.add("abortion");
    word_list.add("about");
@@ -48,24 +46,33 @@ public class Sand {
    word_list.add("academics");
    word_list.add("academy");
    word_list.add("accent");
-   //word_list.add("accept");
-   //word_list.add("acceptable");
-   //word_list.add("acceptance");
-   //word_list.add("accepted");
-   //word_list.add("accepting");
-   //word_list.add("accepts");
-   //word_list.add("access");
-   //word_list.add("accessed");
-   //word_list.add("accessibility");
-    //printWords(word_list);
-    // TODO: word_list should be randomized before being passed to createGrid
-    printGrid(createGrid(word_list));
+   word_list.add("accept");
+   word_list.add("acceptable");
+   word_list.add("acceptance");
+   word_list.add("accepted");
+   word_list.add("accepting");
+   word_list.add("accepts");
+   word_list.add("access");
+   word_list.add("accessed");
+   word_list.add("accessibility");
+
+   if (debug)
+   {
+     long start_time = System.nanoTime();
+     printGrid(createGrid(word_list, debug));
+     long end_time = System.nanoTime();
+
+     long duration = (end_time - start_time) / 1000000;  
+     System.out.format("Time to complete: " + duration + " milliseconds\n");
+   } else 
+   {
+     printGrid(createGrid(word_list, debug));
+   }
   }
 
-  public static char[][] createGrid(ArrayList<String> words)
+  public static char[][] createGrid(ArrayList<String> words, boolean debug)
   {
     final int size = 50;
-    final boolean debug = true;
 
     Random rand_num = new Random();
     char[][] my_array = new char[size][size];
@@ -77,32 +84,30 @@ public class Sand {
       {
         if (debug)
         {
-          my_array[x][y] = (char) (rand_num.nextInt('Z' + 1 - 'A') + 'A');
+          //my_array[x][y] = (char) (rand_num.nextInt('Z' + 1 - 'A') + 'A');
+          my_array[x][y] = '_';
         } else 
         {
-          // Upper bound is exclusive, therefor skew 'z' by one
+          // Upper bound is exclusive, therefore skew 'z' by one
           my_array[x][y] = (char) (rand_num.nextInt('z' + 1 - 'a') + 'a');
         }
       }
     }
 
-    // Populate words
     int head_x = 0; 
     int head_y = 0; 
     Point head = new Point(0, 0);
     boolean running = true;
     List<Point> taken_index = new ArrayList<>();
 
-    //while (word_index < words.size())
-    //while (!(head.x == size - 1 && head.y == size - 1))
+    /* Populate words */
     while (running)
     {
       List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
-      // Four in five chance to create word
+      // Chance to create word
       if (rand_num.nextInt(3) == 0)
       {
         int word_index = rand_num.nextInt(words.size());
-        //System.out.format("Length is: %02d, word: '%s'\n", words.get(word_index).length(), words.get(word_index));
         int word_len = words.get(word_index).length();
 
 
@@ -130,7 +135,7 @@ public class Sand {
         for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
-          if (runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
+          if (runner.x == size - 1 || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
           {
             valid.remove(Integer.valueOf(2));
           }
@@ -142,7 +147,7 @@ public class Sand {
         for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
-          if (runner.y == -1 || runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
+          if (runner.y == -1 || runner.x == size || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
           {
             valid.remove(Integer.valueOf(3));
           }
@@ -154,8 +159,11 @@ public class Sand {
             valid.remove(Integer.valueOf(3));
           }
         }
-
-        System.out.println("valid array: " + valid);
+        if (debug)
+        {
+          System.out.format("head.x: %02d, head.y: %02d, ", head.x, head.y);
+          System.out.println("valid array: " + valid);
+        }
 
 
         /* Create word */
@@ -163,8 +171,6 @@ public class Sand {
         {
           int rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
           int direction = valid.get(rand_dir);
-          System.out.format("valid direction: %d, valid.size: %d\n", direction, valid.size());
-          //System.out.format("runner.x is: %d, runner.y: %d, head.x: %d, head.y: %d\n", new_runner.x, new_runner.y, head.x, head.y);
 
           Point new_runner = new Point(head.x, head.y);
           runner = new Point(head.x, head.y);
@@ -205,7 +211,10 @@ public class Sand {
         head.y ++;
       }
     }
-    System.out.format("Size of taken_index: %d, percentage: %f\n", taken_index.size(), 100.0 * taken_index.size() / (size * size));
+    if (debug)
+    {
+      System.out.format("Size of taken_index: %d, percentage of word chars: %f\n", taken_index.size(), 100.0 * taken_index.size() / (size * size));
+    }
 
     return my_array;
   }

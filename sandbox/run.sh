@@ -1,1 +1,1 @@
-javac Sand.java && java Sand
+javac Sand.java && javac Point.java && java Sand
