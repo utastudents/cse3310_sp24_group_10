@@ -5,10 +5,13 @@ import java.util.List;
 
 public class Lobby {
 
+    public int LobbyNum;
     public List<String> PlayerNames;
     public int[] PlayerIds = new int[] {-1, -1, -1, -1};
     public int[] ReadiedPlayers = new int[] {0, 0, 0, 0};
-    Lobby() {
+
+    public Lobby(int lobbyNum) {
+        this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
         PlayerNames = new ArrayList<>();
     }
 
@@ -41,7 +44,7 @@ public class Lobby {
                     if(ReadiedPlayers[i] == 1)
                     {
                         count++;
-                        if(count == PlayerNames.size() && count <= 2)
+                        if((count == PlayerNames.size()) && (count <= 2))
                         {
                             StartGame();
                         }

@@ -12,12 +12,6 @@ public class InitialLobby {
 
     public int[] NumOfPlayersInLobby = {0, 0, 0, 0, 0};
 
-    // public int NumOfPlayersInLobby1;
-    // public int NumOfPlayersInLobby2;
-    // public int NumOfPlayersInLobby3;
-    // public int NumOfPlayersInLobby4;
-    // public int NumOfPlayersInLobby5;
-
     public List<String> PlayerNames;
     public Map<WebSocket, Integer> connectionToPlayerIndexMap;
 
@@ -30,11 +24,11 @@ public class InitialLobby {
 
     InitialLobby() {
         connectionToPlayerIndexMap = new HashMap<>();
-        Lobby1 = new Lobby();
-        Lobby2 = new Lobby();
-        Lobby3 = new Lobby();
-        Lobby4 = new Lobby();
-        Lobby5 = new Lobby();
+        Lobby1 = new Lobby(1);
+        Lobby2 = new Lobby(2);
+        Lobby3 = new Lobby(3);
+        Lobby4 = new Lobby(4);
+        Lobby5 = new Lobby(5);
     }
 
     // Method to associate WebSocket connection with player index
