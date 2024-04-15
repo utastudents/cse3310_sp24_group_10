@@ -1,4 +1,5 @@
 package uta.cse3310;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -101,30 +102,32 @@ public class InitialLobby {
             PlayerNames.set(U.PlayerIdx, U.PlayerName);
         }
 
+        Player player = new Player(U.PlayerName, 0, 0, "white", false);
+
         if(U.AddPlayer)
         {
             System.out.println("\nCHOOSING LOBBY NOW");
             switch(U.LobbyNum)
             {
                 case 1:
-                    Lobby1.AddPlayers(U);
+                    Lobby1.AddPlayers(player);
                     this.NumOfPlayersInLobby[0]++; // Increment the global variable
                     System.out.println("JOINED LOBBY1\n");
                     break;
                 case 2:
-                    Lobby2.AddPlayers(U);
+                    Lobby2.AddPlayers(player);
                     this.NumOfPlayersInLobby[1]++;
                     break;
                 case 3:
-                    Lobby3.AddPlayers(U);
+                    Lobby3.AddPlayers(player);
                     this.NumOfPlayersInLobby[2]++;
                     break;
                 case 4:
-                    Lobby4.AddPlayers(U);
+                    Lobby4.AddPlayers(player);
                     this.NumOfPlayersInLobby[3]++;
                     break;
                 case 5:
-                    Lobby5.AddPlayers(U);
+                    Lobby5.AddPlayers(player);
                     this.NumOfPlayersInLobby[4]++;
                     break;
                 default:
@@ -137,19 +140,19 @@ public class InitialLobby {
             switch(U.LobbyNum)
             {
                 case 1:
-                    Lobby1.ReadyPlayer(U);
+                    Lobby1.ReadyPlayer(player);
                     break;
                 case 2:
-                    Lobby2.ReadyPlayer(U);
+                    Lobby2.ReadyPlayer(player);
                     break;
                 case 3:
-                    Lobby3.ReadyPlayer(U);
+                    Lobby3.ReadyPlayer(player);
                     break;
                 case 4:
-                    Lobby4.ReadyPlayer(U);
+                    Lobby4.ReadyPlayer(player);
                     break;
                 case 5:
-                    Lobby5.ReadyPlayer(U);
+                    Lobby5.ReadyPlayer(player);
                     break;
                 default:
                     System.out.println("NO LOBBY FOUND TO READY UP\n");

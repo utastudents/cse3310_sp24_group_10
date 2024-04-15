@@ -1,3 +1,5 @@
+package uta.cse3310;
+
 import java.util.Random;
 import java.io.BufferedReader;
 import java.io.FileReader;
