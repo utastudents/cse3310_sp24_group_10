@@ -101,15 +101,15 @@ public class InitialLobby {
             PlayerNames.set(U.PlayerIdx, U.PlayerName);
         }
 
-        if(U.LobbyNum != 0)
+        if(U.AddPlayer)
         {
-            System.out.println("CHOOSING LOBBY NOW");
+            System.out.println("\nCHOOSING LOBBY NOW");
             switch(U.LobbyNum)
             {
                 case 1:
                     Lobby1.AddPlayers(U);
                     this.NumOfPlayersInLobby[0]++; // Increment the global variable
-                    System.out.println("JOINED LOBBY1");
+                    System.out.println("JOINED LOBBY1\n");
                     break;
                 case 2:
                     Lobby2.AddPlayers(U);
@@ -129,6 +129,30 @@ public class InitialLobby {
                     break;
                 default:
                     System.out.println("NO LOBBY FOUND");
+            }
+        }
+        if(U.Ready)
+        {
+            System.out.println("\nREADY BUTTON CLICKED");
+            switch(U.LobbyNum)
+            {
+                case 1:
+                    Lobby1.ReadyPlayer(U);
+                    break;
+                case 2:
+                    Lobby2.ReadyPlayer(U);
+                    break;
+                case 3:
+                    Lobby3.ReadyPlayer(U);
+                    break;
+                case 4:
+                    Lobby4.ReadyPlayer(U);
+                    break;
+                case 5:
+                    Lobby5.ReadyPlayer(U);
+                    break;
+                default:
+                    System.out.println("NO LOBBY FOUND TO READY UP\n");
             }
         }
     }

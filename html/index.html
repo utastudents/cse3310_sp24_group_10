@@ -33,6 +33,93 @@
           margin-left: 10px; /* Adjust margin as needed */
       }
 
+      * Start of Lobby HTML classes */
+      .readyTable{
+        border: hidden;
+        width: 100%;
+        margin: 2px;
+      }
+      .ready{
+        background-color: lightgreen;
+        padding: 50px;
+        margin: 2px;
+        cursor: pointer;
+        border: hidden;
+        width: 200px;
+      }
+      .ready:hover{
+          outline-style: solid;
+          transition-duration: 100ms;
+      }
+      .notReady{
+          background-color: lightcoral;
+          padding: 50px;
+          margin: 2px;
+          cursor: pointer;
+          border: hidden;
+          width: 200px;
+      }
+      .notReady:hover{
+          outline-style: solid;
+          transition-duration: 100ms;
+      }
+      .chat{
+        background-color: white;
+        cursor: scroll;
+        text-align: left;
+        margin: 2px;
+        width: 100%;
+        border: none;
+      }
+      .textBox{
+        background-color: white;
+        color: grey;
+        cursor: text;
+        text-align: left;
+        margin: 2px;
+      }
+      /* Start of Ongoing Game HTML classes */
+      .wordButton{
+        cursor: pointer;
+        background-color: white;
+        border: 1px solid lightgray;
+        width: 2px;
+        height: 2px;
+      }
+      .wordButton:hover{
+        outline: black solid 2px;
+        transition-duration: 100ms;
+      }
+      .wordBank{
+        border: none;
+        width: 100%;
+      }
+      .playerTable{
+        border: none;
+        width: 100%;
+        margin: 2px;
+        text-align: center;
+        table-layout: fixed;
+      }
+      .surrenderButton{
+        cursor: pointer;
+        background-color: black;
+        color: white;
+        width: 200px;
+      }
+      .surrenderButton:hover{
+        outline: red solid;
+        transition-duration: 100ms;
+      }
+      .statistic{
+        text-align: left;
+        border: none;
+      }
+      .pageSplit::after{
+        clear: both;
+        content: "";
+      }
+
   </style>
 </head>
 <body>
@@ -45,6 +132,7 @@
 <script>
   function leaveGame() {
     window.location.href = "index.html"; 
+
   }
 </script>
 
@@ -91,15 +179,55 @@
   </div>
 </div>
 
+<div id="gameLobby">
+  <hr>
+  <!-- First row, where the player info and ready button is  -->
+  <table class="readyTable">
+    <!-- Player information -->
+    <tr>
+      <th style="background-color: lightcoral;" id="readyP0">Player 1</th>
+      <th style="background-color: lightskyblue;" id="readyP1">Player 2</th>
+      <th style="background-color: lightgreen;" id="readyP2">Player 3</th>
+      <th style="background-color: plum;" id="readyP3"> Player 4</th>
+    </tr>
+    
+    <tr>
+        <td style="border: none">Wins: #</td>
+        <td style="border: none">Wins: #</td>
+        <td style="border: none">Wins: #</td>
+        <td style="border: none">Wins: #</td>
+    </tr>
+    <tr>
+        <!-- Ready button (toggle) -->
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="ready1"; onclick="readyUp(1)">
+        </td>
+        <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready2"; onclick="readyUp(2)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready3"; onclick="readyUp(3)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready4"; onclick="readyUp(4)">
+      </td>
+    </tr>
+  </table>
+</div>
+
 
 
 <script>
 
+var currentLobby = null;
 var nickname;
 var playerNames = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
-var pla
 var idx = -1;
+var readyStatus = [0, 0, 0, 0];
+var ready = false;
+
+document.getElementById("gameLobby").style.display = "none";
 
 var connection = null;
 
@@ -117,6 +245,9 @@ connection.onclose = function (evt) {
 }
 
 connection.onmessage = function (evt) {
+
+  var addPlayer = false;
+  var ready = false;
   var msg;
   msg = evt.data;
 
@@ -212,8 +343,14 @@ function joinLobby(lobby) {
     return;
   }
 
-  // Hide the InitialLobby elements
+  addPlayer = true;
+
+  // Hide the InitialLobby elements and show the GameLobby
   document.getElementById("InitialLobby").style.display = "none";
+  document.getElementById("gameLobby").style.display = "block";
+
+  // Update the current lobby
+  currentLobby = lobby;
 
   lobbyNumOfPlayers[lobby-1]++;
 
@@ -224,6 +361,7 @@ function joinLobby(lobby) {
     PlayerIdx: idx,
     PlayerName: nickname,
     LobbyNum: lobby,
+    AddPlayer: addPlayer,
   };
   userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
   connection.send(JSON.stringify(userEvent));
@@ -238,6 +376,28 @@ function updatePlayerNamesDisplay(playerNamesInLobby, displayId) {
   
   playerNamesHTML += playerNamesString;
   playerNamesDisplay.innerHTML = playerNamesHTML;
+}
+
+function readyUp(i) {
+  ready = true
+
+  // Get the button element by its ID
+  var buttonElement = document.getElementById("ready" + i);
+
+  // Remove the existing class (notReady) and add the new class (ready)
+  buttonElement.classList.remove("notReady");
+  buttonElement.classList.add("ready");
+
+  // Change the value of the button to "Ready"
+  buttonElement.value = "Ready";
+
+  const userEvent = {
+    PlayerIdx: idx,
+    LobbyNum: currentLobby,
+    Ready: ready,
+  };
+
+  connection.send(JSON.stringify(userEvent));
 }
 
 </script>

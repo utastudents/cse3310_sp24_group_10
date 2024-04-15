@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Test </title>
+    </head>
+    <style>
+        .ready{
+            cursor:pointer;
+            background-color: rgb(173, 255, 47);
+            border: none;
+            margin: 10px;
+            padding: 10px;
+            width: 100px;
+        }
+        .notReady{
+            cursor:pointer;
+            background-color: rgb(240, 128, 128);
+            border: none;
+            margin: 10px;
+            padding: 10px;
+            width: 100px;
+        }
+        .notReady:hover{
+            border: solid;
+            transition-duration: 100ms;
+        }
+        .ready:hover{
+            border: solid;
+            transition-duration: 100ms;
+        }
+    </style>
+    <body>
+        <h1>Button Toggle and Read Status</h1>
+        <hr>
+        <!-- Labels for buttons -->
+        <input class="notReady"; type="button"; value="Not Ready"; id="first"; onclick="toggleButton(this)">
+        <label for="top">Player 1</label><br>
+        <input class="notReady"; type="button"; value="Not Ready"; id="second"; onclick="toggleButton(this)">
+        <label id="mid">Player 2</label><br>
+        <input class="notReady"; type="button"; value="Not Ready"; id="third"; onclick="toggleButton(this)">
+        <label id="bot">Player 3</label><br>
+        <!-- Labels for a section -->
+        <p>status for player 1:</p> <p id="status1"></p>
+        <p>status for player 2:</p> <p id="status2"></p>
+        <p>status for player 3:</p> <p id="status3"></p>
+        <p>status for player 3:</p> <p id="status4"></p>
+
+        <!-- New secion -->
+        <h1>How to retreive profile data</h1>
+        <hr>
+        <p id="msg"></p>
+
+        <script>
+        /* Non-conditional code: */
+            updateStatus();
+        /* Conditional code: */
+            /* Function to toggle button */
+            function toggleButton(id){
+
+                var buttonClass = id.className;
+                if(buttonClass == "notReady"){ //Compare class names
+                    id.className = "ready"; //Change class and value
+                    id.value = "Ready";
+                }
+                else{
+                    id.className = "notReady"; //change class and value
+                    id.value = "Not Ready";
+                }
+                updateStatus();
+            }
+            /* Function that can return the value of toggle state */
+
+            function updateStatus(){
+                document.getElementById("status1").innerHTML = readStatus(first);
+                document.getElementById("status2").innerHTML = readStatus(second);
+                document.getElementById("status3").innerHTML = readStatus(third);
+            }
+            /* Function that will read the curent status of player and print */
+            function readStatus(id){
+                if(id.className == "notReady"){
+                    return "User is NOT READY";
+                }
+                else{
+                    return "User is READY";
+                }
+
+            }
+
+            /* Stuff for profile info */
+            const arr = {color: "red", type: "dog", size: "large"};
+            const myJSON = JSON.stringify(arr);
+            /* Store the message */
+            localStorage.setItem("msgStore", myJSON);
+
+            /* Load the message */
+            let inbox = localStorage.getItem("msgStore");
+            let putMsg = JSON.parse(inbox);
+
+            document.getElementById("msg").innerHTML = putMsg.color;
+
+        </script>
+
+    </body>
+</html>
