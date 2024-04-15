@@ -200,7 +200,7 @@
         <td style="border: none">Wins: #</td>
         <td style="border: none">Wins: #</td>
     </tr>
-    
+
     <tr>
         <!-- Ready button (toggle) -->
         <td style="background-color: white;">
@@ -218,8 +218,6 @@
     </tr>
   </table>
 </div>
-
-
 
 <script>
 
@@ -293,7 +291,6 @@ connection.onmessage = function (evt) {
   document.getElementById("button3").textContent = lobbyNumOfPlayers[3] + "/4";
   document.getElementById("button4").textContent = lobbyNumOfPlayers[4] + "/4";
 }
-
 
 connection.onopen = function (evt) {
   console.log("open");
