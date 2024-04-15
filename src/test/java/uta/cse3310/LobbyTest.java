@@ -1,4 +1,4 @@
-package uta;
+package uta.cse3310;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
