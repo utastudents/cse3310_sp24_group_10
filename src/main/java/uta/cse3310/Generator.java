@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Map;
 
-public class Generator {
+public class Generator 
+{
   public static char[][] createGrid(ArrayList<String> words)
   {
     boolean debug = false;
