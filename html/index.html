@@ -131,6 +131,12 @@
 <button class="leave-button" style="display: block;" onclick="leaveGame()">Leave Game</button>
 <script>
   function leaveGame() {
+    var playerName=nickname;
+    var index=playerNames.indexOf(playerName);
+    if(index!= -1){
+      playerNames.splice(index,1);
+    }
+    updatePlayerNamesDisplay(playerNames, "playerNamesDisplay" + currentLobby);
     window.location.href = "index.html"; 
     document.querySelector('.leave-button').style.display = 'block';
     alert(nickname + ', You have left the game.');
