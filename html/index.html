@@ -134,14 +134,9 @@
     window.location.href = "index.html"; 
     document.querySelector('.leave-button').style.display = 'block';
     alert(nickname + ', You have left the game.');
-    var playerNamesInLobby1 = obj.Lobby1.PlayerNames;
-    var playerNamesInLobby2 = obj.Lobby2.PlayerNames;
-    var playerNamesInLobby3 = obj.Lobby3.PlayerNames;
-    var playerNamesInLobby4 = obj.Lobby4.PlayerNames;
-    var playerNamesInLobby5 = obj.Lobby5.PlayerNames;
-    var index = playerNamesInLobby1.indexOf(nickname);
+    var index = playerNames.indexOf(nickname);
     if (index !== -1) {
-      playerNamesInLobby1.splice(index, 1);
+      playerNames.splice(index, 1);
     }
 
   }
