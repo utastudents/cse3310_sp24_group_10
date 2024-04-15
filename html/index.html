@@ -291,7 +291,6 @@ function unhide(id){
 
 hide("gameLobby");
 hide("ongoingGame");
-hide("chatBox");
   
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
@@ -299,7 +298,7 @@ var nickname = "(You)";
 var currentLobby = null;
 var playerNamesInServer = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
-var idx = -1;
+var idx = -1; //the current idx of the player?
 var ready = false;
 
 // Create Multidimensional array to store players of each lobby
@@ -349,6 +348,8 @@ connection.onmessage = function (evt) {
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
+
+  console.log("Which player? --> "+idx);
 
   // Get the players in each lobby
   var playerNamesInServerInLobby1 = obj.Lobby1.PlayerNames;
