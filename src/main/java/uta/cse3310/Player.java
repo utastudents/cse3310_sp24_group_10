@@ -6,6 +6,8 @@ public class Player {
     int wins;
     String color;
     boolean readyStatus;
+    private int id;
+    private static int playerIdCounter = 0;
 
     Player(String name, int score, int wins, String color, boolean readyStatus){
       this.name = name;
@@ -13,8 +15,11 @@ public class Player {
       this.wins = wins;
       this.color = color;
       this.readyStatus = readyStatus;
+      this.id = playerIdCounter++;
     }
-
+    public int getId() {
+      return id;
+    }
     public int getScore() {
       return score;
     } 
