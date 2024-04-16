@@ -655,17 +655,6 @@
     <div align="center";> <!-- Divider for surrender button -->
       <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
     </div>
-    <script>
-      // execute when the surrender button is clicked
-      function surrenderFunction() {
-        alert("You surrendered!");
-       window.location.href= "index.html";
-      }
-      var surrenderButton = document.getElementById("surrender");
-      surrenderButton.addEventListener("click", surrenderFunction);
-      </script>
-      </body>
-      </html>
 
     <div align="right";> <!-- Divider for Word Bank -->
       <table class="wordBank">
@@ -847,7 +836,7 @@ connection.onmessage = function (evt) {
       lobby5Info[i][3] = obj.Lobby5.PlayersInLobby[i].color;
       lobby5Info[i][4] = obj.Lobby5.PlayersInLobby[i].readyStatus;
     }
-    
+    updateDisplayPlayers();
   }
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
@@ -930,48 +919,36 @@ function joinLobby(lobby) {
   
 }
 /* Start of script for Lobby --------------------------------------------------*/
-function updateDisplayPlayers(lobby){
-  switch(lobby){
-    case 1:
-      for(var i = 0; i < lobbyNumOfPlayers[0]; i++){
-        document.getElementById("readyP1"+i).textContent = (lobby1Info[i][0] || "You");
-        document.getElementById("inGameP1"+i).textContent = lobby1Info[i][0];
-        document.getElementById("scoreP1"+i).textContent = "Score: "+lobby1Info[i][1];
-        document.getElementById("winsP1"+i).textContent = "Wins: "+lobby1Info[i][2];
-      }
-    break;
-    case 2:
-      for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
-        document.getElementById("readyP2"+i).textContent = lobby2Info[i][0];
-        document.getElementById("inGameP2"+i).textContent = lobby2Info[i][0];
-        document.getElementById("scoreP2"+i).textContent = "Score: "+lobby2Info[i][1];
-        document.getElementById("winsP2"+i).textContent = "Wins: "+lobby2Info[i][2];
-      }
-    break;
-    case 3:
-      for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
-        document.getElementById("readyP3"+i).textContent = lobby3Info[i][0];
-        document.getElementById("inGameP3"+i).textContent = lobby3Info[i][0];
-        document.getElementById("scoreP3"+i).textContent = "Score: "+lobby3Info[i][1];
-        document.getElementById("winsP3"+i).textContent = "Wins: "+lobby3Info[i][2];
-      }
-    break
-    case 4:
-      for(var i = 0; i < lobbyNumOfPlayers[3]; i++){
-        document.getElementById("readyP4"+i).textContent = lobby4Info[i][0];
-        document.getElementById("inGameP4"+i).textContent = lobby4Info[i][0];
-        document.getElementById("scoreP4"+i).textContent = "Score: "+lobby4Info[i][1];
-        document.getElementById("winsP4"+i).textContent = "Wins: "+lobby4Info[i][2];
-      }
-    break;
-    case 5:
-      for(var i = 0; i < lobbyNumOfPlayers[4]; i++){
-        document.getElementById("readyP5"+i).textContent = lobby5Info[i][0];
-        document.getElementById("inGameP5"+i).textContent = lobby5Info[i][0];
-        document.getElementById("scoreP5"+i).textContent = "Score: "+lobby5Info[i][1];
-        document.getElementById("winsP5"+i).textContent = "Wins: "+lobby5Info[i][2];
-      }
-    break;
+function updateDisplayPlayers(){
+  for(var i = 0; i < lobbyNumOfPlayers[0]; i++){
+    document.getElementById("readyP1"+i).textContent = lobby1Info[i][0];
+    document.getElementById("inGameP1"+i).textContent = lobby1Info[i][0];
+    document.getElementById("scoreP1"+i).textContent = "Score: "+lobby1Info[i][1];
+    document.getElementById("winsP1"+i).textContent = "Wins: "+lobby1Info[i][2];
+  }
+  for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
+    document.getElementById("readyP2"+i).textContent = lobby2Info[i][0];
+    document.getElementById("inGameP2"+i).textContent = lobby2Info[i][0];
+    document.getElementById("scoreP2"+i).textContent = "Score: "+lobby2Info[i][1];
+    document.getElementById("winsP2"+i).textContent = "Wins: "+lobby2Info[i][2];
+  }
+  for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
+    document.getElementById("readyP3"+i).textContent = lobby3Info[i][0];
+    document.getElementById("inGameP3"+i).textContent = lobby3Info[i][0];
+    document.getElementById("scoreP3"+i).textContent = "Score: "+lobby3Info[i][1];
+    document.getElementById("winsP3"+i).textContent = "Wins: "+lobby3Info[i][2];
+  }
+  for(var i = 0; i < lobbyNumOfPlayers[3]; i++){
+    document.getElementById("readyP4"+i).textContent = lobby4Info[i][0];
+    document.getElementById("inGameP4"+i).textContent = lobby4Info[i][0];
+    document.getElementById("scoreP4"+i).textContent = "Score: "+lobby4Info[i][1];
+    document.getElementById("winsP4"+i).textContent = "Wins: "+lobby4Info[i][2];
+  }
+  for(var i = 0; i < lobbyNumOfPlayers[4]; i++){
+    document.getElementById("readyP5"+i).textContent = lobby5Info[i][0];
+    document.getElementById("inGameP5"+i).textContent = lobby5Info[i][0];
+    document.getElementById("scoreP5"+i).textContent = "Score: "+lobby5Info[i][1];
+    document.getElementById("winsP5"+i).textContent = "Wins: "+lobby5Info[i][2];
   }
 }
 
