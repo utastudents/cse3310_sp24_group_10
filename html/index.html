@@ -253,6 +253,18 @@
       <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
     </div>
 
+    <script>
+      // execute when the surrender button is clicked
+      function surrenderFunction() {
+        alert("You surrendered!");
+       window.location.href= "index.html";
+      }
+      var surrenderButton = document.getElementById("surrender");
+      surrenderButton.addEventListener("click", surrenderFunction);
+      </script>
+      </body>
+      </html>
+
     <div align="right";> <!-- Divider for Word Bank -->
       <table class="wordBank">
           <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
