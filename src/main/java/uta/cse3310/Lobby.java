@@ -43,7 +43,13 @@ public class Lobby {
         {
             if(U.PlayerIdx == PlayerIds[j])
             {
-                ReadiedPlayers[j] = 1;
+                if(U.Ready == true){
+                    ReadiedPlayers[j] = 1;
+                }
+                else if(U.Ready == false){ //attempt to reset ready state to 0
+                    ReadiedPlayers[j] = 0;
+                }
+
                 int count = 0;
                 for(int i = 0; i < 4; i++)
                 {

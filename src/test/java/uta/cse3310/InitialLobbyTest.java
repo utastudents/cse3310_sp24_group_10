@@ -3,7 +3,7 @@ package uta.cse3310;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-//import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 public class InitialLobbyTest extends TestCase {
 

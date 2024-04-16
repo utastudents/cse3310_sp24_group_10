@@ -7,7 +7,7 @@ import uta.cse3310.InitialLobbyTest;
 import uta.cse3310.Lobby;
 import uta.cse3310.UserEvent;
 
-//import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 public class LobbyTest  extends TestCase{
 
@@ -31,7 +31,7 @@ public class LobbyTest  extends TestCase{
 
         lobby1.ReadyPlayer(userEvent);
 
-        //assertArrayEquals(ReadiedPlayers, lobby1.ReadiedPlayers);
+        assertArrayEquals(ReadiedPlayers, lobby1.ReadiedPlayers);
 
     }
     

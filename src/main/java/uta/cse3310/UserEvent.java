@@ -9,12 +9,5 @@ public class UserEvent {
     boolean Ready;
 
     String PlayerName; //name inputed by the player
-    String PlayerScore;
-    String PlayerWins;
-    String PlayerColor;
-    String PlayerStatus;
-
-    Player player; //Player information
-
 
 }
