@@ -130,12 +130,21 @@
   The Word Search Game
 </h1>
 <button class="leave-button" style="display: block;" onclick="leaveGame()">Leave Game</button>
+
 <script>
   function leaveGame() {
     window.location.href = "index.html"; 
     document.querySelector('.leave-button').style.display = 'block';
     alert(nickname + ', You have left the game.');
   }
+
+  // execute when the surrender button is clicked
+  function surrenderFunction() {
+    alert("You surrendered!");
+    window.location.href= "index.html";
+  }
+  var surrenderButton = document.getElementById("surrender");
+  surrenderButton.addEventListener("click", surrenderFunction);
 </script>
 
 <div id = "InitialLobby">
@@ -152,92 +161,234 @@
 
   <!-- Buttons for joining lobbies -->
   <div class="lobby-container">
-    <button class="lobby-button" id="button0" onclick="joinLobby(1); updateDisplayPlayers(1)">0/4</button>
+    <button class="lobby-button" id="button0" onclick="joinLobby(1); updateDisplayPlayers(1); hide('InitialLobby'); unhide('gameLobby1')">0/4</button>
     <div class="player-names" id="playerNamesInServerDisplay1"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button1" onclick="joinLobby(2); updateDisplayPlayers(1)">0/4</button>
+      <button class="lobby-button" id="button1" onclick="joinLobby(2); updateDisplayPlayers(2); hide('InitialLobby'); unhide('gameLobby2')">0/4</button>
       <div class="player-names" id="playerNamesInServerDisplay2"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button2" onclick="joinLobby(3); updateDisplayPlayers(1)">0/4</button>
+      <button class="lobby-button" id="button2" onclick="joinLobby(3); updateDisplayPlayers(3); hide('InitialLobby'); unhide('gameLobby3')">0/4</button>
       <div class="player-names" id="playerNamesInServerDisplay3"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button3" onclick="joinLobby(4); updateDisplayPlayers(1)">0/4</button>
+      <button class="lobby-button" id="button3" onclick="joinLobby(4); updateDisplayPlayers(4); hide('InitialLobby'); unhide('gameLobby4')">0/4</button>
       <div class="player-names" id="playerNamesInServerDisplay4"></div> <!-- Modified line -->
   </div>
   <div class="lobby-container">
-      <button class="lobby-button" id="button4" onclick="joinLobby(5); updateDisplayPlayers(1)">0/4</button>
+      <button class="lobby-button" id="button4" onclick="joinLobby(5); updateDisplayPlayers(5); hide('InitialLobby'); unhide('gameLobby5')">0/4</button>
       <div class="player-names" id="playerNamesInServerDisplay5"></div> <!-- Modified line -->
   </div>
 
-  <!-- Lobby information -->
   <!-- TODO: Implement so that a join button corresponds to a unique lobby to prevent overwriting. -->
-  <div id="lobbyInfo" style="display: none;">
-    <h2>Lobby 1</h2>
-    <p id="lobbyPlayers">0/4</p>
-  </div>
 </div>
 
-<div id="gameLobby">
+<div id="gameLobby1">
   <hr>
   <!-- First row, where the player info and ready button is  -->
   <table class="readyTable">
     <!-- Player information -->
     <tr>
-      <th style="background-color: lightcoral;" id="readyP0">Player 1</th>
-      <th style="background-color: lightskyblue;" id="readyP1">Player 2</th>
-      <th style="background-color: lightgreen;" id="readyP2">Player 3</th>
-      <th style="background-color: plum;" id="readyP3"> Player 4</th>
+      <th style="background-color: lightcoral;" id="readyP10">Player 1</th>
+      <th style="background-color: lightskyblue;" id="readyP11">Player 2</th>
+      <th style="background-color: lightgreen;" id="readyP12">Player 3</th>
+      <th style="background-color: plum;" id="readyP13"> Player 4</th>
     </tr>
     
     <tr>
-        <td style="border: none"; id="winsP0">Wins: #</td>
-        <td style="border: none"; id="winsP1">Wins: #</td>
-        <td style="border: none"; id="winsP2">Wins: #</td>
-        <td style="border: none"; id="winsP3">Wins: #</td>
+        <td style="border: none"; id="winsP10">Wins: #</td>
+        <td style="border: none"; id="winsP11">Wins: #</td>
+        <td style="border: none"; id="winsP12">Wins: #</td>
+        <td style="border: none"; id="winsP13">Wins: #</td>
     </tr>
 
     <tr>
         <!-- Ready button (toggle) -->
         <td style="background-color: white;">
-            <input class="notReady"; type="button"; value="Not Ready"; id="ready1"; onclick="readyUp(1)">
+            <input class="notReady"; type="button"; value="Not Ready"; id="ready11"; onclick="readyUp(1,1)">
         </td>
         <td style="background-color: white;">
-          <input class="notReady"; type="button"; value="Not Ready"; id="ready2"; onclick="readyUp(2)">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready12"; onclick="readyUp(1,2)">
       </td>
       <td style="background-color: white;">
-          <input class="notReady"; type="button"; value="Not Ready"; id="ready3"; onclick="readyUp(3)">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready13"; onclick="readyUp(1,3)">
       </td>
       <td style="background-color: white;">
-          <input class="notReady"; type="button"; value="Not Ready"; id="ready4"; onclick="readyUp(4)">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready14"; onclick="readyUp(1,4)">
+      </td>
+    </tr>
+  </table>
+  <!-- The button to toggle ready -->
+  <input type="button"; value="Toggle Ready"; id="readyButton1";>
+
+</div>
+<div id="gameLobby2">
+  <hr>
+  <!-- First row, where the player info and ready button is  -->
+  <table class="readyTable">
+    <!-- Player information -->
+    <tr>
+      <th style="background-color: lightcoral;" id="readyP20">Player 1</th>
+      <th style="background-color: lightskyblue;" id="readyP21">Player 2</th>
+      <th style="background-color: lightgreen;" id="readyP22">Player 3</th>
+      <th style="background-color: plum;" id="readyP23"> Player 4</th>
+    </tr>
+    
+    <tr>
+        <td style="border: none"; id="winsP20">Wins: #</td>
+        <td style="border: none"; id="winsP21">Wins: #</td>
+        <td style="border: none"; id="winsP22">Wins: #</td>
+        <td style="border: none"; id="winsP23">Wins: #</td>
+    </tr>
+
+    <tr>
+        <!-- Ready button (toggle) -->
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="ready21"; onclick="readyUp(2,1)">
+        </td>
+        <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready22"; onclick="readyUp(2,2)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready23"; onclick="readyUp(2,3)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready24"; onclick="readyUp(2,4)">
+      </td>
+    </tr>
+  </table>
+</div>
+<div id="gameLobby3">
+  <hr>
+  <!-- First row, where the player info and ready button is  -->
+  <table class="readyTable">
+    <!-- Player information -->
+    <tr>
+      <th style="background-color: lightcoral;" id="readyP30">Player 1</th>
+      <th style="background-color: lightskyblue;" id="readyP31">Player 2</th>
+      <th style="background-color: lightgreen;" id="readyP32">Player 3</th>
+      <th style="background-color: plum;" id="readyP33"> Player 4</th>
+    </tr>
+    
+    <tr>
+        <td style="border: none"; id="winsP30">Wins: #</td>
+        <td style="border: none"; id="winsP31">Wins: #</td>
+        <td style="border: none"; id="winsP32">Wins: #</td>
+        <td style="border: none"; id="winsP33">Wins: #</td>
+    </tr>
+
+    <tr>
+        <!-- Ready button (toggle) -->
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="ready31"; onclick="readyUp(3,1)">
+        </td>
+        <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready32"; onclick="readyUp(3,2)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready33"; onclick="readyUp(3,3)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready34"; onclick="readyUp(3,4)">
+      </td>
+    </tr>
+  </table>
+</div>
+<div id="gameLobby4">
+  <hr>
+  <!-- First row, where the player info and ready button is  -->
+  <table class="readyTable">
+    <!-- Player information -->
+    <tr>
+      <th style="background-color: lightcoral;" id="readyP40">Player 1</th>
+      <th style="background-color: lightskyblue;" id="readyP41">Player 2</th>
+      <th style="background-color: lightgreen;" id="readyP42">Player 3</th>
+      <th style="background-color: plum;" id="readyP43"> Player 4</th>
+    </tr>
+    
+    <tr>
+        <td style="border: none"; id="winsP40">Wins: #</td>
+        <td style="border: none"; id="winsP41">Wins: #</td>
+        <td style="border: none"; id="winsP42">Wins: #</td>
+        <td style="border: none"; id="winsP43">Wins: #</td>
+    </tr>
+
+    <tr>
+        <!-- Ready button (toggle) -->
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="ready41"; onclick="readyUp(4,1)">
+        </td>
+        <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready42"; onclick="readyUp(4,2)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready43"; onclick="readyUp(4,3)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready44"; onclick="readyUp(4,4)">
+      </td>
+    </tr>
+  </table>
+</div>
+<div id="gameLobby5">
+  <hr>
+  <!-- First row, where the player info and ready button is  -->
+  <table class="readyTable">
+    <!-- Player information -->
+    <tr>
+      <th style="background-color: lightcoral;" id="readyP50">Player 1</th>
+      <th style="background-color: lightskyblue;" id="readyP51">Player 2</th>
+      <th style="background-color: lightgreen;" id="readyP52">Player 3</th>
+      <th style="background-color: plum;" id="readyP53"> Player 4</th>
+    </tr>
+    
+    <tr>
+        <td style="border: none"; id="winsP50">Wins: #</td>
+        <td style="border: none"; id="winsP51">Wins: #</td>
+        <td style="border: none"; id="winsP52">Wins: #</td>
+        <td style="border: none"; id="winsP53">Wins: #</td>
+    </tr>
+
+    <tr>
+        <!-- Ready button (toggle) -->
+        <td style="background-color: white;">
+            <input class="notReady"; type="button"; value="Not Ready"; id="ready51"; onclick="readyUp(5,1)">
+        </td>
+        <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready52"; onclick="readyUp(5,2)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready53"; onclick="readyUp(5,3)">
+      </td>
+      <td style="background-color: white;">
+          <input class="notReady"; type="button"; value="Not Ready"; id="ready54"; onclick="readyUp(5,4)">
       </td>
     </tr>
   </table>
 </div>
 
-<div id="ongoingGame">
+<div id="ongoingGame1">
   <hr>
 
 <div> <!-- Divider for player info -->
   <table class="playerTable">
       <!-- Player information -->
-      <th style="background-color: lightcoral;"; id="inGameP0">Player 1</th>
-      <th style="background-color: lightskyblue;"; id="inGameP1">Player 2</th>
-      <th style="background-color: lightgreen;"; id="inGameP2">Player 3</th>
-      <th style="background-color: plum;"; id="inGameP3">Player 4</th>
+      <th style="background-color: lightcoral;"; id="inGameP10">Player 1</th>
+      <th style="background-color: lightskyblue;"; id="inGameP11">Player 2</th>
+      <th style="background-color: lightgreen;"; id="inGameP12">Player 3</th>
+      <th style="background-color: plum;"; id="inGameP13">Player 4</th>
       <tr>
-          <td class="statistic"; id="scoreP0">SCORE: </td>
-          <td class="statistic"; id="scoreP1">SCORE: </td>
-          <td class="statistic"; id="scoreP2">SCORE: </td>
-          <td class="statistic"; id="scoreP3">SCORE: </td>
+          <td class="statistic"; id="scoreP10">SCORE: </td>
+          <td class="statistic"; id="scoreP11">SCORE: </td>
+          <td class="statistic"; id="scoreP12">SCORE: </td>
+          <td class="statistic"; id="scoreP13">SCORE: </td>
       </tr>
       <tr>
-          <td class="statistic"; id="wordsP0">Words Found: </td>
-          <td class="statistic"; id="wordsP1">Words Found: </td>
-          <td class="statistic"; id="wordsP2">Words Found: </td>
-          <td class="statistic"; id="wordsP3">Words Found: </td>
+          <td class="statistic"; id="wordsP10">Words Found: </td>
+          <td class="statistic"; id="wordsP11">Words Found: </td>
+          <td class="statistic"; id="wordsP12">Words Found: </td>
+          <td class="statistic"; id="wordsP13">Words Found: </td>
       </tr>
   </table>
 </div>
@@ -245,12 +396,264 @@
 
 <div id="pageSplit"> <!-- Section where the page will split into two -->
   <div style="float: left; width: 50%; height: 100%"> <!-- Divider for Word Search Box -->
-      <label id = "wordButton"></label>
+      <label id = "wordButton1"></label>
   </div>
 
   <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
     <div align="center";> <!-- Divider for surrender button -->
-      <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton">
+      <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
+    </div>
+
+    <div align="right";> <!-- Divider for Word Bank -->
+      <table class="wordBank">
+          <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
+          <tr><td style="border: 1px solid black; height: 200px"><p id="wordList"></p></td></tr>
+      </table>
+    </div>
+
+    <!-- This is the chat box -->
+    <div align="right"; id="chatBox";> <!-- For chat -->
+      <table class="chat">
+          <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
+          <tr>
+              <td style="text-align: left; height: 450px">
+                  messages go here
+              </td>
+          </tr><tr>
+              <td class="textBox">
+                  Type here...
+              </td>
+          </tr>
+          
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+<div id="ongoingGame2">
+  <hr>
+
+<div> <!-- Divider for player info -->
+  <table class="playerTable">
+      <!-- Player information -->
+      <th style="background-color: lightcoral;"; id="inGameP20">Player 1</th>
+      <th style="background-color: lightskyblue;"; id="inGameP21">Player 2</th>
+      <th style="background-color: lightgreen;"; id="inGameP22">Player 3</th>
+      <th style="background-color: plum;"; id="inGameP23">Player 4</th>
+      <tr>
+          <td class="statistic"; id="scoreP20">SCORE: </td>
+          <td class="statistic"; id="scoreP21">SCORE: </td>
+          <td class="statistic"; id="scoreP22">SCORE: </td>
+          <td class="statistic"; id="scoreP23">SCORE: </td>
+      </tr>
+      <tr>
+          <td class="statistic"; id="wordsP20">Words Found: </td>
+          <td class="statistic"; id="wordsP21">Words Found: </td>
+          <td class="statistic"; id="wordsP22">Words Found: </td>
+          <td class="statistic"; id="wordsP23">Words Found: </td>
+      </tr>
+  </table>
+</div>
+<hr>
+
+<div id="pageSplit"> <!-- Section where the page will split into two -->
+  <div style="float: left; width: 50%; height: 100%"> <!-- Divider for Word Search Box -->
+      <label id = "wordButton2"></label>
+  </div>
+
+  <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
+    <div align="center";> <!-- Divider for surrender button -->
+      <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
+    </div>
+
+    <div align="right";> <!-- Divider for Word Bank -->
+      <table class="wordBank">
+          <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
+          <tr><td style="border: 1px solid black; height: 200px"><p id="wordList"></p></td></tr>
+      </table>
+    </div>
+
+    <!-- This is the chat box -->
+    <div align="right"; id="chatBox";> <!-- For chat -->
+      <table class="chat">
+          <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
+          <tr>
+              <td style="text-align: left; height: 450px">
+                  messages go here
+              </td>
+          </tr><tr>
+              <td class="textBox">
+                  Type here...
+              </td>
+          </tr>
+          
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+<div id="ongoingGame3">
+  <hr>
+
+<div> <!-- Divider for player info -->
+  <table class="playerTable">
+      <!-- Player information -->
+      <th style="background-color: lightcoral;"; id="inGameP30">Player 1</th>
+      <th style="background-color: lightskyblue;"; id="inGameP31">Player 2</th>
+      <th style="background-color: lightgreen;"; id="inGameP32">Player 3</th>
+      <th style="background-color: plum;"; id="inGameP33">Player 4</th>
+      <tr>
+          <td class="statistic"; id="scoreP30">SCORE: </td>
+          <td class="statistic"; id="scoreP31">SCORE: </td>
+          <td class="statistic"; id="scoreP32">SCORE: </td>
+          <td class="statistic"; id="scoreP33">SCORE: </td>
+      </tr>
+      <tr>
+          <td class="statistic"; id="wordsP30">Words Found: </td>
+          <td class="statistic"; id="wordsP31">Words Found: </td>
+          <td class="statistic"; id="wordsP32">Words Found: </td>
+          <td class="statistic"; id="wordsP33">Words Found: </td>
+      </tr>
+  </table>
+</div>
+<hr>
+
+<div id="pageSplit"> <!-- Section where the page will split into two -->
+  <div style="float: left; width: 50%; height: 100%"> <!-- Divider for Word Search Box -->
+      <label id = "wordButton3"></label>
+  </div>
+
+  <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
+    <div align="center";> <!-- Divider for surrender button -->
+      <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
+    </div>
+
+    <div align="right";> <!-- Divider for Word Bank -->
+      <table class="wordBank">
+          <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
+          <tr><td style="border: 1px solid black; height: 200px"><p id="wordList"></p></td></tr>
+      </table>
+    </div>
+
+    <!-- This is the chat box -->
+    <div align="right"; id="chatBox";> <!-- For chat -->
+      <table class="chat">
+          <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
+          <tr>
+              <td style="text-align: left; height: 450px">
+                  messages go here
+              </td>
+          </tr><tr>
+              <td class="textBox">
+                  Type here...
+              </td>
+          </tr>
+          
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+<div id="ongoingGame4">
+  <hr>
+
+<div> <!-- Divider for player info -->
+  <table class="playerTable">
+      <!-- Player information -->
+      <th style="background-color: lightcoral;"; id="inGameP40">Player 1</th>
+      <th style="background-color: lightskyblue;"; id="inGameP41">Player 2</th>
+      <th style="background-color: lightgreen;"; id="inGameP42">Player 3</th>
+      <th style="background-color: plum;"; id="inGameP43">Player 4</th>
+      <tr>
+          <td class="statistic"; id="scoreP40">SCORE: </td>
+          <td class="statistic"; id="scoreP41">SCORE: </td>
+          <td class="statistic"; id="scoreP42">SCORE: </td>
+          <td class="statistic"; id="scoreP43">SCORE: </td>
+      </tr>
+      <tr>
+          <td class="statistic"; id="wordsP40">Words Found: </td>
+          <td class="statistic"; id="wordsP41">Words Found: </td>
+          <td class="statistic"; id="wordsP42">Words Found: </td>
+          <td class="statistic"; id="wordsP43">Words Found: </td>
+      </tr>
+  </table>
+</div>
+<hr>
+
+<div id="pageSplit"> <!-- Section where the page will split into two -->
+  <div style="float: left; width: 50%; height: 100%"> <!-- Divider for Word Search Box -->
+      <label id = "wordButton4"></label>
+  </div>
+
+  <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
+    <div align="center";> <!-- Divider for surrender button -->
+      <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
+    </div>
+
+    <div align="right";> <!-- Divider for Word Bank -->
+      <table class="wordBank">
+          <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
+          <tr><td style="border: 1px solid black; height: 200px"><p id="wordList"></p></td></tr>
+      </table>
+    </div>
+
+    <!-- This is the chat box -->
+    <div align="right"; id="chatBox";> <!-- For chat -->
+      <table class="chat">
+          <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
+          <tr>
+              <td style="text-align: left; height: 450px">
+                  messages go here
+              </td>
+          </tr><tr>
+              <td class="textBox">
+                  Type here...
+              </td>
+          </tr>
+          
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+<div id="ongoingGame5">
+  <hr>
+
+<div> <!-- Divider for player info -->
+  <table class="playerTable">
+      <!-- Player information -->
+      <th style="background-color: lightcoral;"; id="inGameP50">Player 1</th>
+      <th style="background-color: lightskyblue;"; id="inGameP51">Player 2</th>
+      <th style="background-color: lightgreen;"; id="inGameP52">Player 3</th>
+      <th style="background-color: plum;"; id="inGameP53">Player 4</th>
+      <tr>
+          <td class="statistic"; id="scoreP50">SCORE: </td>
+          <td class="statistic"; id="scoreP51">SCORE: </td>
+          <td class="statistic"; id="scoreP52">SCORE: </td>
+          <td class="statistic"; id="scoreP53">SCORE: </td>
+      </tr>
+      <tr>
+          <td class="statistic"; id="wordsP50">Words Found: </td>
+          <td class="statistic"; id="wordsP51">Words Found: </td>
+          <td class="statistic"; id="wordsP52">Words Found: </td>
+          <td class="statistic"; id="wordsP53">Words Found: </td>
+      </tr>
+  </table>
+</div>
+<hr>
+
+<div id="pageSplit"> <!-- Section where the page will split into two -->
+  <div style="float: left; width: 50%; height: 100%"> <!-- Divider for Word Search Box -->
+      <label id = "wordButton5"></label>
+  </div>
+
+  <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
+    <div align="center";> <!-- Divider for surrender button -->
+      <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
     </div>
 
     <div align="right";> <!-- Divider for Word Bank -->
@@ -281,7 +684,6 @@
 
 </div>
 
-
 <script>
 /*Util hide/unhide functions*/
 function hide(id){
@@ -291,8 +693,17 @@ function unhide(id){
   document.getElementById(id).style.display = "inline";
 }
 
-hide("gameLobby");
-hide("ongoingGame");
+hide("gameLobby1");
+hide("gameLobby2");
+hide("gameLobby3");
+hide("gameLobby4");
+hide("gameLobby5");
+hide("ongoingGame1");
+hide("ongoingGame2");
+hide("ongoingGame3");
+hide("ongoingGame4");
+hide("ongoingGame5");
+
   
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
@@ -320,7 +731,13 @@ for(var i = 0; i < 5; i++){
   lobby5Info[i] = Array.from(newPlayer);
 }
 
-document.getElementById("gameLobby").style.display = "none";
+//Record the ready states of each lobby into variables
+var readyLobby1 = [-1,-1,-1,-1];
+var readyLobby2 = [-1,-1,-1,-1];
+var readyLobby3 = [-1,-1,-1,-1];
+var readyLobby4 = [-1,-1,-1,-1];
+var readyLobby5 = [-1,-1,-1,-1];
+
 
 var connection = null;
 var serverUrl;
@@ -359,6 +776,13 @@ connection.onmessage = function (evt) {
   var playerNamesInServerInLobby3 = obj.Lobby3.PlayerNames;
   var playerNamesInServerInLobby4 = obj.Lobby4.PlayerNames;
   var playerNamesInServerInLobby5 = obj.Lobby5.PlayerNames;
+
+  // Update the ready arrays to be used:
+  readyLobby1 = obj.Lobby1.ReadiedPlayers;
+  readyLobby2 = obj.Lobby2.ReadiedPlayers;
+  readyLobby3 = obj.Lobby3.ReadiedPlayers;
+  readyLobby4 = obj.Lobby4.ReadiedPlayers;
+  readyLobby5 = obj.Lobby5.ReadiedPlayers;
 
   // Display the names of the players in each lobby
   updateDisplayPlayersInMainMenu(playerNamesInServerInLobby1, "playerNamesInServerDisplay1");
@@ -476,10 +900,6 @@ function joinLobby(lobby) {
 
   addPlayer = true;
 
-  // Hide the InitialLobby elements and show the GameLobby
-  document.getElementById("InitialLobby").style.display = "none";
-  document.getElementById("gameLobby").style.display = "block";
-
   // Update the current lobby
   currentLobby = lobby;
 
@@ -503,47 +923,46 @@ function updateDisplayPlayers(lobby){
   switch(lobby){
     case 1:
       for(var i = 0; i < lobbyNumOfPlayers[0]; i++){
-        document.getElementById("readyP"+i).textContent = (lobby1Info[i][0] || "You");
-        document.getElementById("inGameP"+i).textContent = lobby1Info[i][0];
-        document.getElementById("scoreP"+i).textContent = "Score: "+lobby1Info[i][1];
-        document.getElementById("winsP"+i).textContent = "Wins: "+lobby1Info[i][2];
+        document.getElementById("readyP1"+i).textContent = (lobby1Info[i][0] || "You");
+        document.getElementById("inGameP1"+i).textContent = lobby1Info[i][0];
+        document.getElementById("scoreP1"+i).textContent = "Score: "+lobby1Info[i][1];
+        document.getElementById("winsP1"+i).textContent = "Wins: "+lobby1Info[i][2];
       }
     break;
     case 2:
       for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
-        document.getElementById("readyP"+i).textContent = lobby2Info[i][0];
-        document.getElementById("inGameP"+i).textContent = lobby1Info[i][0];
-        document.getElementById("scoreP"+i).textContent = "Score: "+lobby1Info[i][1];
-        document.getElementById("winsP"+i).textContent = "Wins: "+lobby2Info[i][2];
+        document.getElementById("readyP2"+i).textContent = lobby2Info[i][0];
+        document.getElementById("inGameP2"+i).textContent = lobby2Info[i][0];
+        document.getElementById("scoreP2"+i).textContent = "Score: "+lobby2Info[i][1];
+        document.getElementById("winsP2"+i).textContent = "Wins: "+lobby2Info[i][2];
       }
     break;
     case 3:
       for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
-        document.getElementById("readyP"+i).textContent = lobby3Info[i][0];
-        document.getElementById("inGameP"+i).textContent = lobby1Info[i][0];
-        document.getElementById("scoreP"+i).textContent = "Score: "+lobby1Info[i][1];
-        document.getElementById("winsP"+i).textContent = "Wins: "+lobby2Info[i][2];
+        document.getElementById("readyP3"+i).textContent = lobby3Info[i][0];
+        document.getElementById("inGameP3"+i).textContent = lobby3Info[i][0];
+        document.getElementById("scoreP3"+i).textContent = "Score: "+lobby3Info[i][1];
+        document.getElementById("winsP3"+i).textContent = "Wins: "+lobby3Info[i][2];
       }
     break
     case 4:
       for(var i = 0; i < lobbyNumOfPlayers[3]; i++){
-        document.getElementById("readyP"+i).textContent = lobby4Info[i][0];
-        document.getElementById("inGameP"+i).textContent = lobby1Info[i][0];
-        document.getElementById("scoreP"+i).textContent = "Score: "+lobby1Info[i][1];
-        document.getElementById("winsP"+i).textContent = "Wins: "+lobby2Info[i][2];
+        document.getElementById("readyP4"+i).textContent = lobby4Info[i][0];
+        document.getElementById("inGameP4"+i).textContent = lobby4Info[i][0];
+        document.getElementById("scoreP4"+i).textContent = "Score: "+lobby4Info[i][1];
+        document.getElementById("winsP4"+i).textContent = "Wins: "+lobby4Info[i][2];
       }
     break;
     case 5:
       for(var i = 0; i < lobbyNumOfPlayers[4]; i++){
-        document.getElementById("readyP"+i).textContent = lobby5Info[i][0];
-        document.getElementById("inGameP"+i).textContent = lobby1Info[i][0];
-        document.getElementById("scoreP"+i).textContent = "Score: "+lobby1Info[i][1];
-        document.getElementById("winsP"+i).textContent = "Wins: "+lobby2Info[i][2];
+        document.getElementById("readyP5"+i).textContent = lobby5Info[i][0];
+        document.getElementById("inGameP5"+i).textContent = lobby5Info[i][0];
+        document.getElementById("scoreP5"+i).textContent = "Score: "+lobby5Info[i][1];
+        document.getElementById("winsP5"+i).textContent = "Wins: "+lobby5Info[i][2];
       }
     break;
   }
 }
-
 
 function genTable(id){ /*Function to generate word search table*/
   let newTable = '<table style="width: 100%; border: none">'; 
@@ -561,11 +980,54 @@ function genTable(id){ /*Function to generate word search table*/
   document.getElementById(id).innerHTML = newTable;
 }
 
-function checkGameStart(){ //Check if all players are ready; checks every time a ready button is toggled. 
-  var numReady; //How many players are ready?
-  hide("gameLobby");
-  unhide("ongoingGame");
-  genTable("wordButton");
+function checkGameStart(lobby){ //Check if all players are ready; checks every time a ready button is toggled. 
+  //Count how many players are ready
+  let readyCount = 0;
+  switch(lobby){
+    case 1:
+      for(var i = 0; i < lobbyNumOfPlayers[lobby-1]; i++){ //4 maximum players
+        if(readyLobby1[i] == 1){
+          readyCount++;
+        }
+      }
+      break;
+    case 2:
+      for(var i = 0; i < lobbyNumOfPlayers[lobby-1]; i++){ //4 maximum players
+        if(readyLobby2[i] == 1){
+          readyCount++;
+        }
+      }
+      break;
+    case 3:
+      for(var i = 0; i < lobbyNumOfPlayers[lobby-1]; i++){ //4 maximum players
+        if(readyLobby3[i] == 1){
+          readyCount++;
+        }
+      }
+      break;
+    case 4:
+      for(var i = 0; i < lobbyNumOfPlayers[lobby-1]; i++){ //4 maximum players
+        if(readyLobby4[i] == 1){
+          readyCount++;
+        }
+      }
+      break;
+    case 5:
+      for(var i = 0; i < lobbyNumOfPlayers[lobby-1]; i++){ //4 maximum players
+        if(readyLobby5[i] == 1){
+          readyCount++;
+        }
+      }
+      break;
+  }
+
+  console.log("Total Players in Lobby: "+lobbyNumOfPlayers[lobby-1]);
+  console.log("Current ready players: "+readyCount);
+  if(lobbyNumOfPlayers[lobby-1] == readyCount){
+    hide("gameLobby"+lobby);
+    unhide("ongoingGame"+lobby);
+    genTable("wordButton"+lobby);
+  }
 }
 
 function updateDisplayPlayersInMainMenu(playerNamesInServerInLobby, displayId) {
@@ -579,18 +1041,29 @@ function updateDisplayPlayersInMainMenu(playerNamesInServerInLobby, displayId) {
   playerNamesInServerDisplay.innerHTML = playerNamesInServerHTML;
 }
 
-function readyUp(i) {
-  ready = true
-
+function readyUp(lobby,i) {
   // Get the button element by its ID
-  var buttonElement = document.getElementById("ready" + i);
+  var buttonElement = document.getElementById("ready"+lobby+i);
 
   // Remove the existing class (notReady) and add the new class (ready)
-  buttonElement.classList.remove("notReady");
-  buttonElement.classList.add("ready");
+  if(buttonElement.className == "notReady"){
+    ready = true;
+    buttonElement.classList.remove("notReady");
+    buttonElement.classList.add("ready");
 
-  // Change the value of the button to "Ready"
-  buttonElement.value = "Ready";
+    // Change the value of the button to "Ready"
+    buttonElement.value = "Ready";
+  }
+  else{
+    ready = false;
+    buttonElement.classList.remove("ready");
+    buttonElement.classList.add("notReady");
+
+    // Change the value of the button to "Ready"
+    buttonElement.value = "Not Ready";
+
+  }
+  
 
   const userEvent = {
     PlayerIdx: idx,
@@ -600,8 +1073,7 @@ function readyUp(i) {
 
   connection.send(JSON.stringify(userEvent));
 
-  checkGameStart(); //Currently, if anyone readies, the display changes
-  //TODO: Implement so that each lobby's ready can be read and redirect them to their own ongoing game. 
+  checkGameStart(lobby);
 }
 
 </script>
