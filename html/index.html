@@ -655,6 +655,17 @@
     <div align="center";> <!-- Divider for surrender button -->
       <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
     </div>
+    <script>
+      // execute when the surrender button is clicked
+      function surrenderFunction() {
+        alert("You surrendered!");
+       window.location.href= "index.html";
+      }
+      var surrenderButton = document.getElementById("surrender");
+      surrenderButton.addEventListener("click", surrenderFunction);
+      </script>
+      </body>
+      </html>
 
     <div align="right";> <!-- Divider for Word Bank -->
       <table class="wordBank">
