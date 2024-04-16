@@ -62,6 +62,6 @@ public class InitialLobbyTest extends TestCase {
         lobby.Update(addPlayerEvent);
     
         // Verify that the NumOfPlayersInLobby was updated correctly
-        //assertArrayEquals(new int[]{1, 0, 0, 0, 0}, lobby.NumOfPlayersInLobby);
+        assertArrayEquals(new int[]{1, 0, 0, 0, 0}, lobby.NumOfPlayersInLobby);
     }    
 }
