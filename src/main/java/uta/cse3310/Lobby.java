@@ -23,10 +23,10 @@ public class Lobby {
     }
     
     public void AddPlayers(UserEvent U) {
-        Player newPlayer = new Player(U.PlayerName, 0,0);
+        Player newPlayer = new Player(U.PlayerName, 0,0); //Create a profile for the new player
 
         PlayerNames.add(U.PlayerName);
-        PlayersInLobby.add(newPlayer);
+        PlayersInLobby.add(newPlayer); //add the new profile to the array of players in the lobby
         for(int i = 0; i < 4; i++)
         {
             if(PlayerIds[i] == -1)
