@@ -43,7 +43,6 @@ public class Lobby {
         {
             if(U.PlayerIdx == PlayerIds[j])
             {
-                System.out.println(U.PlayerIdx+ "is: "+U.Ready);
                 if(U.Ready == true){
                     ReadiedPlayers[j] = 1;
                     System.out.println("PLAYER READIED");
