@@ -2,43 +2,46 @@ package uta.cse3310;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
 
-public class Lobby 
-{
+public class Lobby {
 
+    public int LobbyNum;
     public List<Player> players;
     public int[] PlayerIds = new int[] {-1, -1, -1, -1};
     public int[] ReadiedPlayers = new int[] {0, 0, 0, 0};
-    Lobby() 
-    {
+
+    public Lobby(int lobbyNum) {
+        this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
         players = new ArrayList<>();
     }
 
-    public void StartGame()
-    {
+    /* Create an array list to store the players of each lobby*/
+    ArrayList<Player> PlayersInLobby = new ArrayList<>(4); 
+
+    public void StartGame(){
         System.out.println("GAME HAS BEEN STARTED!!!!!!!!!!!!!!!!!");
     }
     
-    public void AddPlayers(Player player) 
-    {
-        players.add(player);
+    public void AddPlayers(UserEvent U) {
+        Player newPlayer = new Player(U.PlayerName, 0,0);
+
+        // players.add(U.PlayerName);
+        PlayersInLobby.add(newPlayer);
         for(int i = 0; i < 4; i++)
         {
             if(PlayerIds[i] == -1)
             {
-                PlayerIds[i] = player.getId();
+                PlayerIds[i] = U.PlayerIdx;
                 break;
             }
         }
         System.out.println("PLAYER SUCCESFULLY ADDED");
     }
 
-    public void ReadyPlayer(Player player) 
-    {
+    public void ReadyPlayer(UserEvent U) {
         for(int j = 0; j < 4; j++)
         {
-            if(player.getId() == PlayerIds[j])
+            if(U.PlayerIdx == PlayerIds[j])
             {
                 ReadiedPlayers[j] = 1;
                 int count = 0;
@@ -47,7 +50,7 @@ public class Lobby
                     if(ReadiedPlayers[i] == 1)
                     {
                         count++;
-                        if(count == players.size() && count <= 2)
+                        if((count == players.size()) && (count <= 2))
                         {
                             StartGame();
                         }
@@ -57,28 +60,12 @@ public class Lobby
             }
         }
     }
-
-    public void leaderboard() 
+    public void sortPlayers() 
     {
-        Collections.sort(players, (p1, p2) -> p2.getWins() - p1.getWins());
-    
-        displayPlayers(players);
-    }
-    
-    public void leaderboardingame() 
-    {
-        Collections.sort(players, (p1, p2) -> p2.score - p1.score);
-
-        displayPlayers(players);
+        PlayerComparator comparator = new PlayerComparator();
+        List<Player> sortedPlayers = comparator.sortPlayers(players);
     }
 
-    public static void displayPlayers(List<Player> players) 
-    {
-        int rank = 1;
-        for (Player player : players) 
-        {
-            System.out.println(rank + ". " + player.name + " - " + player.wins);
-            rank++;
-        }
-    }   
+    // String sortedPlayersJson = gson.toJson(players);
+    // broadcast(sortedPlayersJson);
 }

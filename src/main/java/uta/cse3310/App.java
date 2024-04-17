@@ -22,8 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-public class App extends WebSocketServer 
-{
+public class App extends WebSocketServer {
 
   // Vector<InitialLobby> ActiveIL = new Vector<InitialLobby>();
 
@@ -32,37 +31,31 @@ public class App extends WebSocketServer
   int numOfPlayers = 1;
   int extraPlayers = 0;
   
-  public App(int port) 
-  {
+  public App(int port) {
     super(new InetSocketAddress(port));
   }
 
-  public App(InetSocketAddress address) 
-  {
+  public App(InetSocketAddress address) {
     super(address);
   }
 
-  public App(int port, Draft_6455 draft) 
-  {
+  public App(int port, Draft_6455 draft) {
     super(new InetSocketAddress(port), Collections.<Draft>singletonList(draft));
   }
 
   @Override
-  public void onOpen(WebSocket conn, ClientHandshake handshake) 
-  {
+  public void onOpen(WebSocket conn, ClientHandshake handshake) {
 
     System.out.println(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " connected");
 
     ServerEvent E = new ServerEvent();
 
     // search for a Initial Lobby needing a player
-    if (IL != null &&  numOfPlayers <= 20) 
-    {
+    if (IL != null &&  numOfPlayers <= 20) {
       IL.NumOfPlayers = numOfPlayers;
       numOfPlayers++;
       System.out.println("Found a match");
-    } else if(IL == null) 
-    {
+    } else if(IL == null) {
       // No matches or lobby is full, create a new lobby
       IL = new InitialLobby();
       IL.NumOfPlayers = numOfPlayers;
@@ -71,8 +64,7 @@ public class App extends WebSocketServer
       IL.StartInitialLobby();
       System.out.println("Creating a new InitialLobby");
     }
-    else 
-    {
+    else {
       extraPlayers++;
       System.out.println("Initial lobby full");
     }
@@ -96,13 +88,15 @@ public class App extends WebSocketServer
     String jsonString;
     jsonString = gson.toJson(IL);
 
+    String sortedPlayersJson = gson.toJson(sortedPlayers);
+    broadcast(sortedPlayersJson);
+
     System.out.println(jsonString);
     broadcast(jsonString);
   }
 
   @Override
-  public void onClose(WebSocket conn, int code, String reason, boolean remote) 
-  {
+  public void onClose(WebSocket conn, int code, String reason, boolean remote) {
     System.out.println(conn + " has closed");
 
     // Retrieve the game tied to the WebSocket connection
@@ -111,13 +105,11 @@ public class App extends WebSocketServer
     // Retrieve the player index associated with the WebSocket connection
     int playerIdx = L.getPlayerIndexForWebSocket(conn);
 
-    if (playerIdx != -1) 
-    {
+    if (playerIdx != -1) {
         // Set the player's name to an empty string
         L.updatePlayerName(playerIdx, "");
         System.out.println("Player disconnected: " + playerIdx);
-    } else 
-    {
+    } else {
         System.out.println("Player index not found.");
     }
 
@@ -126,15 +118,13 @@ public class App extends WebSocketServer
     {
       extraPlayers--;
     }
-    else
-    {
+    else{
       numOfPlayers--;
     }
   }
 
   @Override
-  public void onMessage(WebSocket conn, String message) 
-  {
+  public void onMessage(WebSocket conn, String message) {
     System.out.println(conn + ": " + message);
 
     GsonBuilder builder = new GsonBuilder();
@@ -155,31 +145,26 @@ public class App extends WebSocketServer
   }
 
   @Override
-  public void onMessage(WebSocket conn, ByteBuffer message) 
-  {
+  public void onMessage(WebSocket conn, ByteBuffer message) {
     System.out.println(conn + ": " + message);
   }
 
   @Override
-  public void onError(WebSocket conn, Exception ex) 
-  {
+  public void onError(WebSocket conn, Exception ex) {
     ex.printStackTrace();
-    if (conn != null) 
-    {
+    if (conn != null) {
       // some errors like port binding failed may not be assignable to a specific
       // websocket
     }
   }
 
   @Override
-  public void onStart() 
-  {
+  public void onStart() {
     System.out.println("Server started!");
     setConnectionLostTimeout(0);
   }
 
-  public static void main(String[] args) 
-  {
+  public static void main(String[] args) {
 
     // Set up the http server
     int port = 9010;
