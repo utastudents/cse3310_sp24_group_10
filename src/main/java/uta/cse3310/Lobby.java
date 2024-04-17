@@ -5,19 +5,28 @@ import java.util.List;
 
 public class Lobby {
 
+    public int LobbyNum;
     public List<String> PlayerNames;
     public int[] PlayerIds = new int[] {-1, -1, -1, -1};
     public int[] ReadiedPlayers = new int[] {0, 0, 0, 0};
-    Lobby() {
+
+    public Lobby(int lobbyNum) {
+        this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
         PlayerNames = new ArrayList<>();
     }
+
+    /* Create an array list to store the players of each lobby*/
+    ArrayList<Player> PlayersInLobby = new ArrayList<>(4); 
 
     public void StartGame(){
         System.out.println("GAME HAS BEEN STARTED!!!!!!!!!!!!!!!!!");
     }
     
     public void AddPlayers(UserEvent U) {
+        Player newPlayer = new Player(U.PlayerName, 0,0);
+
         PlayerNames.add(U.PlayerName);
+        PlayersInLobby.add(newPlayer);
         for(int i = 0; i < 4; i++)
         {
             if(PlayerIds[i] == -1)
@@ -34,14 +43,20 @@ public class Lobby {
         {
             if(U.PlayerIdx == PlayerIds[j])
             {
-                ReadiedPlayers[j] = 1;
+                if(U.Ready == true){
+                    ReadiedPlayers[j] = 1;
+                }
+                else if(U.Ready == false){ //attempt to reset ready state to 0
+                    ReadiedPlayers[j] = 0;
+                }
+
                 int count = 0;
                 for(int i = 0; i < 4; i++)
                 {
                     if(ReadiedPlayers[i] == 1)
                     {
                         count++;
-                        if(count == PlayerNames.size() && count <= 2)
+                        if((count == PlayerNames.size()) && (count <= 2))
                         {
                             StartGame();
                         }
