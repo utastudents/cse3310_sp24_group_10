@@ -710,7 +710,7 @@ var currentLobby = null;
 var playerNamesInServer = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 var idx = -1; //the current idx of the player?
-var ready = false;
+var ready;
 
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
@@ -759,7 +759,6 @@ connection.onclose = function (evt) {
 
 connection.onmessage = function (evt) {
   var addPlayer = false;
-  var ready = false;
   var msg;
   msg = evt.data;
 
@@ -770,6 +769,10 @@ connection.onmessage = function (evt) {
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
+  // Cells the user selected;
+  var firstCell = null;
+  var secondCell = null;
+  
 
   // Get the players in each lobby
   var playerNamesInServerInLobby1 = obj.Lobby1.PlayerNames;
@@ -777,6 +780,9 @@ connection.onmessage = function (evt) {
   var playerNamesInServerInLobby3 = obj.Lobby3.PlayerNames;
   var playerNamesInServerInLobby4 = obj.Lobby4.PlayerNames;
   var playerNamesInServerInLobby5 = obj.Lobby5.PlayerNames;
+
+  // Get the player's ready status
+  ready = obj.ready;
 
   // Update the ready arrays to be used:
   readyLobby1 = obj.Lobby1.ReadiedPlayers;
@@ -1026,6 +1032,7 @@ function checkGameStart(lobby){ //Check if all players are ready; checks every t
     genTable("wordButton"+lobby);
   }
 }
+
 function updateDisplayPlayersInMainMenu(playerNamesInServerInLobby, displayId) {
   var playerNamesInServerDisplay = document.getElementById(displayId);
   var playerNamesInServerHTML = "";
@@ -1083,9 +1090,11 @@ function readyUp(lobby,i) {
   // Remove the existing class (notReady) and add the new class (ready)
   if(buttonElement.className == "notReady"){ //if they are not ready, change their status to ready
     ready = true; //their status visually will be updated in onMessage
+    console.log(idx+" Toggled Ready");
   }
   else if(buttonElement.className == "ready"){
     ready = false;
+    console.log(idx+" Toggled Not Ready");
   }
 
   console.log("Switch to: "+ready);

@@ -123,8 +123,9 @@ public class InitialLobby {
                     System.out.println("NO LOBBY FOUND");
             }
         }
-        if(U.Ready)
-        {
+        //if(U.Ready) <-- Note(This only triggers when they are ready)
+        //{
+            /* Update ready state */
             System.out.println("\nREADY BUTTON CLICKED");
             switch(U.LobbyNum)
             {
@@ -146,6 +147,6 @@ public class InitialLobby {
                 default:
                     System.out.println("NO LOBBY FOUND TO READY UP\n");
             }
-        }
+        //}
     }
 }
