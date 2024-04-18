@@ -84,14 +84,16 @@
         border: none;
         width: 2px;
         height: 2px;
-        margin: 1px;
+        pointer-events: none;
+        margin: 0px;
       }
       .wordButton{
         cursor: pointer;
-        background-color: #ffffff;
+        background-color: white;
         margin: 0px;
         width: 100%;
         height: 100%;
+        pointer-events: auto;
       }
       .wordBank{
         outline: none;
@@ -287,11 +289,11 @@
 
 <div id="pageSplit"> <!-- Section where the page will split into two -->
 
-  <div style="float: left; width: 50%; height: 100%;"> <!-- Divider for Word Search Box -->
+  <div style="float: left; width: 70%; height: 100%;"> <!-- Divider for Word Search Box -->
       <label id="grid"></label>
   </div>
 
-  <div style="float: left; width: 50%; height: 100%"> <!-- Contents sitting beside the table-->
+  <div style="float: left; width: 30%; height: 100%"> <!-- Contents sitting beside the table-->
     <div align="center";> <!-- Divider for surrender button -->
       <input id="surrender"; type="button"; value="SURRENDER"; class="surrenderButton"; onclick="surrenderFunction()">
     </div>
@@ -607,8 +609,8 @@ function genTable(id){ /*Function to generate word search table*/
   for(var i = 0; i < 25; i++){ //number of rows
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
     for(var j = 0; j < 25; j++){ //number of columns
-      newTable += '<td class="cell"; style="pointer-events: none">';
-      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="?"; style="pointer-events: auto"; onclick="giveCell(id)">'; //change this value with input. Add onclick behavior here
+      newTable += '<td class="cell";>';
+      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="?"; onclick="giveCell(id)">'; //change this value with input. Add onclick behavior here
       newTable += '</td>';
     }
     newTable += '</tr>';
@@ -778,22 +780,20 @@ function giveCell(id){
 
   switch(index){
     case 0:
-      console.log(document.getElementById(id).style.backgroundColor);
       if(document.getElementById(id).className == "wordButton"){
-        document.getElementById(id).className= "red";
+        document.getElementById(id).className = "red";
       }
       else{
-        document.getElementById(id).className == "wordButton";
+        document.getElementById(id).className = "wordButton";
       }
       console.log("Cell clicked: "+id);
       break;
     case 1:
-      console.log(document.getElementById(id).style.backgroundColor);
       if(document.getElementById(id).className == "wordButton"){
-        document.getElementById(id).className= "blue";
+        document.getElementById(id).className = "blue";
       }
       else{
-        document.getElementById(id).className= "wordButton";
+        document.getElementById(id).className = "wordButton";
       }
       console.log("Cell clicked: "+id);
       break;
@@ -802,16 +802,16 @@ function giveCell(id){
         document.getElementById(id).className = "green";
       }
       else{
-        document.getElementById(id).className == "wordButton";
+        document.getElementById(id).className = "wordButton";
       }
       console.log("Cell clicked: "+id);
       break;
     case 3:
       if(document.getElementById(id).className == "wordButton"){
-        document.getElementById(id).className= "purple";
+        document.getElementById(id).className = "purple";
       }
       else{
-        document.getElementById(id).className == "wordButton";
+        document.getElementById(id).className = "wordButton";
       }
       console.log("Cell clicked: "+id);
       break;
