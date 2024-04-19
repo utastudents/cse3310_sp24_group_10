@@ -88,5 +88,28 @@ public class LobbyTest  extends TestCase{
         assertEquals(PIL_obj[1], newTestPlayer2);
 
     }
+    /*
+     * Tests the chat functionality
+     */
+    public void testChat(){
+        Lobby lobby1 = new Lobby(1);
+
+        UserEvent U = new UserEvent();
+        U.LobbyNum = 1;
+        U.Msg = "[Thomas] Text \n"; //expected
+        U.MsgSent = true;
+
+        lobby1.Chatting(U);
+
+        assertEquals(U.Msg, lobby1.chatLog.messages);
+
+        U.LobbyNum = 1;
+        U.Msg = "[Thomas]\n"; //unexpected (nothing inputed, just enter key)
+        U.MsgSent = true;
+
+        lobby1.Chatting(U);
+
+        assertEquals(U.Msg, lobby1.chatLog.messages);
+    }
     
 }
