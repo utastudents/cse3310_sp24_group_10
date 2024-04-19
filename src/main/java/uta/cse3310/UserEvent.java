@@ -8,5 +8,7 @@ public class UserEvent {
     int[] NumOfPlayersInLobby;
     boolean Ready;
     String PlayerName; //name inputed by the player
+    boolean MsgSent; //If a message has been sent
+    String Msg; //chat message to be inputed by user
 
 }

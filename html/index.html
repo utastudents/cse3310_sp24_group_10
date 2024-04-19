@@ -156,7 +156,9 @@
         height: 100%;
         pointer-events: auto;
       }
-
+      .wordButton:hover, .red:hover, .blue:hover, .green:hover, .purple:hover{
+        outline: blue solid 2px;
+      }
   </style>
 </head>
 <body>
@@ -169,7 +171,7 @@
 
 <script>
   function leaveGame() {
-    window.location.href = "index.html"; 
+    window.location.href = "index.html";
     document.querySelector('.leave-button').style.display = 'block';
     alert(nickname + ', You have left the game.');
   }
@@ -222,7 +224,7 @@
         <div class="player-names" id="playerNamesInServerDisplay5"></div> <!-- Modified line -->
     </div>
   </div>
-  
+
 
   <!-- TODO: Implement so that a join button corresponds to a unique lobby to prevent overwriting. -->
 </div>
@@ -238,7 +240,7 @@
       <th style="background-color: lightgreen;" id="readyP2">Player 3</th>
       <th style="background-color: plum;" id="readyP3"> Player 4</th>
     </tr>
-    
+
     <tr>
         <td style="outline: none"; id="winsP0">-</td>
         <td style="outline: none"; id="winsP1">-</td>
@@ -311,19 +313,12 @@
 
     <!-- This is the chat box -->
     <div align="right"; id="chatBox";> <!-- For chat -->
-      <table class="chat">
-          <tr><th style="background-color:rgb(162, 185, 249);">Chat</th></tr>
-          <tr>
-              <td style="text-align: left; height: 450px">
-                  messages go here
-              </td>
-          </tr><tr>
-              <td class="textBox">
-                  Type here...
-              </td>
-          </tr>
-          
-      </table>
+      <h2>Chat</h2>
+      <div id="msgLog"; style="overflow-x: hidden; overflow-y: scroll; max-height: 400px; min-height: 400px; white-space: pre-line; outline: black solid 1px; text-align: left;";></div>
+      <form id="chatForm" onsubmit="submitChatMessage()">
+        <input type="text" id="chatInput" name="chatMessage" style="width: 390px"><br><br>
+        <input type="submit" value="SEND">
+      </form>
     </div>
   </div>
 </div>
@@ -342,7 +337,7 @@ function unhide(id){
 hide("gameLobby");
 hide("ongoingGame");
 
-  
+
 var playersJoined = 0; // Initialize the number of players joined to 0
 var maxPlayers = 4; // Set the maximum number of players
 var nickname = "(You)";
@@ -375,12 +370,18 @@ var readyLobby2 = [-1,-1,-1,-1];
 var readyLobby3 = [-1,-1,-1,-1];
 var readyLobby4 = [-1,-1,-1,-1];
 var readyLobby5 = [-1,-1,-1,-1];
-
+//Record the player ids of each lobby
 var playerIds1 = [-1,-1,-1,-1];
 var playerIds2 = [-1,-1,-1,-1];
 var playerIds3 = [-1,-1,-1,-1];
 var playerIds4 = [-1,-1,-1,-1];
 var playerIds5 = [-1,-1,-1,-1];
+//The chat logs of each lobby
+var chatLog1;
+var chatLog2;
+var chatLog3;
+var chatLog4;
+var chatLog5;
 
 
 var connection = null;
@@ -412,7 +413,7 @@ connection.onmessage = function (evt) {
   // Cells the user selected;
   var firstCell = null;
   var secondCell = null;
-  
+
 
   // Get the players in each lobby
   var playerNamesInServerInLobby1 = obj.Lobby1.PlayerNames;
@@ -438,6 +439,14 @@ connection.onmessage = function (evt) {
   playerIds4 = obj.Lobby4.PlayerIds;
   playerIds5 = obj.Lobby5.PlayerIds;
 
+  // Update the chat logs for each lobby
+  chatLog1 = obj.Lobby1.chatLog.messages; //lobby 1 chat log
+  console.log("CHAT: "+chatLog1);
+  chatLog2 = obj.Lobby2.chatLog.messages; //lobby 2 chat log
+  chatLog3 = obj.Lobby3.chatLog.messages; //lobby 3 chat log
+  chatLog4 = obj.Lobby4.chatLog.messages; //lobby 4 chat log
+  chatLog5 = obj.Lobby5.chatLog.messages; //lobby 5 chat log
+
   // Display the names of the players in each lobby
   updateDisplayPlayersInMainMenu(playerNamesInServerInLobby1, "playerNamesInServerDisplay1");
   updateDisplayPlayersInMainMenu(playerNamesInServerInLobby2, "playerNamesInServerDisplay2");
@@ -458,7 +467,7 @@ connection.onmessage = function (evt) {
       lobby1Info[i][3] = obj.Lobby1.PlayersInLobby[i].color;
       lobby1Info[i][4] = obj.Lobby1.PlayersInLobby[i].readyStatus;
     }
-        
+
     for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
       lobby2Info[i][0] = obj.Lobby2.PlayersInLobby[i].name;
       lobby2Info[i][1] = obj.Lobby2.PlayersInLobby[i].score;
@@ -466,7 +475,7 @@ connection.onmessage = function (evt) {
       lobby2Info[i][3] = obj.Lobby2.PlayersInLobby[i].color;
       lobby2Info[i][4] = obj.Lobby2.PlayersInLobby[i].readyStatus;
     }
-    
+
     for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
       lobby3Info[i][0] = obj.Lobby3.PlayersInLobby[i].name;
       lobby3Info[i][1] = obj.Lobby3.PlayersInLobby[i].score;
@@ -492,9 +501,11 @@ connection.onmessage = function (evt) {
     }
     updateDisplayPlayers();
   }
-  
+
   // Update the ready status of each player to everyone
   updateDisplayReady();
+  // Update the chat log for players
+  updateChatDisplay();
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
@@ -515,7 +526,7 @@ connection.onmessage = function (evt) {
 
 
 function submitNickname(event) {
- event.preventDefault(); // Prevent form submission
+  event.preventDefault(); // Prevent form submission
 
   nickname = document.getElementById("nicknameInput").value;
   if (!nickname) {
@@ -576,9 +587,11 @@ function joinLobby(lobby) {
   };
   userEvent[`NumOfPlayersInLobby${lobby}`] = lobbyNumOfPlayers[lobby-1];
   connection.send(JSON.stringify(userEvent));
-  
+
 }
-/* Start of script for Lobby --------------------------------------------------*/
+/*
+* This function updates the profile information seen in game lobby and ongoing game session "real-time"
+*/
 function updateDisplayPlayers(){
   var data;
   switch(currentLobby){
@@ -600,16 +613,19 @@ function updateDisplayPlayers(){
   }
 
   for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
-    console.log("Player: "+data[i][0]+" :: "+data[i][1]+" :: "+data[i][2]);
     document.getElementById("readyP"+i).textContent = data[i][0];
     document.getElementById("inGameP"+i).textContent = data[i][0];
     document.getElementById("scoreP"+i).textContent = "Score: "+data[i][1];
     document.getElementById("winsP"+i).textContent = "Wins: "+data[i][2];
   }
 }
-
+/*
+* Param:
+*   id -> the id of where the grid will be generated
+* This function generates the grid for word search
+*/
 function genTable(id){ /*Function to generate word search table*/
-  let newTable = '<table style="width: 100%; outline: none; border: none; pointer-events: none">'; 
+  let newTable = '<table style="width: 100%; outline: none; border: none; pointer-events: none">';
   for(var i = 0; i < 25; i++){ //number of rows
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
     for(var j = 0; j < 25; j++){ //number of columns
@@ -623,8 +639,10 @@ function genTable(id){ /*Function to generate word search table*/
 
   document.getElementById(id).innerHTML = newTable;
 }
-
-function checkGameStart(){ //Check if all players are ready; checks every time a ready button is toggled. 
+/*
+* This function checks whether all players are ready to start the game
+*/
+function checkGameStart(){ //Check if all players are ready; checks every time a ready button is toggled.
   //Count how many players are ready
   let readyCount = 0;
   var readyInfo;
@@ -633,7 +651,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
       readyInfo = readyLobby1;
       break;
     case 2:
-      readyInfo = readyLobby2;  
+      readyInfo = readyLobby2;
       break;
     case 3:
       readyInfo = readyLobby3;
@@ -657,18 +675,27 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     genTable("grid");
   }
 }
-
+/*
+* Param:
+*   playerNamesInServerInLobby -> a list of players in server
+*   displayId -> the id of what was inserted during call
+* This function updates the player names in main menu
+*/
 function updateDisplayPlayersInMainMenu(playerNamesInServerInLobby, displayId) {
   var playerNamesInServerDisplay = document.getElementById(displayId);
   var playerNamesInServerHTML = "";
 
   // Convert array of player names to comma-separated string
   var playerNamesInServerString = playerNamesInServerInLobby.join(", ");
-  
+
   playerNamesInServerHTML += playerNamesInServerString;
   playerNamesInServerDisplay.innerHTML = playerNamesInServerHTML;
 }
-
+/*
+* Param:
+*   i -> represents the button selected (1-4)
+* This function updates the ready status of current instance of player. UserEvent updates.
+*/
 function readyUp(i) {
   // check if button click is legal by user
   var illegalCheck = false;
@@ -712,9 +739,6 @@ function readyUp(i) {
     console.log(idx+" Toggled Not Ready");
   }
 
-  console.log("Switch to: "+ready);
-  
-  
   const userEvent = {
     PlayerIdx: idx,
     LobbyNum: currentLobby,
@@ -723,7 +747,9 @@ function readyUp(i) {
 
   connection.send(JSON.stringify(userEvent));
 }
-
+/*
+* This function assists updating the ready table that is broadcast to all players in lobby "real-time"
+*/
 function updateDisplayReady(){
   var whatLobby;
   switch(currentLobby){
@@ -755,7 +781,9 @@ function updateDisplayReady(){
   }
   checkGameStart(currentLobby);
 }
-
+/*
+* This function will highlight cells depending on the color
+*/
 function giveCell(id){
   switch(currentLobby){
     case 1:
@@ -819,15 +847,60 @@ function giveCell(id){
       }
       console.log("Cell clicked: "+id);
       break;
-    
+
   }
 }
-/*
-<th style="background-color: #f08080;"; id="inGameP0">Player 1</th>
-      <th style="background-color: #87cefa;"; id="inGameP1">Player 2</th>
-      <th style="background-color: #90ee90;"; id="inGameP2">Player 3</th>
-      <th style="background-color: #dda0dd;"; id="inGameP3">Player 4</th>
-*/
+
+function submitChatMessage(){
+  event.preventDefault();
+
+  var text = "["+nickname+"] ";
+  text += document.getElementById("chatInput").value;
+  text += "\n";
+
+  var sent = true;
+
+  const userEvent = {
+    LobbyNum: currentLobby,
+    Msg: text,
+    MsgSent: sent
+  }
+
+  connection.send(JSON.stringify(userEvent));
+
+  document.getElementById("chatInput").value = "";
+  console.log(nickname+" sent a message: "+text);
+
+}
+
+function updateChatDisplay(){
+  var chatDisplay = document.getElementById("msgLog");
+  switch(currentLobby){
+    case 1:
+      chatDisplay.textContent = chatLog1;
+      console.log(chatLog1);
+      break;
+    case 2:
+      chatDisplay.textContent = chatLog2;
+      console.log(chatLog2);
+      break;
+    case 3:
+      chatDisplay.textContent = chatLog3;
+      console.log(chatLog3);
+      break;
+    case 4:
+      chatDisplay.textContent = chatLog4;
+      console.log(chatLog4);
+      break;
+    case 5:
+      chatDisplay.textContent = chatLog5;
+      console.log(chatLog5);
+      break;
+  }
+
+  document.getElementById("msgLog").scrollTop = document.getElementById("msgLog").scrollHeight; //prevent scroll up
+}
+
 
 </script>
 </body>

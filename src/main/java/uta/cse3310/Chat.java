@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chat{
-  List<String> messages = new ArrayList<>();
+  ArrayList<String> messages = new ArrayList<>();
 
   public void addMessage(String message){
+    messages.add(message);
   }
-  public List<String>getMessages(){
-    return messages;
-  }
+  // public List<String>getMessages(){
+  //   return messages;
+  // }
 }

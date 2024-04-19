@@ -18,13 +18,14 @@ public class Lobby {
     /* Create an array list to store the players of each lobby*/
     ArrayList<Player> PlayersInLobby = new ArrayList<>(4); 
 
+    Chat chatLog = new Chat();
+    
     public void StartGame(){
         System.out.println("GAME HAS BEEN STARTED!!!!!!!!!!!!!!!!!");
     }
     
     public void AddPlayers(UserEvent U) {
         Player newPlayer = new Player(U.PlayerName, 0,0); //Create a profile for the new player
-
         PlayerNames.add(U.PlayerName);
         PlayersInLobby.add(newPlayer); //add the new profile to the array of players in the lobby
         for(int i = 0; i < 4; i++)
@@ -67,5 +68,11 @@ public class Lobby {
                 break;
             }
         }
+    }
+
+    public void Chatting(UserEvent U){
+        String text = U.Msg;
+        System.out.println("\nDEBUG: Msg = "+text);
+        chatLog.addMessage(text);
     }
 }
