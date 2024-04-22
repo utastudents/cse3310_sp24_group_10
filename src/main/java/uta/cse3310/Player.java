@@ -1,18 +1,14 @@
 package uta.cse3310;
 
 public class Player {
-    private String name;
-    private int score;
-    private int wins;
-    private String color;
-    private boolean readyStatus;
+    String name;
+    int score;
+    int wins;
 
-    public Player(String name, int score, int wins, String color, boolean readyStatus){
+    Player(String name, int score, int wins){
       this.name = name;
       this.score = score;
       this.wins = wins;
-      this.color = color;
-      this.readyStatus = readyStatus;
     }
 
     public int getScore() {
