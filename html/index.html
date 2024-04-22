@@ -167,24 +167,9 @@
 <h1 style="text-align:center">
   The Word Search Game
 </h1>
-<button class="leave-button" style="display: block;" onclick="leaveGame()">Leave Game</button>
+<button class="leave-button" style="display: block;" onclick="surrenderFunction()">Leave Game</button>
 
-<script>
-  function leaveGame() {
-    window.location.href = "index.html";
-    document.querySelector('.leave-button').style.display = 'block';
-    alert(nickname + ', You have left the game.');
-  }
-
-  // execute when the surrender button is clicked
-  function surrenderFunction() {
-    alert("You surrendered!");
-    window.location.href= "index.html";
-  }
-  var surrenderButton = document.getElementById("surrender");
-  surrenderButton.addEventListener("click", surrenderFunction);
-</script>
-
+<!-- Display name -->
 <h2 id="displayName"; style="text-align:left";>Display name:</h2>
 
 <div id = "InitialLobby"; align="center">
@@ -346,6 +331,7 @@ var playerNamesInServer = [];
 let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 var idx = -1; //the current idx of the player?
 var ready;
+var surrender = false;
 
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
@@ -400,6 +386,7 @@ connection.onclose = function (evt) {
 
 connection.onmessage = function (evt) {
   var addPlayer = false;
+  surrender = false;
   var msg;
   msg = evt.data;
 
@@ -681,7 +668,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
 * This function updates the player names in main menu
 */
 function updateDisplayPlayersInMainMenu(playerNamesInServerInLobby, displayId) {
-  var playerNamesInServerDisplay = document.getElementById(displayId);
+  playerNamesInServerDisplay = document.getElementById(displayId);
   var playerNamesInServerHTML = "";
 
   // Convert array of player names to comma-separated string
@@ -862,8 +849,8 @@ function submitChatMessage(){
   const userEvent = {
     LobbyNum: currentLobby,
     Msg: text,
-    MsgSent: sent
-  }
+    MsgSent: sent,
+  };
 
   connection.send(JSON.stringify(userEvent));
 
@@ -899,6 +886,27 @@ function updateChatDisplay(){
 
   document.getElementById("msgLog").scrollTop = document.getElementById("msgLog").scrollHeight; //prevent scroll up
 }
+
+function leaveGame(){
+
+}
+
+// execute when the surrender button is clicked
+function surrenderFunction() {
+    console.log("surrender button clicked");
+    surrender = true;
+    hide("gameLobby");
+    hide("ongoingGame");
+    unhide("InitialLobby");
+
+    userEvent = {
+      PlayerIdx: idx,
+      LobbyNum: currentLobby,
+      PlayerName: nickname,
+      Surrender: surrender,
+    };
+    connection.send(JSON.stringify(userEvent));
+  }
 
 
 </script>

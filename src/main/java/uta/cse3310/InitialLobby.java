@@ -171,5 +171,28 @@ public class InitialLobby {
                     System.out.println("NO LOBBY FOUND TO UPDATE CHAT LOGS\n");
             }
         }
+        if(U.Surrender)
+        {
+            switch(U.LobbyNum)
+            {
+                case 1:
+                    Lobby1.SurrenderPlayer(U);
+                    break;
+                case 2:
+                    Lobby2.SurrenderPlayer(U);
+                    break;
+                case 3:
+                    Lobby3.SurrenderPlayer(U);
+                    break;
+                case 4:
+                    Lobby4.SurrenderPlayer(U);
+                    break;
+                case 5:
+                    Lobby5.SurrenderPlayer(U);
+                    break;
+                default:
+                    System.out.println("NOT ABLE TO SURRENDER\n");
+            }
+        }
     }
 }

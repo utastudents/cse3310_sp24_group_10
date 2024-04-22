@@ -75,4 +75,31 @@ public class Lobby {
         System.out.println("\nDEBUG: Msg = "+text);
         chatLog.addMessage(text);
     }
+
+    public void SurrenderPlayer(UserEvent U)
+    {
+        PlayerNames.remove(U.PlayerName);
+        System.out.println("\nPLAYER NAME REMOVED;");
+
+        for (int i = 0; i < PlayersInLobby.size(); i++) 
+        {
+            if (PlayersInLobby.get(i).name.equals(U.PlayerName)) 
+            {
+                PlayersInLobby.remove(i);
+                System.out.println("\nPLAYER OBJECT REMOVED");
+                break;
+            }
+        }
+
+        for(int i = 0; i < 4; i++)
+        {
+            if(PlayerIds[i] == U.PlayerIdx)
+            {
+                PlayerIds[i] = -1;
+                System.out.println("\nPLAYER ID REMOVED");
+                break;
+            }
+        }
+        System.out.println("PLAYER SURRENDERED");
+    }
 }
