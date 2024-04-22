@@ -7,14 +7,8 @@ public class UserEvent {
     boolean AddPlayer;
     int[] NumOfPlayersInLobby;
     boolean Ready;
-
     String PlayerName; //name inputed by the player
-    String PlayerScore;
-    String PlayerWins;
-    String PlayerColor;
-    String PlayerStatus;
-
-    Player player; //Player information
-
+    boolean MsgSent; //If a message has been sent
+    String Msg; //chat message to be inputed by user
 
 }

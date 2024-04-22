@@ -12,16 +12,16 @@ public class InitialLobby {
     public int[] NumOfPlayersInLobby = {0, 0, 0, 0, 0};
     public List<String> PlayerNamesInServer;
     public Map<WebSocket, Integer> connectionToPlayerIndexMap;
-
+    /* Game lobbies  */
     Lobby Lobby1 = null;
     Lobby Lobby2 = null;
     Lobby Lobby3 = null;
     Lobby Lobby4 = null;
     Lobby Lobby5 = null;
 
-
     InitialLobby() {
         connectionToPlayerIndexMap = new HashMap<>();
+        /* Create new lobby objects */
         Lobby1 = new Lobby(1);
         Lobby2 = new Lobby(2);
         Lobby3 = new Lobby(3);
@@ -123,8 +123,9 @@ public class InitialLobby {
                     System.out.println("NO LOBBY FOUND");
             }
         }
-        if(U.Ready)
-        {
+        //if(U.Ready) <-- Note(This only triggers when they are ready)
+        //{
+            /* Update ready state */
             System.out.println("\nREADY BUTTON CLICKED");
             switch(U.LobbyNum)
             {
@@ -145,6 +146,29 @@ public class InitialLobby {
                     break;
                 default:
                     System.out.println("NO LOBBY FOUND TO READY UP\n");
+            }
+        //}
+        if(U.MsgSent){
+            System.out.println("\nMESSAGE SENT. UPDATING CHAT LOGS\n");
+            switch(U.LobbyNum)
+            {
+                case 1:
+                    Lobby1.Chatting(U);
+                    break;
+                case 2:
+                    Lobby2.Chatting(U);
+                    break;
+                case 3:
+                    Lobby3.Chatting(U);
+                    break;
+                case 4:
+                    Lobby4.Chatting(U);
+                    break;
+                case 5:
+                    Lobby5.Chatting(U);
+                    break;
+                default:
+                    System.out.println("NO LOBBY FOUND TO UPDATE CHAT LOGS\n");
             }
         }
     }

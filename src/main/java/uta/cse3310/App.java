@@ -88,9 +88,6 @@ public class App extends WebSocketServer {
     String jsonString;
     jsonString = gson.toJson(IL);
 
-    String sortedPlayersJson = gson.toJson(sortedPlayers);
-    broadcast(sortedPlayersJson);
-
     System.out.println(jsonString);
     broadcast(jsonString);
   }
