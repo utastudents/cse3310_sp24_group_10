@@ -177,6 +177,7 @@ public class App extends WebSocketServer {
     A.start();
     System.out.println("websocket Server started on port: " + port);
 
+    /*
     //add players
     ArrayList<Player> players = new ArrayList<>();
     players.add(new Player("Bob", "Yellow"));
@@ -184,6 +185,7 @@ public class App extends WebSocketServer {
     //testing timer
     Game game = new Game(players);
     game.startGame();
+    */
     
   }
 }
