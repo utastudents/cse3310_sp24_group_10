@@ -11,7 +11,7 @@ import java.util.Map;
 public class Generator {
   public static char[][] createGrid(ArrayList<String> words, long seed)
   {
-    boolean debug = true;
+    boolean debug = false;
     final int size = 50;
     int overlap = 0;
 
