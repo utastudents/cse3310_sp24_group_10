@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Map;
 
+
+/* FOR FUTURE
+  - Possibly combine the 4 for loops into one
+  - Add a flag for word overlapping to only happen once per for loop
+  - Remove the getWords method and roll it into the createGrid
+*/
+
 public class Generator {
   public static char[][] createGrid(ArrayList<String> words, long seed)
   {
@@ -53,13 +60,14 @@ public class Generator {
 
         Point runner = new Point(head.x, head.y);
 
+/*
         // Check if horizontal is valid
         for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
           if ((taken_index.contains(new Point(runner.x, runner.y))))
           {
-            // Check if the word can be a overlap
+            // Check if the word can be an overlap
             if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
             {
               overlap ++;
@@ -74,7 +82,66 @@ public class Generator {
           }
           runner.x ++;
         }
+*/
 
+        int valid_size = valid.size();
+        // Loop through the four valid directions
+        for (int j = 0; j > valid_size; j ++)
+        {
+          runner = new Point(head.x, head.y);
+          // For each direction, check if the word position is valid
+          for (int i = 0; i < word_len; i ++)
+          {
+            // Current character position occupied 
+            if ((taken_index.contains(new Point(runner.x, runner.y))))
+            {
+              // Check if the word can be an overlap
+              if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+              {
+                overlap ++;
+              } else // Invalidate this position
+              {
+                valid.remove(Integer.valueOf(j));
+              }
+            }
+            // Invalid position
+            if (runner.y == -1 || runner.x == -1 || runner.x == size - 1 || runner.x == size || runner.y == size)
+            {
+              valid.remove(Integer.valueOf(j));
+            }
+            switch (j)
+            {
+              case 0: // Horizontal
+                runner.x ++;
+                break; 
+              case 1: // Vertical
+                runner.y ++;
+                break;
+              case 2: // Diagnal down 
+                runner.x ++;
+                runner.y ++;
+                break;
+              case 3: // Diagnal up 
+                runner.x ++;
+                runner.y --;
+                break;
+              default:
+                break;
+            }
+            // Special check for diagnal up
+            if (runner.y == -1 || runner.x == size - 1 || runner.y == size - 1)
+            {
+              valid.remove(Integer.valueOf(j));
+            }
+          }
+        }
+
+
+
+
+
+
+/*
         runner = new Point(head.x, head.y);
         // Check if vertical is valid
         for (int i = 0; i < word_len; i ++)
@@ -82,7 +149,7 @@ public class Generator {
           // Invalid word position
           if ((taken_index.contains(new Point(runner.x, runner.y))))
           {
-            // Check if the word can be a overlap
+            // Check if the word can be an overlap
             if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
             {
               overlap ++;
@@ -105,7 +172,7 @@ public class Generator {
           // Invalid word position
           if ((taken_index.contains(new Point(runner.x, runner.y))))
           {
-            // Check if the word can be a overlap
+            // Check if the word can be an overlap
             if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
             {
               overlap ++;
@@ -128,7 +195,7 @@ public class Generator {
           // Invalid word position
           if ((taken_index.contains(new Point(runner.x, runner.y))))
           {
-            // Check if the word can be a overlap
+            // Check if the word can be an overlap
             if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
             {
               overlap ++;
@@ -149,6 +216,7 @@ public class Generator {
             valid.remove(Integer.valueOf(3));
           }
         }
+*/
         if (debug)
         {
           System.out.format("head.x: %02d, head.y: %02d, ", head.x, head.y);
@@ -203,7 +271,7 @@ public class Generator {
     }
     if (debug)
     {
-      System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlap: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
+      System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlap attempts: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
     }
 
     return my_array;
