@@ -54,7 +54,7 @@ public class GeneratorTest  extends TestCase{
     words_used = Generator.getWords(word_list, (long) 1234);
     assertArrayEquals(Generator.createGrid(word_list, (long) 1234), Generator.createGrid(word_list, (long) 1234));
     assertEquals(words_used, Generator.getWords(word_list, (long) 1234));
-    printGrid(Generator.createGrid(word_list, (long) 1234));
+    //printGrid(Generator.createGrid(word_list, (long) 1234));
   }
   public static void printGrid(char[][] my_array)
   {

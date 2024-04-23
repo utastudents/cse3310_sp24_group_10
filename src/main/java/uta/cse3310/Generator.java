@@ -10,7 +10,6 @@ import java.util.Map;
 
 
 /* FOR FUTURE
-  - Possibly combine the 4 for loops into one
   - Add a flag for word overlapping to only happen once per for loop
   - Remove the getWords method and roll it into the createGrid
 */
@@ -18,7 +17,7 @@ import java.util.Map;
 public class Generator {
   public static char[][] createGrid(ArrayList<String> words, long seed)
   {
-    boolean debug = true;
+    boolean debug = false;
     final int size = 50;
     int overlap = 0;
 
@@ -68,7 +67,7 @@ public class Generator {
           // For each direction, check if the word position is valid
           for (int i = 0; i < word_len; i ++)
           {
-            // Current character position occupied 
+            // Check if current character position occupied 
             if ((taken_index.contains(new Point(runner.x, runner.y))))
             {
               // Check if the word can be an overlap
@@ -81,7 +80,7 @@ public class Generator {
               }
             }
             // Invalid position
-            if (runner.y == -1 || runner.x == -1 || runner.x == size - 1 || runner.x == size || runner.y == size)
+            if (runner.y == -1 || runner.x == -1 || runner.x == size || runner.y == size)
             {
               valid.remove(Integer.valueOf(j));
             }
@@ -105,7 +104,7 @@ public class Generator {
                 break;
             }
             // Special check for diagnal up
-            if (runner.x == -1 || runner.y == -1 || runner.x == size - 1 || runner.y == size - 1)
+            if (runner.x == -1 || runner.y == -1 || runner.x == size || runner.y == size)
             {
               valid.remove(Integer.valueOf(j));
             }
