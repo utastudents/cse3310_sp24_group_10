@@ -77,22 +77,25 @@ public class Generator {
 
         runner = new Point(head.x, head.y);
         // Check if vertical is valid
-        for (int i = head.y; (i - head.y) < word_len; i ++)
+        for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
-          if (taken_index.contains(new Point(head.x, i)) && my_array[head.x][i] == words.get(word_index).charAt(i - head.y))
+          if ((taken_index.contains(new Point(runner.x, runner.y))))
           {
-            System.out.format("Overlapping char %c at %d, %d\n", words.get(word_index).charAt(i - head.y), i + 1, head.x + 1); // Unknown why plus one skew is needed
-            overlap ++;
+            // Check if the word can be a overlap
+            if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+            {
+              overlap ++;
+            } else // If not, invalidate this position
+            {
+              valid.remove(Integer.valueOf(1));
+            }
           }
-          if (taken_index.contains(new Point(head.x, i)) && my_array[head.x][i] != words.get(word_index).charAt(i - head.y))
+          if (runner.y == size)
           {
             valid.remove(Integer.valueOf(1));
           }
-          if (i == size)
-          {
-            valid.remove(Integer.valueOf(1));
-          }
+          runner.y ++;
         }
 
         runner = new Point(head.x, head.y);
@@ -100,7 +103,18 @@ public class Generator {
         for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
-          if (runner.x == size - 1 || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
+          if ((taken_index.contains(new Point(runner.x, runner.y))))
+          {
+            // Check if the word can be a overlap
+            if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+            {
+              overlap ++;
+            } else // If not, invalidate this position
+            {
+              valid.remove(Integer.valueOf(2));
+            }
+          }
+          if (runner.x == size - 1 || runner.y == size)
           {
             valid.remove(Integer.valueOf(2));
           }
@@ -112,7 +126,18 @@ public class Generator {
         for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
-          if (runner.y == -1 || runner.x == size || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
+          if ((taken_index.contains(new Point(runner.x, runner.y))))
+          {
+            // Check if the word can be a overlap
+            if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+            {
+              overlap ++;
+            } else // If not, invalidate this position
+            {
+              valid.remove(Integer.valueOf(3));
+            }
+          }
+          if (runner.y == -1 || runner.x == size || runner.y == size)
           {
             valid.remove(Integer.valueOf(3));
           }
