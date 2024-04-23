@@ -198,7 +198,6 @@
   </form>
 
   <hr>
-
   <!-- Buttons for joining lobbies -->
   <div align="left">
     <div class="lobby-container">
@@ -608,13 +607,22 @@ function updateDisplayPlayers(){
   }
 }
 
-function genTable(id){ /*Function to generate word search table*/
+function generateRandomLetter() {
+    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return letters.charAt(Math.floor(Math.random() * letters.length));
+}
+
+
+function genTable(id,words){ 
+  /*Function to generate word search table*/
   let newTable = '<table style="width: 100%; outline: none; border: none; pointer-events: none">'; 
   for(var i = 0; i < 25; i++){ //number of rows
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
     for(var j = 0; j < 25; j++){ //number of columns
       newTable += '<td class="cell";>';
-      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="?"; onclick="giveCell(id)">'; //change this value with input. Add onclick behavior here
+      var randomLetter = generateRandomLetter();
+      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ randomLetter+ '"; onclick="giveCell(id)">'; //change this value with input. Add onclick behavior here
+
       newTable += '</td>';
     }
     newTable += '</tr>';
@@ -623,6 +631,7 @@ function genTable(id){ /*Function to generate word search table*/
 
   document.getElementById(id).innerHTML = newTable;
 }
+
 
 function checkGameStart(){ //Check if all players are ready; checks every time a ready button is toggled. 
   //Count how many players are ready
