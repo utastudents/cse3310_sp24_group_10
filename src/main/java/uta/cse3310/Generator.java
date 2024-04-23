@@ -11,8 +11,9 @@ import java.util.Map;
 public class Generator {
   public static char[][] createGrid(ArrayList<String> words, long seed)
   {
-    boolean debug = false;
+    boolean debug = true;
     final int size = 50;
+    int overlap = 0;
 
     Random rand_num = new Random(seed);
     char[][] my_array = new char[size][size];
@@ -50,27 +51,51 @@ public class Generator {
         int word_index = rand_num.nextInt(words.size());
         int word_len = words.get(word_index).length();
 
+        Point runner = new Point(head.x, head.y);
 
         // Check if horizontal is valid
-        for (int i = head.x; (i - head.x) < word_len; i ++)
+        for (int i = 0; i < word_len; i ++)
         {
           // Invalid word position
-          if ((taken_index.contains(new Point(i, head.y))) || (i == size))
+          if ((taken_index.contains(new Point(runner.x, runner.y))))
+          {
+            // Check if the word can be a overlap
+            if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+            {
+              overlap ++;
+            } else // If not, invalidate this position
+            {
+              valid.remove(Integer.valueOf(0));
+            }
+          }
+          if (runner.x == size - 1)
           {
             valid.remove(Integer.valueOf(0));
           }
+          runner.x ++;
         }
+
+        runner = new Point(head.x, head.y);
         // Check if vertical is valid
         for (int i = head.y; (i - head.y) < word_len; i ++)
         {
           // Invalid word position
-          if (taken_index.contains(new Point(head.x, i)) || i == size)
+          if (taken_index.contains(new Point(head.x, i)) && my_array[head.x][i] == words.get(word_index).charAt(i - head.y))
+          {
+            System.out.format("Overlapping char %c at %d, %d\n", words.get(word_index).charAt(i - head.y), i + 1, head.x + 1); // Unknown why plus one skew is needed
+            overlap ++;
+          }
+          if (taken_index.contains(new Point(head.x, i)) && my_array[head.x][i] != words.get(word_index).charAt(i - head.y))
+          {
+            valid.remove(Integer.valueOf(1));
+          }
+          if (i == size)
           {
             valid.remove(Integer.valueOf(1));
           }
         }
 
-        Point runner = new Point(head.x, head.y);
+        runner = new Point(head.x, head.y);
         // Check if diagnal down is valid
         for (int i = 0; i < word_len; i ++)
         {
@@ -82,7 +107,7 @@ public class Generator {
           runner.x ++;
           runner.y ++;
         }
-        runner = new Point(0, 0);
+        runner = new Point(head.x, head.y);
         // Check if diagnal up is valid
         for (int i = 0; i < word_len; i ++)
         {
@@ -153,7 +178,7 @@ public class Generator {
     }
     if (debug)
     {
-      System.out.format("Size of taken_index: %d, percentage of word chars: %f\n", taken_index.size(), 100.0 * taken_index.size() / (size * size));
+      System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlap: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
     }
 
     return my_array;
