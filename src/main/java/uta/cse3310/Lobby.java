@@ -9,19 +9,29 @@ public class Lobby {
     public List<String> PlayerNames;
     public int[] PlayerIds = new int[] {-1, -1, -1, -1};
     public int[] ReadiedPlayers = new int[] {0, 0, 0, 0};
-
+    public String[] Msg;
+    public PlayerType CurrentPlayer;
+    
     public Lobby(int lobbyNum) {
         this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
         PlayerNames = new ArrayList<>();
+        Msg = new String[4];
+        CurrentPlayer = PlayerType.NOPLAYER;
     }
 
     /* Create an array list to store the players of each lobby*/
     ArrayList<Player> PlayersInLobby = new ArrayList<>(4); 
 
     Chat chatLog = new Chat();
+
     
     public void StartGame(){
         System.out.println("GAME HAS BEEN STARTED!!!!!!!!!!!!!!!!!");
+        CurrentPlayer = PlayerType.PLAYER1;
+        Msg[0] = "hello there";
+        Msg[1] = "hello there";
+        Msg[2] = "hello there";
+        Msg[3] = "hello there";
     }
     
     public void AddPlayers(UserEvent U) {

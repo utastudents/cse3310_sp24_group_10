@@ -96,9 +96,9 @@ public class Game {
         //determine winner
         for(int i = 0; i < players.size(); i++)
         {
-            if(players.get(i).getScore() > winner)
+            if(players.get(i).score > winner)
             {
-                winner = players.get(i).getScore(); 
+                winner = players.get(i).score; 
                 winnerIdx = i;
             }
         }
@@ -106,14 +106,14 @@ public class Game {
         //reset all players scores
         for(int i = 0; i < players.size(); i++)
         {
-            players.get(i).setScore(0); 
+            players.get(i).score = 0; 
         }
 
         Player pWinner = players.get(winnerIdx);
 
-        System.out.println("The Winner is: " + pWinner.getName() + System.lineSeparator());
+        System.out.println("The Winner is: " + pWinner.name + System.lineSeparator());
 
-        pWinner.addWin();
+        pWinner.wins++;
 
     }
     

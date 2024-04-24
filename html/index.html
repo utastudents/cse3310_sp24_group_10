@@ -169,6 +169,15 @@
 </h1>
 <button class="leave-button" style="display: block;" onclick="surrenderFunction()">Leave Game</button>
 
+<!-- Message for winner/losers -->
+<font size ="6">
+  <div style="text-align:center">
+       <label id= "Message"></label><br>
+  <!-- <label id= "Message">Message</label><br> -->
+  </div>
+</font>
+
+
 <!-- Display name -->
 <h2 id="displayName"; style="text-align:left";>Display name:</h2>
 
@@ -385,6 +394,7 @@ connection.onclose = function (evt) {
 }
 
 connection.onmessage = function (evt) {
+  
   var addPlayer = false;
   surrender = false;
   var msg;
@@ -397,6 +407,15 @@ connection.onmessage = function (evt) {
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
+  
+  if('CurrentPlayer' in obj) {
+
+    if(currentLobby == obj.LobbyNum){
+
+      document.getElementById("Message").innerHTML = obj.Msg[idx];
+    }
+  }
+  
   // Cells the user selected;
   var firstCell = null;
   var secondCell = null;
