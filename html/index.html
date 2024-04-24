@@ -167,7 +167,6 @@
 <h1 style="text-align:center">
   The Word Search Game
 </h1>
-<button class="leave-button" style="display: block;" onclick="surrenderFunction()">Leave Game</button>
 
 <!-- Message for winner/losers -->
 <font size ="6">
@@ -258,6 +257,7 @@
       </td>
     </tr>
   </table>
+  <button class="leave-button" style="display: block;" onclick="surrenderFunction()">Leave Game</button>
 
 </div>
 
@@ -317,6 +317,33 @@
   </div>
 </div>
 
+<br>
+
+<div align="center">
+<table style="width: 50%">
+  <tr>
+    <th>Player</th>
+    <th>Position</th>
+  </tr>
+  <tr>
+    <td id="pos0">-</td>
+    <td>1st</td>
+  </tr>
+  <tr>
+    <td id="pos1">-</td>
+    <td>2nd</td>
+  </tr>
+  <tr>
+    <td id="pos2">-</td>
+    <td>3rd</td>
+  </tr>
+  <tr>
+    <td id="pos3">-</td>
+    <td>4th</td>
+  </tr>
+</table>
+</div>
+
 </div>
 
 <script>
@@ -341,6 +368,7 @@ let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 var idx = -1; //the current idx of the player?
 var ready;
 var surrender = false;
+let gameStarted = [0, 0, 0, 0, 0]; // array to tell if a game is started (1 means started)
 
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
@@ -358,6 +386,12 @@ for(var i = 0; i < 5; i++){
   lobby4Info[i] = Array.from(newPlayer);
   lobby5Info[i] = Array.from(newPlayer);
 }
+
+var playerNamesInLobby1;
+var playerNamesInLobby2;
+var playerNamesInLobby3;
+var playerNamesInLobby4;
+var playerNamesInLobby5;
 
 //Record the ready states of each lobby into variables
 var readyLobby1 = [-1,-1,-1,-1];
@@ -377,6 +411,18 @@ var chatLog2;
 var chatLog3;
 var chatLog4;
 var chatLog5;
+
+var playerScores1 = [0,0,0,0];
+var playerScores2 = [0,0,0,0];
+var playerScores3 = [0,0,0,0];
+var playerScores4 = [0,0,0,0];
+var playerScores5 = [0,0,0,0];
+
+var playerWins1 = [0,0,0,0];
+var playerWins2 = [0,0,0,0];
+var playerWins3 = [0,0,0,0];
+var playerWins4 = [0,0,0,0];
+var playerWins5 = [0,0,0,0];
 
 
 var connection = null;
@@ -422,11 +468,11 @@ connection.onmessage = function (evt) {
 
 
   // Get the players in each lobby
-  var playerNamesInServerInLobby1 = obj.Lobby1.PlayerNames;
-  var playerNamesInServerInLobby2 = obj.Lobby2.PlayerNames;
-  var playerNamesInServerInLobby3 = obj.Lobby3.PlayerNames;
-  var playerNamesInServerInLobby4 = obj.Lobby4.PlayerNames;
-  var playerNamesInServerInLobby5 = obj.Lobby5.PlayerNames;
+  playerNamesInLobby1 = obj.Lobby1.PlayerNames;
+  playerNamesInLobby2 = obj.Lobby2.PlayerNames;
+  playerNamesInLobby3 = obj.Lobby3.PlayerNames;
+  playerNamesInLobby4 = obj.Lobby4.PlayerNames;
+  playerNamesInLobby5 = obj.Lobby5.PlayerNames;
 
   // Get the player's ready status
   ready = obj.ready;
@@ -452,16 +498,29 @@ connection.onmessage = function (evt) {
   chatLog4 = obj.Lobby4.chatLog.messages; //lobby 4 chat log
   chatLog5 = obj.Lobby5.chatLog.messages; //lobby 5 chat log
 
+  playerScores1 = obj.Lobby1.PlayerScores;
+  playerScores2 = obj.Lobby2.PlayerScores;
+  playerScores3 = obj.Lobby3.PlayerScores;
+  playerScores4 = obj.Lobby4.PlayerScores;
+  playerScores5 = obj.Lobby5.PlayerScores;
+
+  playerWins1 = obj.Lobby1.PlayerWins;
+  playerWins2 = obj.Lobby2.PlayerWins;
+  playerWins3 = obj.Lobby3.PlayerWins;
+  playerWins4 = obj.Lobby4.PlayerWins;
+  playerWins5 = obj.Lobby5.PlayerWins;
+
   // Display the names of the players in each lobby
-  updateDisplayPlayersInMainMenu(playerNamesInServerInLobby1, "playerNamesInServerDisplay1");
-  updateDisplayPlayersInMainMenu(playerNamesInServerInLobby2, "playerNamesInServerDisplay2");
-  updateDisplayPlayersInMainMenu(playerNamesInServerInLobby3, "playerNamesInServerDisplay3");
-  updateDisplayPlayersInMainMenu(playerNamesInServerInLobby4, "playerNamesInServerDisplay4");
-  updateDisplayPlayersInMainMenu(playerNamesInServerInLobby5, "playerNamesInServerDisplay5");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby1, "playerNamesInServerDisplay1");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby2, "playerNamesInServerDisplay2");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby3, "playerNamesInServerDisplay3");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby4, "playerNamesInServerDisplay4");
+  updateDisplayPlayersInMainMenu(playerNamesInLobby5, "playerNamesInServerDisplay5");
 
   // Sets the arrays equal to each other
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
   playerNamesInServer = obj.PlayerNamesInServer;
+  gameStarted[currentLobby-1] = obj.GameStarted;
 
   // Update player profile information in game lobby and ongoing game
   function addPlayer2Array(){
@@ -469,54 +528,46 @@ connection.onmessage = function (evt) {
       lobby1Info[i][0] = obj.Lobby1.PlayersInLobby[i].name;
       lobby1Info[i][1] = obj.Lobby1.PlayersInLobby[i].score;
       lobby1Info[i][2] = obj.Lobby1.PlayersInLobby[i].wins;
-      lobby1Info[i][3] = obj.Lobby1.PlayersInLobby[i].color;
-      lobby1Info[i][4] = obj.Lobby1.PlayersInLobby[i].readyStatus;
     }
 
     for(var i = 0; i < lobbyNumOfPlayers[1]; i++){
       lobby2Info[i][0] = obj.Lobby2.PlayersInLobby[i].name;
       lobby2Info[i][1] = obj.Lobby2.PlayersInLobby[i].score;
       lobby2Info[i][2] = obj.Lobby2.PlayersInLobby[i].wins;
-      lobby2Info[i][3] = obj.Lobby2.PlayersInLobby[i].color;
-      lobby2Info[i][4] = obj.Lobby2.PlayersInLobby[i].readyStatus;
     }
 
     for(var i = 0; i < lobbyNumOfPlayers[2]; i++){
       lobby3Info[i][0] = obj.Lobby3.PlayersInLobby[i].name;
       lobby3Info[i][1] = obj.Lobby3.PlayersInLobby[i].score;
       lobby3Info[i][2] = obj.Lobby3.PlayersInLobby[i].wins;
-      lobby3Info[i][3] = obj.Lobby3.PlayersInLobby[i].color;
-      lobby3Info[i][4] = obj.Lobby3.PlayersInLobby[i].readyStatus;
     }
 
     for(var i = 0; i < lobbyNumOfPlayers[3]; i++){
       lobby4Info[i][0] = obj.Lobby4.PlayersInLobby[i].name;
       lobby4Info[i][1] = obj.Lobby4.PlayersInLobby[i].score;
       lobby4Info[i][2] = obj.Lobby4.PlayersInLobby[i].wins;
-      lobby4Info[i][3] = obj.Lobby4.PlayersInLobby[i].color;
-      lobby4Info[i][4] = obj.Lobby4.PlayersInLobby[i].readyStatus;
     }
 
     for(var i = 0; i < lobbyNumOfPlayers[4]; i++){
       lobby5Info[i][0] = obj.Lobby5.PlayersInLobby[i].name;
       lobby5Info[i][1] = obj.Lobby5.PlayersInLobby[i].score;
       lobby5Info[i][2] = obj.Lobby5.PlayersInLobby[i].wins;
-      lobby5Info[i][3] = obj.Lobby5.PlayersInLobby[i].color;
-      lobby5Info[i][4] = obj.Lobby5.PlayersInLobby[i].readyStatus;
     }
     updateDisplayPlayers();
   }
-
   // Update the ready status of each player to everyone
   updateDisplayReady();
   // Update the chat log for players
   updateChatDisplay();
 
+  addPlayer2Array();
+
+  updateLeaderboard();
+
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
   nickname = displayName.replace("Display name:", "").trim();
 
-  addPlayer2Array();
 
   // Update the numbers on the buttons to display the correct number of players
   document.getElementById("button0").textContent = lobbyNumOfPlayers[0] + "/4";
@@ -568,11 +619,13 @@ function joinLobby(lobby) {
     return;
   }
 
-  if(lobbyNumOfPlayers[lobby-1] >= 4)
+  // if 4 players already in lobby or if the game has already started, disable button
+  if((lobbyNumOfPlayers[lobby-1] >= 4) || gameStarted[lobby-1] == 1)
   {
     document.getElementById("button" + (lobby -1)).disabled = true;
     return;
   }
+
 
   addPlayer = true;
 
@@ -598,30 +651,43 @@ function joinLobby(lobby) {
 * This function updates the profile information seen in game lobby and ongoing game session "real-time"
 */
 function updateDisplayPlayers(){
-  var data;
+  var names;
+  var scores;
+  var wins;
+
   switch(currentLobby){
     case 1:
-      data = lobby1Info;
+      names = playerNamesInLobby1;
+      scores = playerScores1;
+      wins = playerWins1;
     break;
     case 2:
-      data = lobby2Info;
+      names = playerNamesInLobby2;
+      scores = playerScores2;
+      wins = playerWins2;
     break;
     case 3:
-      data = lobby3Info;
+      names = playerNamesInLobby3;
+      scores = playerScores3;
+      wins = playerWins3;
     break;
     case 4:
-      data = lobby4Info;
+      names = playerNamesInLobby4;
+      scores = playerScores4;
+      wins = playerWins4;
     break;
     case 5:
-      data = lobby5Info;
+      names = playerNamesInLobby5;
+      scores = playerScores5;
+      wins = playerWins5;
     break;
   }
 
   for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
-    document.getElementById("readyP"+i).textContent = data[i][0];
-    document.getElementById("inGameP"+i).textContent = data[i][0];
-    document.getElementById("scoreP"+i).textContent = "Score: "+data[i][1];
-    document.getElementById("winsP"+i).textContent = "Wins: "+data[i][2];
+    document.getElementById("readyP"+i).textContent = names[i];
+    document.getElementById("inGameP"+i).textContent = names[i];
+    document.getElementById("scoreP"+i).textContent = "Score: "+scores[i];
+    document.getElementById("winsP"+i).textContent = "Wins: "+wins[i];
   }
 }
 /*
@@ -642,7 +708,7 @@ function genTable(id,words){
     for(var j = 0; j < 25; j++){ //number of columns
       newTable += '<td class="cell";>';
       var randomLetter = generateRandomLetter();
-      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ randomLetter+ '"; onclick="giveCell(id)">'; //change this value with input. Add onclick behavior here
+      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ randomLetter+ '"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
 
       newTable += '</td>';
     }
@@ -683,7 +749,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     }
   }
 
-  if(lobbyNumOfPlayers[currentLobby-1] == readyCount){
+  if((lobbyNumOfPlayers[currentLobby-1] == readyCount) && (lobbyNumOfPlayers[currentLobby-1] >=2)){
     hide("gameLobby");
     unhide("ongoingGame");
     genTable("grid");
@@ -914,11 +980,6 @@ function updateChatDisplay(){
 
   document.getElementById("msgLog").scrollTop = document.getElementById("msgLog").scrollHeight; //prevent scroll up
 }
-
-function leaveGame(){
-
-}
-
 // execute when the surrender button is clicked
 function surrenderFunction() {
     console.log("surrender button clicked");
@@ -933,10 +994,70 @@ function surrenderFunction() {
       PlayerName: nickname,
       Surrender: surrender,
     };
+
+    lobbyNumOfPlayers[currentLobby-1]--;
+
+    userEvent[`NumOfPlayersInLobby${currentLobby}`] = lobbyNumOfPlayers[currentLobby-1];
     connection.send(JSON.stringify(userEvent));
+
+    document.getElementById("button" + (currentLobby - 1)).textContent = lobbyNumOfPlayers[currentLobby- 1] + "/4";
+  }
+//Function will send a request to update the score of players real-time
+function scoring(){
+  var score = calcScore();
+  userEvent = {
+    PlayerIdx: idx,
+    LobbyNum: currentLobby,
+    ScoreRequest: true,
+    Score: score,
+    PlayerName: nickname,
   }
 
-
+  connection.send(JSON.stringify(userEvent));
+  updateLeaderboard();
+}
+//This function determines the returning score value
+function calcScore(){
+  var score = 0;
+  for(var i = 0; i < 25; i++){
+    for(var j = 0; j < 25; j++){
+      if(document.getElementById("cell"+i+"_"+j).className != "wordButton"){
+        score += 5;
+      }
+    }
+  }
+  return score;
+}
+//This function updates the display for scoring in ongoing game
+function updateLeaderboard(){
+  switch(currentLobby){
+    case 1:
+      for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+      document.getElementById("pos"+i).textContent = lobby1Info[i][0];
+      }
+      break;
+    case 2:
+      for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+      document.getElementById("pos"+i).textContent = lobby2Info[i][0];
+      }
+      break;
+    case 3:
+      for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+      document.getElementById("pos"+i).textContent = lobby3Info[i][0];
+      }
+      break;
+    case 4:
+      for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+      document.getElementById("pos"+i).textContent = lobby4Info[i][0];
+      }
+      break;
+    case 5:
+      for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+      document.getElementById("pos"+i).textContent = lobby5Info[i][0];
+      }
+      break;
+  }
+}
 </script>
 </body>
 </html>

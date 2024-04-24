@@ -34,6 +34,7 @@ public class App extends WebSocketServer {
   
   public App(int port) {
     super(new InetSocketAddress(port));
+    this.setReuseAddr(true); // Forcing the reuse of ports on timeout
   }
 
   public App(InetSocketAddress address) {
@@ -88,6 +89,7 @@ public class App extends WebSocketServer {
     // The state of the game has changed, so lets send it to everyone
     String jsonString;
     jsonString = gson.toJson(IL);
+    // Send lobby specific word grid to all it's players
 
     System.out.println(jsonString);
     broadcast(jsonString);

@@ -8,11 +8,18 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Map;
 
+
+/* FOR FUTURE
+  - Add a flag for word overlapping to only happen once per for loop
+  - Remove the getWords method and roll it into the createGrid
+*/
+
 public class Generator {
   public static char[][] createGrid(ArrayList<String> words, long seed)
   {
     boolean debug = false;
     final int size = 50;
+    int overlap = 0;
 
     Random rand_num = new Random(seed);
     char[][] my_array = new char[size][size];
@@ -50,55 +57,60 @@ public class Generator {
         int word_index = rand_num.nextInt(words.size());
         int word_len = words.get(word_index).length();
 
-
-        // Check if horizontal is valid
-        for (int i = head.x; (i - head.x) < word_len; i ++)
-        {
-          // Invalid word position
-          if ((taken_index.contains(new Point(i, head.y))) || (i == size))
-          {
-            valid.remove(Integer.valueOf(0));
-          }
-        }
-        // Check if vertical is valid
-        for (int i = head.y; (i - head.y) < word_len; i ++)
-        {
-          // Invalid word position
-          if (taken_index.contains(new Point(head.x, i)) || i == size)
-          {
-            valid.remove(Integer.valueOf(1));
-          }
-        }
-
         Point runner = new Point(head.x, head.y);
-        // Check if diagnal down is valid
-        for (int i = 0; i < word_len; i ++)
+
+        int valid_size = valid.size();
+        // Loop through the four valid directions
+        for (int j = 0; j < valid_size; j ++)
         {
-          // Invalid word position
-          if (runner.x == size - 1 || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
+          runner = new Point(head.x, head.y);
+          // For each direction, check if the word position is valid
+          for (int i = 0; i < word_len; i ++)
           {
-            valid.remove(Integer.valueOf(2));
+            // Check if current character position occupied 
+            if ((taken_index.contains(new Point(runner.x, runner.y))))
+            {
+              // Check if the word can be an overlap
+              if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+              {
+                overlap ++;
+              } else // Invalidate this position
+              {
+                valid.remove(Integer.valueOf(j));
+              }
+            }
+            // Invalid position
+            if (runner.y == -1 || runner.x == -1 || runner.x == size || runner.y == size)
+            {
+              valid.remove(Integer.valueOf(j));
+            }
+            switch (j)
+            {
+              case 0: // Horizontal
+                runner.x ++;
+                break; 
+              case 1: // Vertical
+                runner.y ++;
+                break;
+              case 2: // Diagnal down 
+                runner.x ++;
+                runner.y ++;
+                break;
+              case 3: // Diagnal up 
+                runner.x ++;
+                runner.y --;
+                break;
+              default:
+                break;
+            }
+            // Special check for diagnal up
+            if (runner.x == -1 || runner.y == -1 || runner.x == size || runner.y == size)
+            {
+              valid.remove(Integer.valueOf(j));
+            }
           }
-          runner.x ++;
-          runner.y ++;
         }
-        runner = new Point(0, 0);
-        // Check if diagnal up is valid
-        for (int i = 0; i < word_len; i ++)
-        {
-          // Invalid word position
-          if (runner.y == -1 || runner.x == size || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
-          {
-            valid.remove(Integer.valueOf(3));
-          }
-          runner.x ++;
-          runner.y --;
-          // Invalid word position
-          if (runner.y == -1 || runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
-          {
-            valid.remove(Integer.valueOf(3));
-          }
-        }
+
         if (debug)
         {
           System.out.format("head.x: %02d, head.y: %02d, ", head.x, head.y);
@@ -153,7 +165,7 @@ public class Generator {
     }
     if (debug)
     {
-      System.out.format("Size of taken_index: %d, percentage of word chars: %f\n", taken_index.size(), 100.0 * taken_index.size() / (size * size));
+      System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlap attempts: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
     }
 
     return my_array;
@@ -203,54 +215,64 @@ public class Generator {
         int word_len = words.get(word_index).length();
 
 
-        // Check if horizontal is valid
-        for (int i = head.x; (i - head.x) < word_len; i ++)
+
+
+
+        Point runner = new Point(head.x, head.y);
+
+        int valid_size = valid.size();
+        // Loop through the four valid directions
+        for (int j = 0; j < valid_size; j ++)
         {
-          // Invalid word position
-          if ((taken_index.contains(new Point(i, head.y))) || (i == size))
+          runner = new Point(head.x, head.y);
+          // For each direction, check if the word position is valid
+          for (int i = 0; i < word_len; i ++)
           {
-            valid.remove(Integer.valueOf(0));
-          }
-        }
-        // Check if vertical is valid
-        for (int i = head.y; (i - head.y) < word_len; i ++)
-        {
-          // Invalid word position
-          if (taken_index.contains(new Point(head.x, i)) || i == size)
-          {
-            valid.remove(Integer.valueOf(1));
+            // Current character position occupied 
+            if ((taken_index.contains(new Point(runner.x, runner.y))))
+            {
+              // Check if the word can be an overlap
+              if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+              {
+                //overlap ++;
+              } else // Invalidate this position
+              {
+                valid.remove(Integer.valueOf(j));
+              }
+            }
+            // Invalid position
+            if (runner.y == -1 || runner.x == -1 || runner.x == size - 1 || runner.x == size || runner.y == size)
+            {
+              valid.remove(Integer.valueOf(j));
+            }
+            switch (j)
+            {
+              case 0: // Horizontal
+                runner.x ++;
+                break; 
+              case 1: // Vertical
+                runner.y ++;
+                break;
+              case 2: // Diagnal down 
+                runner.x ++;
+                runner.y ++;
+                break;
+              case 3: // Diagnal up 
+                runner.x ++;
+                runner.y --;
+                break;
+              default:
+                break;
+            }
+            // Special check for diagnal up
+            if (runner.x == -1 || runner.y == -1 || runner.x == size - 1 || runner.y == size - 1)
+            {
+              valid.remove(Integer.valueOf(j));
+            }
           }
         }
 
-        Point runner = new Point(head.x, head.y);
-        // Check if diagnal down is valid
-        for (int i = 0; i < word_len; i ++)
-        {
-          // Invalid word position
-          if (runner.x == size - 1 || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
-          {
-            valid.remove(Integer.valueOf(2));
-          }
-          runner.x ++;
-          runner.y ++;
-        }
-        runner = new Point(0, 0);
-        // Check if diagnal up is valid
-        for (int i = 0; i < word_len; i ++)
-        {
-          // Invalid word position
-          if (runner.y == -1 || runner.x == size || runner.y == size || taken_index.contains(new Point(runner.x, runner.y)))
-          {
-            valid.remove(Integer.valueOf(3));
-          }
-          runner.x ++;
-          runner.y --;
-          // Invalid word position
-          if (runner.y == -1 || runner.x == size - 1 || runner.y == size - 1 || taken_index.contains(new Point(runner.x, runner.y)))
-          {
-            valid.remove(Integer.valueOf(3));
-          }
-        }
+
         if (debug)
         {
           System.out.format("head.x: %02d, head.y: %02d, ", head.x, head.y);
