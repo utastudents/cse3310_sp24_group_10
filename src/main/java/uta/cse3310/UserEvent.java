@@ -6,6 +6,7 @@ public class UserEvent {
     int LobbyNum;
     boolean AddPlayer;
     int[] NumOfPlayersInLobby;
+    int[] GameStarted;
     boolean Ready;
     String PlayerName; //name inputed by the player
     boolean MsgSent; //If a message has been sent
