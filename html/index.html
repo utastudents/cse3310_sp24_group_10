@@ -689,7 +689,7 @@ function genTable(id,words){
     for(var j = 0; j < 25; j++){ //number of columns
       newTable += '<td class="cell";>';
       var randomLetter = generateRandomLetter();
-      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ randomLetter+ '"; onclick="giveCell(id)">'; //change this value with input. Add onclick behavior here
+      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ randomLetter+ '"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
 
       newTable += '</td>';
     }
@@ -961,7 +961,6 @@ function updateChatDisplay(){
 
   document.getElementById("msgLog").scrollTop = document.getElementById("msgLog").scrollHeight; //prevent scroll up
 }
-
 // execute when the surrender button is clicked
 function surrenderFunction() {
     console.log("surrender button clicked");
@@ -984,7 +983,7 @@ function surrenderFunction() {
 
     document.getElementById("button" + (currentLobby - 1)).textContent = lobbyNumOfPlayers[currentLobby- 1] + "/4";
   }
-//Function will update the score of players real-time
+//Function will send a request to update the score of players real-time
 function scoring(){
   var score = calcScore();
   userEvent = {
