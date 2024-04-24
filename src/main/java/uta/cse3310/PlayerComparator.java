@@ -25,4 +25,5 @@ public class PlayerComparator implements Comparator<Player> {
         sortedPlayers.sort(this); // Sort using this comparator
         return sortedPlayers;
     }
+
 }

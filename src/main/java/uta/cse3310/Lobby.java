@@ -2,8 +2,9 @@ package uta.cse3310;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
-import java.util.Comparator;
+import com.google.gson.Gson;
+
+
 
 
 public class Lobby {
@@ -79,9 +80,10 @@ public class Lobby {
         chatLog.addMessage(text);
     }
 
-    public void sortPlayers() 
+
+    public List<Player> getPlayers() 
     {
-        PlayerComparator comparator = new PlayerComparator();
-        List<Player> sortedPlayers = comparator.sortPlayers(PlayersInLobby);
+        return this.PlayersInLobby;
     }
+
 }

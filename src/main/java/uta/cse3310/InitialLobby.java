@@ -123,6 +123,8 @@ public class InitialLobby {
                     System.out.println("NO LOBBY FOUND");
             }
         }
+
+            
         //if(U.Ready) <-- Note(This only triggers when they are ready)
         //{
             /* Update ready state */
@@ -171,5 +173,5 @@ public class InitialLobby {
                     System.out.println("NO LOBBY FOUND TO UPDATE CHAT LOGS\n");
             }
         }
-    }
+    }   
 }

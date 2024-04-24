@@ -17,6 +17,8 @@ import org.java_websocket.server.WebSocketServer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.util.ArrayList;
+
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,6 +45,29 @@ public class App extends WebSocketServer {
     super(new InetSocketAddress(port), Collections.<Draft>singletonList(draft));
   }
 
+  public void sortAndSendPlayersData() {
+    List<Player> allPlayers = new ArrayList<>();
+
+        // Retrieve players from each lobby and add them to the list
+        allPlayers.addAll(IL.Lobby1.getPlayers());
+        allPlayers.addAll(IL.Lobby2.getPlayers());
+        allPlayers.addAll(IL.Lobby3.getPlayers());
+        allPlayers.addAll(IL.Lobby4.getPlayers());
+        allPlayers.addAll(IL.Lobby5.getPlayers());
+
+
+    // Sort the players
+    List<Player> sortedPlayers = new PlayerComparator().sortPlayers(allPlayers);
+
+    // Convert sorted players to JSON
+    Gson gson = new Gson();
+    String sortedPlayersJson = gson.toJson(sortedPlayers);
+
+    // Broadcast the sorted player data to all connected clients
+    broadcast(sortedPlayersJson);
+}
+
+
   @Override
   public void onOpen(WebSocket conn, ClientHandshake handshake) {
 
@@ -68,6 +93,7 @@ public class App extends WebSocketServer {
       extraPlayers++;
       System.out.println("Initial lobby full");
     }
+    
 
     int idx = IL.PlayerToIdx();
 
@@ -75,6 +101,7 @@ public class App extends WebSocketServer {
     E.PlayerIdx = idx;
 
     IL.associateWebSocketWithPlayer(conn, idx);
+
 
     // allows the websocket to give us the Game when a message arrives
     conn.setAttachment(IL);
@@ -90,6 +117,9 @@ public class App extends WebSocketServer {
 
     System.out.println(jsonString);
     broadcast(jsonString);
+
+    sortAndSendPlayersData();
+
   }
 
   @Override
@@ -139,6 +169,8 @@ public class App extends WebSocketServer {
     String jsonString = gson.toJson(IL);
     System.out.println(jsonString);
     broadcast(jsonString);
+    sortAndSendPlayersData();
+
   }
 
   @Override
