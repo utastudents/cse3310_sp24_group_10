@@ -111,5 +111,59 @@ public class LobbyTest  extends TestCase{
 
         assertEquals(U.Msg, lobby1.chatLog.messages);
     }
-    
+    /*
+     * Tests if modifying the scores work
+     */
+    public void testModScore(){
+        Lobby testLobby = new Lobby(1);
+        UserEvent U = new UserEvent();
+
+        U.PlayerIdx = 0; //First player
+        U.PlayerName = "Billy@^?123";
+
+        testLobby.AddPlayers(U); //This player should start with a score of 0
+
+        /* Create player obj to be compared */
+        Player cmpPlayer = new Player("Billy@^?123", 100, 0); //the end goal
+        /* Create an ArrayList to store them in */
+
+        U.ScoreRequest = true;
+        U.Score = 100;
+
+        /* Modify the score */
+        testLobby.modScore(U, 1); //Assume the player is already in lobby
+        /* Check if modifications were as intended */
+        assertEquals(testLobby.PlayersInLobby.get(0), cmpPlayer);
+    }
+    /* 
+     * Tests if sorting players by score works
+     */
+    public void testSort(){
+        Lobby testLobby = new Lobby(1);
+        UserEvent U = new UserEvent();
+
+        U.PlayerIdx = 0; //First player
+        U.PlayerName = "Billy";
+
+        testLobby.AddPlayers(U); //This player should start with a score of 0
+
+        U.PlayerIdx = 0; //First player
+        U.PlayerName = "John";
+
+        testLobby.AddPlayers(U); //This player should start with a score of 0
+
+        Player cmpPlayer1 = new Player("Billy", 0, 0);
+        assertEquals(testLobby.PlayersInLobby.get(0), cmpPlayer1);
+
+        U.ScoreRequest = true;
+        U.Score = 100;
+
+        testLobby.modScore(U, 2); //Should modify John's score
+        testLobby.sortByScore(); //This will passively call in real application
+
+        Player cmpPlayer2 = new Player("John", 100, 0);
+        assertEquals(testLobby.PlayersInLobby.get(0), cmpPlayer2); //John should be first because they have highest score
+
+
+    }
 }
