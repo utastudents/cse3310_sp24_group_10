@@ -175,18 +175,23 @@ public class InitialLobby {
             {
                 case 1:
                     Lobby1.SurrenderPlayer(U);
+                    this.NumOfPlayersInLobby[0]--;
                     break;
                 case 2:
                     Lobby2.SurrenderPlayer(U);
+                    this.NumOfPlayersInLobby[1]--;
                     break;
                 case 3:
                     Lobby3.SurrenderPlayer(U);
+                    this.NumOfPlayersInLobby[2]--;
                     break;
                 case 4:
                     Lobby4.SurrenderPlayer(U);
+                    this.NumOfPlayersInLobby[3]--;
                     break;
                 case 5:
                     Lobby5.SurrenderPlayer(U);
+                    this.NumOfPlayersInLobby[4]--;
                     break;
                 default:
                     System.out.println("NOT ABLE TO SURRENDER\n");

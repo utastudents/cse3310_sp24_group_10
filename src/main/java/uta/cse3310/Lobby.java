@@ -14,6 +14,7 @@ public class Lobby {
     public int[] ReadiedPlayers = new int[] {0, 0, 0, 0};
     public int[] PlayerScores = new int[] {0, 0, 0, 0};
     public int[] PlayerWins = new int[] {0, 0, 0, 0};
+    public int GameStarted = 0;
 
     public Lobby(int lobbyNum) {
         this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
@@ -27,6 +28,7 @@ public class Lobby {
     
     public void StartGame(){
         System.out.println("GAME HAS BEEN STARTED!!!!!!!!!!!!!!!!!");
+        GameStarted = 1;
     }
     
     public void AddPlayers(UserEvent U) {

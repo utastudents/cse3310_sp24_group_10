@@ -167,7 +167,6 @@
 <h1 style="text-align:center">
   The Word Search Game
 </h1>
-<button class="leave-button" style="display: block;" onclick="surrenderFunction()">Leave Game</button>
 
 <!-- Display name -->
 <h2 id="displayName"; style="text-align:left";>Display name:</h2>
@@ -249,6 +248,7 @@
       </td>
     </tr>
   </table>
+  <button class="leave-button" style="display: block;" onclick="surrenderFunction()">Leave Game</button>
 
 </div>
 
@@ -359,6 +359,7 @@ let lobbyNumOfPlayers = [0, 0, 0, 0, 0];
 var idx = -1; //the current idx of the player?
 var ready;
 var surrender = false;
+let gameStarted = [0, 0, 0, 0, 0]; // array to tell if a game is started (1 means started)
 
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
@@ -500,6 +501,7 @@ connection.onmessage = function (evt) {
   // Sets the arrays equal to each other
   lobbyNumOfPlayers = obj.NumOfPlayersInLobby;
   playerNamesInServer = obj.PlayerNamesInServer;
+  gameStarted[currentLobby-1] = obj.GameStarted;
 
   // Update player profile information in game lobby and ongoing game
   function addPlayer2Array(){
@@ -598,11 +600,13 @@ function joinLobby(lobby) {
     return;
   }
 
-  if(lobbyNumOfPlayers[lobby-1] >= 4)
+  // if 4 players already in lobby or if the game has already started, disable button
+  if((lobbyNumOfPlayers[lobby-1] >= 4) || gameStarted[lobby-1] == 1)
   {
     document.getElementById("button" + (lobby -1)).disabled = true;
     return;
   }
+
 
   addPlayer = true;
 
@@ -672,13 +676,21 @@ function updateDisplayPlayers(){
 *   id -> the id of where the grid will be generated
 * This function generates the grid for word search
 */
-function genTable(id){ /*Function to generate word search table*/
-  let newTable = '<table style="width: 100%; outline: none; border: none; pointer-events: none">';
+function generateRandomLetter() {
+    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return letters.charAt(Math.floor(Math.random() * letters.length));
+}
+
+function genTable(id,words){ 
+  /*Function to generate word search table*/
+  let newTable = '<table style="width: 100%; outline: none; border: none; pointer-events: none">'; 
   for(var i = 0; i < 25; i++){ //number of rows
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
     for(var j = 0; j < 25; j++){ //number of columns
       newTable += '<td class="cell";>';
-      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="?"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
+      var randomLetter = generateRandomLetter();
+      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ randomLetter+ '"; onclick="giveCell(id)">'; //change this value with input. Add onclick behavior here
+
       newTable += '</td>';
     }
     newTable += '</tr>';
@@ -687,6 +699,7 @@ function genTable(id){ /*Function to generate word search table*/
 
   document.getElementById(id).innerHTML = newTable;
 }
+
 /*
 * This function checks whether all players are ready to start the game
 */
@@ -717,7 +730,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     }
   }
 
-  if(lobbyNumOfPlayers[currentLobby-1] == readyCount){
+  if((lobbyNumOfPlayers[currentLobby-1] == readyCount) && (lobbyNumOfPlayers[currentLobby-1] >=2)){
     hide("gameLobby");
     unhide("ongoingGame");
     genTable("grid");
@@ -963,7 +976,13 @@ function surrenderFunction() {
       PlayerName: nickname,
       Surrender: surrender,
     };
+
+    lobbyNumOfPlayers[currentLobby-1]--;
+
+    userEvent[`NumOfPlayersInLobby${currentLobby}`] = lobbyNumOfPlayers[currentLobby-1];
     connection.send(JSON.stringify(userEvent));
+
+    document.getElementById("button" + (currentLobby - 1)).textContent = lobbyNumOfPlayers[currentLobby- 1] + "/4";
   }
 //Function will update the score of players real-time
 function scoring(){
