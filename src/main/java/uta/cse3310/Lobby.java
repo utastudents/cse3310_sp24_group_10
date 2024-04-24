@@ -1,7 +1,10 @@
 package uta.cse3310;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Lobby {
 
@@ -9,6 +12,8 @@ public class Lobby {
     public List<String> PlayerNames;
     public int[] PlayerIds = new int[] {-1, -1, -1, -1};
     public int[] ReadiedPlayers = new int[] {0, 0, 0, 0};
+    public int[] PlayerScores = new int[] {0, 0, 0, 0};
+    public int[] PlayerWins = new int[] {0, 0, 0, 0};
 
     public Lobby(int lobbyNum) {
         this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
@@ -101,5 +106,30 @@ public class Lobby {
             }
         }
         System.out.println("PLAYER SURRENDERED");
+    }
+    /* This func updates the scores */
+    public void modScore(UserEvent U, int num){
+        for(int i = 0; i < num; i++){
+            /* Update the array list of player information*/
+            Player tempPlayer = PlayersInLobby.get(i);
+            if(U.PlayerName.equals(tempPlayer.getName())){
+                tempPlayer.setScore(U.Score);
+                PlayersInLobby.set(i, tempPlayer);
+            }
+            /* Update the score list */
+            if(U.PlayerIdx == PlayerIds[i]){
+                PlayerScores[i] = U.Score;
+            }
+        }
+    }
+    //This function will sort the arraylist
+    public void sortByScore(){
+        Collections.sort(PlayersInLobby, new sortScores());
+    }
+}
+/* A class to sort the Array List of players by Score */
+class sortScores implements Comparator<Player>{
+    public int compare(Player p1, Player p2){
+        return p2.score - p1.score; //update this to change sorting order
     }
 }

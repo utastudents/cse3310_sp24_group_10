@@ -123,8 +123,7 @@ public class InitialLobby {
                     System.out.println("NO LOBBY FOUND");
             }
         }
-        //if(U.Ready) <-- Note(This only triggers when they are ready)
-        //{
+        if(true){
             /* Update ready state */
             System.out.println("\nREADY BUTTON CLICKED");
             switch(U.LobbyNum)
@@ -147,7 +146,7 @@ public class InitialLobby {
                 default:
                     System.out.println("NO LOBBY FOUND TO READY UP\n");
             }
-        //}
+        }
         if(U.MsgSent){
             System.out.println("\nMESSAGE SENT. UPDATING CHAT LOGS\n");
             switch(U.LobbyNum)
@@ -171,8 +170,7 @@ public class InitialLobby {
                     System.out.println("NO LOBBY FOUND TO UPDATE CHAT LOGS\n");
             }
         }
-        if(U.Surrender)
-        {
+        if(U.Surrender){
             switch(U.LobbyNum)
             {
                 case 1:
@@ -192,6 +190,50 @@ public class InitialLobby {
                     break;
                 default:
                     System.out.println("NOT ABLE TO SURRENDER\n");
+            }
+        }
+        if(U.ScoreRequest){
+            switch(U.LobbyNum)
+            {
+                case 1:
+                    Lobby1.modScore(U, NumOfPlayersInLobby[0]);
+                    break;
+                case 2:
+                    Lobby2.modScore(U, NumOfPlayersInLobby[1]);
+                    break;
+                case 3:
+                    Lobby3.modScore(U, NumOfPlayersInLobby[2]);
+                    break;
+                case 4:
+                    Lobby4.modScore(U, NumOfPlayersInLobby[3]);
+                    break;
+                case 5:
+                    Lobby5.modScore(U, NumOfPlayersInLobby[4]);
+                    break;
+                default:
+                    System.out.println("NO LOBBY FOUND TO READY UP\n");
+            }
+        }
+        if(true){
+            switch(U.LobbyNum)
+            {
+                case 1:
+                    Lobby1.sortByScore();
+                    break;
+                case 2:
+                    Lobby2.sortByScore();
+                    break;
+                case 3:
+                    Lobby3.sortByScore();
+                    break;
+                case 4:
+                    Lobby4.sortByScore();
+                    break;
+                case 5:
+                    Lobby5.sortByScore();
+                    break;
+                default:
+                    System.out.println("NO LOBBY FOUND TO SORT PLAYER LIST\n");
             }
         }
     }
