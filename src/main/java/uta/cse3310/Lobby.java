@@ -21,6 +21,18 @@ public class Lobby {
         PlayerNames = new ArrayList<>();
     }
 
+    public int getLobbyNum(){
+        return LobbyNum;
+    }
+
+    public List<String> getPlayerNames(){
+        return PlayerNames;
+    }
+
+    public int[] getPlayerIds(){
+        return PlayerIds;
+    }
+
     /* Create an array list to store the players of each lobby*/
     ArrayList<Player> PlayersInLobby = new ArrayList<>(4); 
 
