@@ -177,10 +177,16 @@
 </h1>
 
 <!-- Message for highlightTimer -->
-<font size ="6">
+<font size ="5">
   <div style="text-align:center">
-       <label id= "timeHighlight"></label><br>
-  <!-- <label id= "Message">Message</label><br> -->
+    <label id= "timeHighlight"></label><br>
+  </div>
+</font>
+
+<!-- Message for winner/loser -->
+<font size ="4">
+  <div style="text-align:center">
+    <label id= "stateMessage"></label><br> 
   </div>
 </font>
 
@@ -376,8 +382,9 @@ var idx = -1; //the current idx of the player?
 var ready;
 var surrender = false;
 let gameStarted = [0, 0, 0, 0, 0]; // array to tell if a game is started (1 means started)
-var iHighlight = 0; //table row to highlight
-var jHighlight = 0; //table column to highlight
+var iHighlight = 0; //table row to highlight cell
+var jHighlight = 0; //table column to highlight cell
+var wordFound = false;
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
 var newPlayer = [nickname, 0, 0];
@@ -760,6 +767,8 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     unhide("ongoingGame");
     genTable("grid");
     timerHighlight();
+
+    determineWinner();
   }
 }
 /*
@@ -1072,25 +1081,108 @@ function timerHighlight(){
 
   var time = 5;
   var elem = document.getElementById('timeHighlight');
-  var timerId = setInterval(count, 1000);
-  var wordFound = true;
+  var timer = setInterval(count, 1000);
   
   function count(){
-    if (time == -1) {
-      clearTimeout(timerId);
+    if (time == -1 || wordFound){
+      clearTimeout(timer);
 
-      if(wordFound){
+      if(!wordFound){
       document.getElementById("cell"+iHighlight+"_"+jHighlight).className = "orange";
       }
+     
+      wordFound = false;
 
       timerHighlight();
     } 
-    else {
+    else{
       elem.innerHTML = time + " seconds until next letter highlighted";
       time--;
     }
   }
 }
+
+function determineWinner(){
+  
+  var scores;
+  
+  switch(currentLobby){
+    case 1:
+      var playerList = playerIds1;
+      scores = playerScores1;
+      break;
+    case 2:
+      var playerList = playerIds2;
+      scores = playerScores2;
+      break;
+    case 3:
+      var playerList = playerIds3;
+      scores = playerScores3;
+      break;
+    case 4:
+      var playerList = playerIds4;
+      scores = playerScores4;
+      break;
+    case 5:
+      var playerList = playerIds5;
+      scores = playerScores5;
+      break;
+  }
+
+  scores = [3, 20, 30, 70]; //test delete later
+
+  var winner = -1;
+  var winnerIdx = 0;
+  for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+    if(scores[i] > winner){
+      winner = scores[i];
+      winnerIdx = i;
+    }
+  }
+
+  var index = 0;
+  for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+    if(idx == playerList[i]){
+      break;
+    }
+    index++;
+  }
+  
+  switch(index){
+    case 0:
+      if(winnerIdx == 0){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    case 1:
+      if(winnerIdx == 1){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    case 2:
+      if(winnerIdx == 2){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    case 3:
+      if(winnerIdx == 3){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    }
+  } 
 </script>
 </body>
 </html>

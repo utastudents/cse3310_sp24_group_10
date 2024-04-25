@@ -15,13 +15,11 @@ public class Lobby {
     public int[] PlayerScores = new int[] {0, 0, 0, 0};
     public int[] PlayerWins = new int[] {0, 0, 0, 0};
     public int GameStarted = 0;
-    public String[] Msg;
     public PlayerType CurrentPlayer;
     
     public Lobby(int lobbyNum) {
         this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
         PlayerNames = new ArrayList<>();
-        Msg = new String[4];
         CurrentPlayer = PlayerType.NOPLAYER;
     }
 
@@ -33,6 +31,7 @@ public class Lobby {
     
     public void StartGame(){
         System.out.println("GAME HAS BEEN STARTED!!!!!!!!!!!!!!!!!");
+        CurrentPlayer = PlayerType.PLAYER1;
         GameStarted = 1;
     }
     
@@ -140,3 +139,4 @@ class sortScores implements Comparator<Player>{
         return p2.score - p1.score; //update this to change sorting order
     }
 }
+
