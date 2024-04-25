@@ -156,6 +156,14 @@
         height: 100%;
         pointer-events: auto;
       }
+      .orange{
+        cursor: pointer;
+        background-color: #f1b81a;
+        margin: 0px;
+        width: 100%;
+        height: 100%;
+        pointer-events: auto;
+      }
       .wordButton:hover, .red:hover, .blue:hover, .green:hover, .purple:hover{
         outline: blue solid 2px;
       }
@@ -168,14 +176,13 @@
   The Word Search Game
 </h1>
 
-<!-- Message for winner/losers -->
+<!-- Message for highlightTimer -->
 <font size ="6">
   <div style="text-align:center">
-       <label id= "Message"></label><br>
+       <label id= "timeHighlight"></label><br>
   <!-- <label id= "Message">Message</label><br> -->
   </div>
 </font>
-
 
 <!-- Display name -->
 <h2 id="displayName"; style="text-align:left";>Display name:</h2>
@@ -369,7 +376,8 @@ var idx = -1; //the current idx of the player?
 var ready;
 var surrender = false;
 let gameStarted = [0, 0, 0, 0, 0]; // array to tell if a game is started (1 means started)
-
+var iHighlight = 0; //table row to highlight
+var jHighlight = 0; //table column to highlight
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
 var newPlayer = [nickname, 0, 0];
@@ -440,6 +448,11 @@ connection.onclose = function (evt) {
 }
 
 connection.onmessage = function (evt) {
+
+  class userEvent {
+      PlayerIdx = 0;
+      LobbyNum = 0;
+    }
   
   var addPlayer = false;
   surrender = false;
@@ -453,14 +466,7 @@ connection.onmessage = function (evt) {
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
-  
-  if('CurrentPlayer' in obj) {
 
-    if(currentLobby == obj.LobbyNum){
-
-      document.getElementById("Message").innerHTML = obj.Msg[idx];
-    }
-  }
   
   // Cells the user selected;
   var firstCell = null;
@@ -753,6 +759,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     hide("gameLobby");
     unhide("ongoingGame");
     genTable("grid");
+    timerHighlight();
   }
 }
 /*
@@ -1056,6 +1063,32 @@ function updateLeaderboard(){
       document.getElementById("pos"+i).textContent = lobby5Info[i][0];
       }
       break;
+  }
+}
+
+/*function counts down 30 seconds to highlight the first letter  
+of an unfound word until it reaches 0 or a word is found*/
+function timerHighlight(){
+
+  var time = 5;
+  var elem = document.getElementById('timeHighlight');
+  var timerId = setInterval(count, 1000);
+  var wordFound = true;
+  
+  function count(){
+    if (time == -1) {
+      clearTimeout(timerId);
+
+      if(wordFound){
+      document.getElementById("cell"+iHighlight+"_"+jHighlight).className = "orange";
+      }
+
+      timerHighlight();
+    } 
+    else {
+      elem.innerHTML = time + " seconds until next letter highlighted";
+      time--;
+    }
   }
 }
 </script>
