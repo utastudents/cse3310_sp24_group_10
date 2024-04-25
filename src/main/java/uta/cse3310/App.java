@@ -33,6 +33,7 @@ public class App extends WebSocketServer {
   
   public App(int port) {
     super(new InetSocketAddress(port));
+    this.setReuseAddr(true); // Forcing the reuse of ports on timeout
   }
 
   public App(InetSocketAddress address) {
@@ -87,6 +88,7 @@ public class App extends WebSocketServer {
     // The state of the game has changed, so lets send it to everyone
     String jsonString;
     jsonString = gson.toJson(IL);
+    // Send lobby specific word grid to all it's players
 
     System.out.println(jsonString);
     broadcast(jsonString);
@@ -97,15 +99,29 @@ public class App extends WebSocketServer {
     System.out.println(conn + " has closed");
 
     // Retrieve the game tied to the WebSocket connection
-    InitialLobby L = conn.getAttachment();
+    InitialLobby IL = conn.getAttachment();
 
     // Retrieve the player index associated with the WebSocket connection
-    int playerIdx = L.getPlayerIndexForWebSocket(conn);
+    int playerIdx = IL.getPlayerIndexForWebSocket(conn);
+    int lobbyNum = IL.getLobbyNum(playerIdx);
+    String name = IL.getPlayerNameFromLobby(lobbyNum, playerIdx);
 
     if (playerIdx != -1) {
-        // Set the player's name to an empty string
-        L.updatePlayerName(playerIdx, "");
-        System.out.println("Player disconnected: " + playerIdx);
+      
+      // Create a UserEvent indicating that the player has surrendered
+      UserEvent surrenderEvent = new UserEvent();
+      surrenderEvent.Surrender = true;
+      surrenderEvent.PlayerIdx = playerIdx;
+      surrenderEvent.PlayerName = name;
+      surrenderEvent.LobbyNum = lobbyNum;
+
+      // Call the Update method of InitialLobby with the surrender event
+      IL.Update(surrenderEvent);
+
+      // Set the player's name to an empty string
+      IL.updatePlayerName(playerIdx, "");
+
+      System.out.println("Player disconnected: " + playerIdx);
     } else {
         System.out.println("Player index not found.");
     }
@@ -115,7 +131,8 @@ public class App extends WebSocketServer {
     {
       extraPlayers--;
     }
-    else{
+    else
+    {
       numOfPlayers--;
     }
   }
