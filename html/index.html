@@ -430,6 +430,7 @@ connection.onclose = function (evt) {
   console.log("Client Server Closed!");
 }
 
+var board;
 connection.onmessage = function (evt) {
   var addPlayer = false;
   surrender = false;
@@ -442,6 +443,12 @@ connection.onmessage = function (evt) {
   // Handling different types of messages received from the server
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
+  }
+  if ('board' in obj.Lobby1) { // Message containing board
+    //console.log("board called!!!!");
+    board = obj.Lobby1.board[0]; 
+    console.log("board1 is: " + obj.Lobby1.board[0]);
+    console.log("board2 is: " + obj.Lobby1.board[1]);
   }
   // Cells the user selected;
   var firstCell = null;
@@ -676,8 +683,9 @@ function updateDisplayPlayers(){
 *   id -> the id of where the grid will be generated
 * This function generates the grid for word search
 */
-function generateRandomLetter() {
+function boardLetter() {
     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    console.log("testing!  " + board);
     return letters.charAt(Math.floor(Math.random() * letters.length));
 }
 
@@ -688,8 +696,8 @@ function genTable(id,words){
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
     for(var j = 0; j < 25; j++){ //number of columns
       newTable += '<td class="cell";>';
-      var randomLetter = generateRandomLetter();
-      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ randomLetter+ '"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
+      var randomLetter = boardLetter();
+      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ board[i]+ '"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
 
       newTable += '</td>';
     }
