@@ -159,6 +159,14 @@
         height: 100%;
         pointer-events: auto;
       }
+     .orange{
+        cursor: pointer;
+        background-color: #f1b81a;
+        margin: 0px;
+        width: 100%;
+        height: 100%;
+        pointer-events: auto;
+      }
       .wordButton:hover, .red:hover, .blue:hover, .green:hover, .purple:hover{
         outline: blue solid 2px;
       }
@@ -170,6 +178,20 @@
 <h1 style="text-align:center">
   The Word Search Game
 </h1>
+
+<!-- Message for highlightTimer -->
+<font size ="5">
+  <div style="text-align:center">
+    <label id= "timeHighlight"></label><br>
+  </div>
+</font>
+
+<!-- Message for winner/loser -->
+<font size ="5">
+  <div style="text-align:center">
+    <label id= "stateMessage"></label><br> 
+  </div>
+</font>
 
 <!-- Display name -->
 <h2 id="displayName"; style="text-align:left";>Display name:</h2>
@@ -363,6 +385,9 @@ var idx = -1; //the current idx of the player?
 var ready;
 var surrender = false;
 let gameStarted = [0, 0, 0, 0, 0]; // array to tell if a game is started (1 means started)
+var iHighlight = 0; //table row to highlight cell
+var jHighlight = 0; //table column to highlight cell
+var wordFound = false; 
 
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
@@ -737,6 +762,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     hide("gameLobby");
     unhide("ongoingGame");
     genTable("grid");
+    timerHighlight();
   }
 }
 /*
@@ -1042,6 +1068,114 @@ function updateLeaderboard(){
       break;
   }
 }
+/*function counts down 30 seconds to highlight the first letter  
+of an unfound word until it reaches 0 or a word is found*/
+function timerHighlight(){
+
+  var time = 30;
+  var elem = document.getElementById('timeHighlight');
+  var timer = setInterval(count, 1000);
+  
+  function count(){
+    if (time == -1 || wordFound){
+      clearTimeout(timer);
+
+      if(!wordFound){
+      document.getElementById("cell"+iHighlight+"_"+jHighlight).className = "orange";
+      }
+     
+      wordFound = false;
+
+      timerHighlight();
+    } 
+    else{
+      elem.innerHTML = time + " seconds until next letter highlighted";
+      time--;
+    }
+  }
+}
+//function determines winner and outputs respective winner/loser message
+function determineWinner(){
+  
+  var scores;
+  
+  switch(currentLobby){
+    case 1:
+      var playerList = playerIds1;
+      scores = playerScores1;
+      break;
+    case 2:
+      var playerList = playerIds2;
+      scores = playerScores2;
+      break;
+    case 3:
+      var playerList = playerIds3;
+      scores = playerScores3;
+      break;
+    case 4:
+      var playerList = playerIds4;
+      scores = playerScores4;
+      break;
+    case 5:
+      var playerList = playerIds5;
+      scores = playerScores5;
+      break;
+  }
+
+  //scores = [3, 20, 30, 70]; //test delete later
+
+  var winner = -1;
+  var winnerIdx = 0;
+  for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+    if(scores[i] > winner){
+      winner = scores[i];
+      winnerIdx = i;
+    }
+  }
+
+  var index = 0;
+  for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
+    if(idx == playerList[i]){
+      break;
+    }
+    index++;
+  }
+  
+  switch(index){
+    case 0:
+      if(winnerIdx == 0){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    case 1:
+      if(winnerIdx == 1){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    case 2:
+      if(winnerIdx == 2){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    case 3:
+      if(winnerIdx == 3){
+        document.getElementById("stateMessage").innerHTML = "You WIN!!!";
+      }
+      else{
+        document.getElementById("stateMessage").innerHTML = "You LOSE";
+      }
+      break;
+    }
+  } 
 </script>
 </body>
 </html>
