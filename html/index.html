@@ -159,7 +159,7 @@
         height: 100%;
         pointer-events: auto;
       }
-      .orange{
+     .orange{
         cursor: pointer;
         background-color: #f1b81a;
         margin: 0px;
@@ -178,6 +178,20 @@
 <h1 style="text-align:center">
   The Word Search Game
 </h1>
+
+<!-- Message for highlightTimer -->
+<font size ="5">
+  <div style="text-align:center">
+    <label id= "timeHighlight"></label><br>
+  </div>
+</font>
+
+<!-- Message for winner/loser -->
+<font size ="5">
+  <div style="text-align:center">
+    <label id= "stateMessage"></label><br> 
+  </div>
+</font>
 
 <!-- Message for highlightTimer -->
 <font size ="5">
@@ -387,7 +401,8 @@ var surrender = false;
 let gameStarted = [0, 0, 0, 0, 0]; // array to tell if a game is started (1 means started)
 var iHighlight = 0; //table row to highlight cell
 var jHighlight = 0; //table column to highlight cell
-var wordFound = false;
+var wordFound = false; 
+
 // Create Multidimensional array to store players of each lobby
 //player = {name, score, wins, color, readyStatus}
 var newPlayer = [nickname, 0, 0];
@@ -1071,7 +1086,6 @@ function updateLeaderboard(){
       break;
   }
 }
-
 /*function counts down 30 seconds to highlight the first letter  
 of an unfound word until it reaches 0 or a word is found*/
 function timerHighlight(){
@@ -1098,7 +1112,7 @@ function timerHighlight(){
     }
   }
 }
-
+//function determines winner and outputs respective winner/loser message
 function determineWinner(){
   
   var scores;
