@@ -33,7 +33,6 @@ public class LobbyTest  extends TestCase{
         lobby1.ReadyPlayer(userEvent);
 
         assertArrayEquals(ReadiedPlayers, lobby1.ReadiedPlayers);
-
     }
 
     /*
@@ -165,5 +164,19 @@ public class LobbyTest  extends TestCase{
         assertEquals(testLobby.PlayersInLobby.get(0), cmpPlayer2); //John should be first because they have highest score
 
 
+    }
+
+    public void testSurrenderPlayer(){
+        Lobby lobby1 = new Lobby(1);
+
+        int[] PlayerIds = {-1, 1, -1, -1};
+
+        UserEvent userEvent = new UserEvent();
+        userEvent.PlayerName = "Bob";
+        userEvent.PlayerIdx = 0;
+
+        lobby1.SurrenderPlayer(userEvent);
+
+        assertArrayEquals(PlayerIds, lobby1.PlayerIds);
     }
 }
