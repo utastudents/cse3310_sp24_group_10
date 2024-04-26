@@ -78,6 +78,11 @@
         text-align: left;
         margin: 2px;
       }
+
+    .countdown {
+    font-size: 24px;
+    font-weight: bold;
+  }
       /* Start of Ongoing Game HTML classes */
       #grid{
         pointer-events: none;
@@ -199,6 +204,7 @@
 
 <!-- Display name -->
 <h2 id="displayName"; style="text-align:left";>Display name:</h2>
+
 
 <div id = "InitialLobby"; align="center">
   <!-- Nickname window -->
@@ -336,8 +342,8 @@
     </div>
   </div>
 </div>
-
 <br>
+
 
 <div align="center">
 <table style="width: 50%">
@@ -363,6 +369,37 @@
   </tr>
 </table>
 </div>
+
+   <!-- Countdown Timer -->
+   <div id="countdown" class="countdown"></div>
+  </div>
+</div>
+
+<script>
+  var countdownDuration = 90;
+
+  var countdownDisplay = document.getElementById("countdown");
+
+  function startCountdown() {
+    var remainingTime = countdownDuration;
+    var x = setInterval(function() {
+      var minutes = Math.floor(remainingTime / 60);
+      var seconds = remainingTime % 60;
+      
+      countdownDisplay.textContent = minutes + "m " + seconds + "s ";
+      remainingTime--;
+
+      
+      if (remainingTime < 0) {
+        clearInterval(x); 
+        countdownDisplay.textContent = "Time is up!"; 
+      }
+    }, 1000); 
+  }
+  startCountdown();
+ // leave();
+
+</script>
 
 </div>
 
@@ -1000,6 +1037,8 @@ function surrenderFunction() {
     surrender = true;
     hide("gameLobby");
     hide("ongoingGame");
+    hide("stateMessage");
+    hide("timeHighlight");
     unhide("InitialLobby");
 
     userEvent = {
