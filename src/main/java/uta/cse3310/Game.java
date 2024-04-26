@@ -9,6 +9,7 @@ public class Game {
     private ArrayList<Player> players;
     private GameTimer timer;
     private int numWordsFound;
+    private int rand;
 
     public Game(ArrayList<Player> players) {
         
