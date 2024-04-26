@@ -184,7 +184,7 @@
 </font>
 
 <!-- Message for winner/loser -->
-<font size ="4">
+<font size ="5">
   <div style="text-align:center">
     <label id= "stateMessage"></label><br> 
   </div>
@@ -455,12 +455,6 @@ connection.onclose = function (evt) {
 }
 
 connection.onmessage = function (evt) {
-
-  class userEvent {
-      PlayerIdx = 0;
-      LobbyNum = 0;
-    }
-  
   var addPlayer = false;
   surrender = false;
   var msg;
@@ -768,7 +762,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     genTable("grid");
     timerHighlight();
 
-    determineWinner();
+    determineWinner(); //test delete later
   }
 }
 /*
@@ -908,7 +902,7 @@ function giveCell(id){
 
   switch(index){
     case 0:
-      if(document.getElementById(id).className == "wordButton"){
+      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
         document.getElementById(id).className = "red";
       }
       else{
@@ -917,7 +911,7 @@ function giveCell(id){
       console.log("Cell clicked: "+id);
       break;
     case 1:
-      if(document.getElementById(id).className == "wordButton"){
+      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
         document.getElementById(id).className = "blue";
       }
       else{
@@ -926,7 +920,7 @@ function giveCell(id){
       console.log("Cell clicked: "+id);
       break;
     case 2:
-      if(document.getElementById(id).className == "wordButton"){
+      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
         document.getElementById(id).className = "green";
       }
       else{
@@ -935,7 +929,7 @@ function giveCell(id){
       console.log("Cell clicked: "+id);
       break;
     case 3:
-      if(document.getElementById(id).className == "wordButton"){
+      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
         document.getElementById(id).className = "purple";
       }
       else{
@@ -1079,7 +1073,7 @@ function updateLeaderboard(){
 of an unfound word until it reaches 0 or a word is found*/
 function timerHighlight(){
 
-  var time = 5;
+  var time = 30;
   var elem = document.getElementById('timeHighlight');
   var timer = setInterval(count, 1000);
   
@@ -1129,7 +1123,7 @@ function determineWinner(){
       break;
   }
 
-  scores = [3, 20, 30, 70]; //test delete later
+  //scores = [3, 20, 30, 70]; //test delete later
 
   var winner = -1;
   var winnerIdx = 0;
