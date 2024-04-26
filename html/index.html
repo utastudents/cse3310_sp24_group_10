@@ -763,6 +763,8 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
   if((lobbyNumOfPlayers[currentLobby-1] == readyCount) && (lobbyNumOfPlayers[currentLobby-1] >=2)){
     hide("gameLobby");
     unhide("ongoingGame");
+    unhide("stateMessage");
+    unhide("timeHighlight");
     genTable("grid");
     timerHighlight();
 
@@ -1000,6 +1002,8 @@ function surrenderFunction() {
     surrender = true;
     hide("gameLobby");
     hide("ongoingGame");
+    hide("stateMessage");
+    hide("timeHighlight");
     unhide("InitialLobby");
 
     userEvent = {
@@ -1081,7 +1085,11 @@ function timerHighlight(){
   var timer = setInterval(count, 1000);
   
   function count(){
-    if (time == -1 || wordFound){
+
+    if(surrender) {
+      clearTimeout(timer);
+    }
+    else if (time == -1 || wordFound){
       clearTimeout(timer);
 
       if(!wordFound){
@@ -1091,7 +1099,7 @@ function timerHighlight(){
       wordFound = false;
 
       timerHighlight();
-    } 
+    }
     else{
       elem.innerHTML = time + " seconds until next letter highlighted";
       time--;
