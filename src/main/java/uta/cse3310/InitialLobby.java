@@ -12,6 +12,14 @@ public class InitialLobby {
     public int[] NumOfPlayersInLobby = {0, 0, 0, 0, 0};
     public List<String> PlayerNamesInServer;
     public Map<WebSocket, Integer> connectionToPlayerIndexMap;
+    // Players in each lobby
+    List<String[]> L1PlayerNames = new ArrayList<>();
+    List<String[]> L2PlayerNames = new ArrayList<>();
+    List<String[]> L3PlayerNames = new ArrayList<>();
+    List<String[]> L4PlayerNames = new ArrayList<>();
+    List<String[]> L5PlayerNames = new ArrayList<>();
+
+
     /* Game lobbies  */
     Lobby Lobby1 = null;
     Lobby Lobby2 = null;
@@ -84,6 +92,88 @@ public class InitialLobby {
     public void updatePlayerName(int playerIdx, String newName) {
         // Update the player's name at the specified index
         PlayerNamesInServer.set(playerIdx, newName);
+    }
+
+    public int getLobbyNum(int playerIdx){
+        int lobbyNum = -1;
+        
+        int[] L1PlayerIds = Lobby1.getPlayerIds();
+        int[] L2PlayerIds = Lobby1.getPlayerIds();
+        int[] L3PlayerIds = Lobby1.getPlayerIds();
+        int[] L4PlayerIds = Lobby1.getPlayerIds();
+        int[] L5PlayerIds = Lobby1.getPlayerIds();
+
+        if(searchLobby(playerIdx, L1PlayerIds))
+            lobbyNum = 1;
+        else if(searchLobby(playerIdx, L2PlayerIds))
+            lobbyNum = 2;
+        else if(searchLobby(playerIdx, L3PlayerIds))
+            lobbyNum = 3;
+        else if(searchLobby(playerIdx, L4PlayerIds))
+            lobbyNum = 4;
+        else if(searchLobby(playerIdx, L5PlayerIds))
+            lobbyNum = 5;
+        else
+            System.out.println("LOBBY NUM NOT FOUND");
+        return lobbyNum;
+    }
+
+    public boolean searchLobby(int playerIdx, int[] LPlayerIds){
+        for(int i = 0; i < 4; i++)
+        {
+            if(playerIdx == LPlayerIds[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public String searchNames(int playerIdx, List<String> playerNames, int[] playerIds){
+        String name = "";
+        for(int i = 0; i < 4; i++)
+        {
+            if(playerIds[i] == playerIdx)
+            {
+                name = playerNames.get(i);
+            }
+        }
+        return name;
+    }
+
+    public String getPlayerNameFromLobby(int lobbyNum, int playerIdx){
+        List<String> playerNames;
+        int[] playerIds;
+        String name = "";
+        switch(lobbyNum)
+        {
+            case 1:
+                playerNames = Lobby1.getPlayerNames();
+                playerIds = Lobby1.getPlayerIds();
+                name = searchNames(playerIdx, playerNames, playerIds);
+                break;
+            case 2:
+                playerNames = Lobby2.getPlayerNames();
+                playerIds = Lobby2.getPlayerIds();
+                name = searchNames(playerIdx, playerNames, playerIds);
+                break;
+            case 3:
+                playerNames = Lobby3.getPlayerNames();
+                playerIds = Lobby3.getPlayerIds();
+                name = searchNames(playerIdx, playerNames, playerIds);
+                break;
+            case 4:
+                playerNames = Lobby4.getPlayerNames();
+                playerIds = Lobby4.getPlayerIds();
+                name = searchNames(playerIdx, playerNames, playerIds);
+                break;
+            case 5:
+                playerNames = Lobby5.getPlayerNames();
+                playerIds = Lobby5.getPlayerIds();
+                name = searchNames(playerIdx, playerNames, playerIds);
+                break;
+        }
+        return name;
     }
 
     public void Update(UserEvent U) {
