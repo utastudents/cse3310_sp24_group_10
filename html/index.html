@@ -766,7 +766,10 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
     unhide("stateMessage");
     unhide("timeHighlight");
     genTable("grid");
-    timerHighlight();
+    if(currentLobby)
+    {
+      timerHighlight();
+    }
 
     determineWinner(); //test delete later
   }
@@ -1086,10 +1089,7 @@ function timerHighlight(){
   
   function count(){
 
-    if(surrender) {
-      clearTimeout(timer);
-    }
-    else if (time == -1 || wordFound){
+    if (time == -1 || wordFound){
       clearTimeout(timer);
 
       if(!wordFound){
