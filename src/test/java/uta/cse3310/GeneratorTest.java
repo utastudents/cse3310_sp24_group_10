@@ -17,10 +17,11 @@ public class GeneratorTest  extends TestCase{
     ArrayList<String> words_used = new ArrayList<>(); 
 
     long seed = 1235;
+    Generator.initWords();
     printGrid(Generator.createGrid(seed));
-    words_used = Generator.getWords((long) 1234);
-    assertArrayEquals(Generator.createGrid((long) 1234), Generator.createGrid((long) 1234));
-    assertEquals(words_used, Generator.getWords((long) 1234)); 
+    words_used = Generator.getWords(seed);
+    assertArrayEquals(Generator.createGrid(seed), Generator.createGrid(seed));
+    assertEquals(words_used, Generator.getWords(seed)); 
   }
   public static void printGrid(char[][] my_array)
   {
