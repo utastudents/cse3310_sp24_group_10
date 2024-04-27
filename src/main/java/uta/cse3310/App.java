@@ -183,31 +183,7 @@ public class App extends WebSocketServer {
     setConnectionLostTimeout(0);
   }
 
-  public void readFile(String file_name) {
-    System.out.println("attemping to read file");
-    try {
-      File word_file = new File(file_name);
-      Scanner scan = new Scanner(word_file);
-      while (scan.hasNextLine())
-      {
-        words.add(scan.nextLine());
-      }
-    } catch (FileNotFoundException e)
-    { 
-      System.out.println("Not able to read '" + file_name + "'");
-    } 
-  }
-
-  //static public ArrayList<String> words = new ArrayList<>();
-  public static ArrayList<String> getWords()
-  {
-    return words;
-  }
-
   public static void main(String[] args) {
-
-    // Read words from file
-    
 
     // Set up the http server
     int port = 9010;
@@ -219,7 +195,6 @@ public class App extends WebSocketServer {
 
     port = 9110;
     App A = new App(port);
-    A.readFile("words_filter.txt");
     A.start();
     System.out.println("websocket Server started on port: " + port);
 

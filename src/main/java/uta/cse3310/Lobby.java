@@ -18,7 +18,6 @@ public class Lobby {
   public int[] PlayerWins = new int[] {0, 0, 0, 0};
   public int GameStarted = 0;
   public long rand_num = 0;
-  public ArrayList<String> words = new ArrayList<>(Arrays.asList("aaron----"));
   public char[][] board;
   private final boolean debug = true;
 
@@ -45,14 +44,14 @@ public class Lobby {
       rand_num = new Random(Long.valueOf(seed));
     }
     // Creates the random number to be passed to the board generator
+    Generator.initWords(); // Reads words from file
     long board_seed = rand_num.nextLong(100000);
 
     if (debug)
     {
       System.out.format("rand_num: %d\n", board_seed);
     }
-    Generator.initWords();
-    board = Generator.createGrid(words, board_seed);
+    board = Generator.createGrid(board_seed);
   }
 
   public int getLobbyNum(){

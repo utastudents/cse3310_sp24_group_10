@@ -15,15 +15,16 @@ import java.util.Map;
 
 
 /* FOR FUTURE
-  - Add a flag for word overlapping to only happen once per for loop
-  - Remove the getWords method and roll it into the createGrid
-*/
+   - Add a flag for word overlapping to only happen once per for loop
+   - Remove the getWords method and roll it into the createGrid
+ */
 
 public class Generator {
   static public ArrayList<String> words = new ArrayList<>();
-  public static char[][] createGrid(ArrayList<String> words_other, long seed)
+  static boolean has_read = false; // Dirty implementation to read from the file only once
+  public static char[][] createGrid(long seed)
   {
-    boolean debug = true;
+    boolean debug = false;
     final int size = 25;
     int overlap = 0;
 
@@ -369,6 +370,10 @@ public class Generator {
 
   public static void initWords()
   {
+    if (has_read) // Dirty fix to only read from the file once
+    {
+      return;
+    }
     String file_name = "words_filter.txt";
     System.out.println("attemping to read file");
     try {
@@ -382,5 +387,6 @@ public class Generator {
     { 
       System.out.println("Not able to read '" + file_name + "'");
     } 
+    has_read = true;
   }
 }
