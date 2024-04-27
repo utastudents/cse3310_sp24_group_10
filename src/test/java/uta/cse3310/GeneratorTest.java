@@ -16,12 +16,11 @@ public class GeneratorTest  extends TestCase{
   public void testGrid(){
     ArrayList<String> words_used = new ArrayList<>(); 
 
-    //printGrid(Generator.createGrid((long) 1234));
-    //words_used = Generator.getWords((long) 1234);
-    //assertArrayEquals(Generator.createGrid((long) 1234), Generator.createGrid((long) 1234));
-    //assertEquals(words_used, Generator.getWords((long) 1234));
-    //printGrid(Generator.createGrid((long) 1234));
     printGrid(Generator.createGrid((long) 1234));
+    words_used = Generator.getWords((long) 1234);
+    assertArrayEquals(Generator.createGrid((long) 1234), Generator.createGrid((long) 1234));
+    //assertEquals(words_used, Generator.getWords((long) 1234)); // This should not pass!
+    assertEquals(Generator.getWords((long) 1234), Generator.getWords((long) 1234)); 
   }
   public static void printGrid(char[][] my_array)
   {

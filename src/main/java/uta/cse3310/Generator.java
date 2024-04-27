@@ -180,7 +180,7 @@ public class Generator {
   }
 
 
-  public static ArrayList<String> getWords(ArrayList<String> words, long seed)
+  public static ArrayList<String> getWords(long seed)
   {
     ArrayList<String> result = new ArrayList<>();
     boolean debug = false;
