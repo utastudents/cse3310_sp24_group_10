@@ -3,6 +3,9 @@ package uta.cse3310;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -17,6 +20,7 @@ import org.java_websocket.server.WebSocketServer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,6 +34,7 @@ public class App extends WebSocketServer {
 
   int numOfPlayers = 1;
   int extraPlayers = 0;
+  static public ArrayList<String> words = new ArrayList<>();
   
   public App(int port) {
     super(new InetSocketAddress(port));
@@ -178,7 +183,31 @@ public class App extends WebSocketServer {
     setConnectionLostTimeout(0);
   }
 
+  public void readFile(String file_name) {
+    System.out.println("attemping to read file");
+    try {
+      File word_file = new File(file_name);
+      Scanner scan = new Scanner(word_file);
+      while (scan.hasNextLine())
+      {
+        words.add(scan.nextLine());
+      }
+    } catch (FileNotFoundException e)
+    { 
+      System.out.println("Not able to read '" + file_name + "'");
+    } 
+  }
+
+  //static public ArrayList<String> words = new ArrayList<>();
+  public static ArrayList<String> getWords()
+  {
+    return words;
+  }
+
   public static void main(String[] args) {
+
+    // Read words from file
+    
 
     // Set up the http server
     int port = 9010;
@@ -190,6 +219,7 @@ public class App extends WebSocketServer {
 
     port = 9110;
     App A = new App(port);
+    A.readFile("words_filter.txt");
     A.start();
     System.out.println("websocket Server started on port: " + port);
 

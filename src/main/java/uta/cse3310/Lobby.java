@@ -18,9 +18,9 @@ public class Lobby {
   public int[] PlayerWins = new int[] {0, 0, 0, 0};
   public int GameStarted = 0;
   public long rand_num = 0;
-  public ArrayList<String> words = new ArrayList<>(Arrays.asList("aaron__________________________", "test"));
+  public ArrayList<String> words = new ArrayList<>(Arrays.asList("aaron----"));
   public char[][] board;
-  private final boolean debug = false;
+  private final boolean debug = true;
 
   public Lobby(int lobbyNum) {
     this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
@@ -51,6 +51,7 @@ public class Lobby {
     {
       System.out.format("rand_num: %d\n", board_seed);
     }
+    Generator.initWords();
     board = Generator.createGrid(words, board_seed);
   }
 

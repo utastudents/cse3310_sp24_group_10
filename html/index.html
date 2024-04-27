@@ -430,7 +430,14 @@ connection.onclose = function (evt) {
   console.log("Client Server Closed!");
 }
 
-var board;
+var size = 25;
+var board1 = Array.from(Array(size), () => new Array(size));
+var board2 = Array.from(Array(size), () => new Array(size));
+var board3 = Array.from(Array(size), () => new Array(size));
+var board4 = Array.from(Array(size), () => new Array(size));
+var board5 = Array.from(Array(size), () => new Array(size));
+
+
 connection.onmessage = function (evt) {
   var addPlayer = false;
   surrender = false;
@@ -440,16 +447,48 @@ connection.onmessage = function (evt) {
   console.log("Message received: " + msg);
   const obj = JSON.parse(msg);
 
-  // Handling different types of messages received from the server
+  /* Handling different types of messages received from the server */
+
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
+  // Populate all the lobbies boards
   if ('board' in obj.Lobby1) { // Message containing board
-    //console.log("board called!!!!");
-    board = obj.Lobby1.board[0]; 
-    console.log("board1 is: " + obj.Lobby1.board[0]);
-    console.log("board2 is: " + obj.Lobby1.board[1]);
+    for(var i = 0; i < size; i++) { 
+      for(var j = 0; j < size; j++) { 
+        board1[i][j] = obj.Lobby1.board[i][j]; 
+      }
+    }
   }
+  if ('board' in obj.Lobby2) { // Message containing board
+    for(var i = 0; i < size; i++) { 
+      for(var j = 0; j < size; j++) { 
+        board2[i][j] = obj.Lobby2.board[i][j]; 
+      }
+    }
+  }
+  if ('board' in obj.Lobby3) { // Message containing board
+    for(var i = 0; i < size; i++) { 
+      for(var j = 0; j < size; j++) { 
+        board3[i][j] = obj.Lobby3.board[i][j]; 
+      }
+    }
+  }
+  if ('board' in obj.Lobby4) { // Message containing board
+    for(var i = 0; i < size; i++) { 
+      for(var j = 0; j < size; j++) { 
+        board4[i][j] = obj.Lobby4.board[i][j]; 
+      }
+    }
+  }
+  if ('board' in obj.Lobby5) { // Message containing board
+    for(var i = 0; i < size; i++) { 
+      for(var j = 0; j < size; j++) { 
+        board5[i][j] = obj.Lobby5.board[i][j]; 
+      }
+    }
+  }
+
   // Cells the user selected;
   var firstCell = null;
   var secondCell = null;
@@ -683,21 +722,37 @@ function updateDisplayPlayers(){
 *   id -> the id of where the grid will be generated
 * This function generates the grid for word search
 */
-function boardLetter() {
-    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    console.log("testing!  " + board);
-    return letters.charAt(Math.floor(Math.random() * letters.length));
-}
 
 function genTable(id,words){ 
-  /*Function to generate word search table*/
+  /* Function to generate word search table */
+  var curr_board = Array.from(Array(size), () => new Array(size));
+  switch (currentLobby)
+  {
+    case 1:
+      curr_board = board1;    
+      break;
+    case 2:
+      curr_board = board2;    
+      break;
+    case 3:
+      curr_board = board3;    
+      break;
+    case 4:
+      curr_board = board4;    
+      break;
+    case 5:
+      curr_board = board5;    
+      break;
+  }
+
   let newTable = '<table style="width: 100%; outline: none; border: none; pointer-events: none">'; 
-  for(var i = 0; i < 25; i++){ //number of rows
+  for(var i = 0; i < size; i++){ //number of rows
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
-    for(var j = 0; j < 25; j++){ //number of columns
+    for(var j = 0; j < size; j++){ //number of columns
       newTable += '<td class="cell";>';
-      var randomLetter = boardLetter();
-      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ board[i]+ '"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
+      console.log("genTable called");
+      console.log("board: " + curr_board[i][j]);
+      newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ curr_board[i][j] + '"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
 
       newTable += '</td>';
     }

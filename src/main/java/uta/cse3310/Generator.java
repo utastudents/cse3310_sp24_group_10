@@ -1,5 +1,10 @@
 package uta.cse3310;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.util.Random;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +20,8 @@ import java.util.Map;
 */
 
 public class Generator {
-  public static char[][] createGrid(ArrayList<String> words, long seed)
+  static public ArrayList<String> words = new ArrayList<>();
+  public static char[][] createGrid(ArrayList<String> words_other, long seed)
   {
     boolean debug = true;
     final int size = 25;
@@ -146,6 +152,7 @@ public class Generator {
               case 3:
                 runner.x ++;
                 runner.y --;
+                //System.out.format("runner.x: %d, runner.y: %d, char: %c\n", runner.x, runner.y, words.get(word_index).charAt(i));
                 break;
             }
           }
@@ -356,5 +363,24 @@ public class Generator {
     }
 
     return result;
+  }
+
+
+
+  public static void initWords()
+  {
+    String file_name = "words_filter.txt";
+    System.out.println("attemping to read file");
+    try {
+      File word_file = new File(file_name);
+      Scanner scan = new Scanner(word_file);
+      while (scan.hasNextLine())
+      {
+        words.add(scan.nextLine());
+      }
+    } catch (FileNotFoundException e)
+    { 
+      System.out.println("Not able to read '" + file_name + "'");
+    } 
   }
 }
