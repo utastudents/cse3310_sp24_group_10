@@ -45,7 +45,7 @@ public class Lobby {
     }
     // Creates the random number to be passed to the board generator
     Generator.initWords(); // Reads words from file
-    long board_seed = rand_num.nextLong(100000);
+    long board_seed = (long) rand_num.nextInt(10000);
 
     if (debug)
     {
