@@ -819,8 +819,8 @@ function genTable(id,words){
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
     for(var j = 0; j < size; j++){ //number of columns
       newTable += '<td class="cell";>';
-      console.log("genTable called");
-      console.log("board: " + curr_board[i][j]);
+      //console.log("genTable called");
+      //console.log("board: " + curr_board[i][j]);
       newTable += '<input type="button"; id="cell'+i+"_"+j+'"; class="wordButton"; value="'+ curr_board[i][j] + '"; onclick="giveCell(id); scoring()">'; //change this value with input. Add onclick behavior here
 
       newTable += '</td>';
