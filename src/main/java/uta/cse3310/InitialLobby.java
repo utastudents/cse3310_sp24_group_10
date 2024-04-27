@@ -1,5 +1,6 @@
 package uta.cse3310;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ public class InitialLobby {
     public PlayerType Players;
     public int NumOfPlayers = 1;
     public int[] NumOfPlayersInLobby = {0, 0, 0, 0, 0};
+    
     public List<String> PlayerNamesInServer;
     public Map<WebSocket, Integer> connectionToPlayerIndexMap;
     // Players in each lobby

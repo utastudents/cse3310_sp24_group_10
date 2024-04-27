@@ -17,8 +17,8 @@ import java.util.Map;
 public class Generator {
   public static char[][] createGrid(ArrayList<String> words, long seed)
   {
-    boolean debug = false;
-    final int size = 50;
+    boolean debug = true;
+    final int size = 25;
     int overlap = 0;
 
     Random rand_num = new Random(seed);
@@ -52,7 +52,7 @@ public class Generator {
     {
       List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
       // Chance to create word
-      if (rand_num.nextInt(3) == 0)
+      if (rand_num.nextInt(2) == 0)
       {
         int word_index = rand_num.nextInt(words.size());
         int word_len = words.get(word_index).length();
