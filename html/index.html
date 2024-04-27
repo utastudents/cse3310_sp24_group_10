@@ -499,13 +499,13 @@ connection.onclose = function (evt) {
   console.log("Client Server Closed!");
 }
 
+
 var size = 25;
 var board1 = Array.from(Array(size), () => new Array(size));
 var board2 = Array.from(Array(size), () => new Array(size));
 var board3 = Array.from(Array(size), () => new Array(size));
 var board4 = Array.from(Array(size), () => new Array(size));
 var board5 = Array.from(Array(size), () => new Array(size));
-
 
 connection.onmessage = function (evt) {
   var addPlayer = false;
@@ -516,11 +516,14 @@ connection.onmessage = function (evt) {
   console.log("Message received: " + msg);
   const obj = JSON.parse(msg);
 
-  /* Handling different types of messages received from the server */
-
+  // Handling different types of messages received from the server
   if ('PlayerIdx' in obj) { // Message containing player information
     idx = obj.PlayerIdx; // Assuming idx starts from 0
   }
+  // Cells the user selected;
+  var firstCell = null;
+  var secondCell = null;
+
   // Populate all the lobbies boards
   if ('board' in obj.Lobby1) { // Message containing board
     for(var i = 0; i < size; i++) { 
@@ -558,9 +561,6 @@ connection.onmessage = function (evt) {
     }
   }
 
-  // Cells the user selected;
-  var firstCell = null;
-  var secondCell = null;
 
 
   // Get the players in each lobby
@@ -815,15 +815,9 @@ function genTable(id,words){
   }
 
   let newTable = '<table style="width: 100%; outline: none; border: none; pointer-events: none">'; 
-<<<<<<< HEAD
   for(var i = 0; i < size; i++){ //number of rows
     newTable += '<tr style="outline: none; border: none; margin: 0px; padding: 0px; pointer-events: none">';
     for(var j = 0; j < size; j++){ //number of columns
-=======
-  for(var i = 0; i < 25; i++){ //number of rows
-    newTable += '<tr style="outline: none; border: none; pointer-events: none">';
-    for(var j = 0; j < 25; j++){ //number of columns
->>>>>>> abed57f4c44b89f73ddc4cd1730654c1ca674202
       newTable += '<td class="cell";>';
       console.log("genTable called");
       console.log("board: " + curr_board[i][j]);
@@ -837,6 +831,8 @@ function genTable(id,words){
 
   document.getElementById(id).innerHTML = newTable;
 }
+
+
 
 /*
 * This function checks whether all players are ready to start the game
