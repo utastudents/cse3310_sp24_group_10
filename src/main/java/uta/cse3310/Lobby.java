@@ -19,7 +19,7 @@ public class Lobby {
   public int GameStarted = 0;
   public long rand_num = 0;
   public char[][] board;
-  private final boolean debug = true;
+  private final boolean debug = false;
 
   public Lobby(int lobbyNum) {
     this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
