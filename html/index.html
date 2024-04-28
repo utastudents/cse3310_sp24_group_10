@@ -327,7 +327,7 @@
     <div align="right";> <!-- Divider for Word Bank -->
       <table class="wordBank">
           <tr><th style="background-color:rgb(162, 185, 249);">Word Bank</th></tr>
-          <tr><td style="outline: black solid 1px; height: 200px; background-color: white;"><p id="wordList"></p></td></tr>
+          <tr><td id="wordList"; style="outline: black solid 1px; height: 200px; background-color: white;"></td></tr>
       </table>
     </div>
 
@@ -662,6 +662,8 @@ connection.onmessage = function (evt) {
   addPlayer2Array();
 
   updateLeaderboard();
+
+  updateWordList();
 
   //sets the nickname variable to what is Displayed and then trims the "Display Name: " part off
   var displayName = document.getElementById("displayName").textContent;
@@ -1287,6 +1289,10 @@ function determineWinner(){
       break;
     }
   } 
+
+function updateWordList(){
+  document.getElementById("wordList").textContent = "insert list here"; 
+}
 </script>
 </body>
 </html>
