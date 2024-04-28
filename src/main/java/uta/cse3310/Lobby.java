@@ -57,8 +57,6 @@ public class Lobby {
     board = Generator.createGrid(board_seed);
     word_bank = Generator.getWords(board_seed);
     num_words = word_bank.size();
-    System.out.format("word_bank length: %d\n", num_words);
-    //test = word_bank.toArray();
   }
 
   public int getLobbyNum(){

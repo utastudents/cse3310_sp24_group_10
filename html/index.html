@@ -571,7 +571,7 @@ connection.onmessage = function (evt) {
   if ('word_bank' in obj.Lobby1) { // Message containing board
     for(var i = 0; i < obj.Lobby1.num_words; i++) { 
       // if word not in bank
-      console.log("bank: " + bank1 + ", i: " + i + ", " + obj.Lobby1.word_bank[i]);
+      //console.log("bank: " + bank1 + ", i: " + i + ", " + obj.Lobby1.word_bank[i]);
       if (bank1.indexOf(obj.Lobby1.word_bank[i]) == -1)
       {
         bank1 = bank1 + " " + obj.Lobby1.word_bank[i];
