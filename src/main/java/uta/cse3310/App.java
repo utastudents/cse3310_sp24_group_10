@@ -186,17 +186,17 @@ public class App extends WebSocketServer {
   public static void main(String[] args) {
 
     // Set up the http server
-    int port = 9010;
-    HttpServer H = new HttpServer(port, "./html");
+    int WEBSOCKET_PORT = 9010;
+    HttpServer H = new HttpServer(WEBSOCKET_PORT, "./html");
     H.start();
-    System.out.println("http Server started on port:" + port);
+    System.out.println("http Server started on port:" + WEBSOCKET_PORT);
 
     // create and start the websocket server
 
-    port = 9110;
-    App A = new App(port);
+    WEBSOCKET_PORT = 9110;
+    App A = new App(WEBSOCKET_PORT);
     A.start();
-    System.out.println("websocket Server started on port: " + port);
+    System.out.println("websocket Server started on port: " + WEBSOCKET_PORT);
 
   }
 }
