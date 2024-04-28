@@ -509,6 +509,11 @@ var board2 = Array.from(Array(size), () => new Array(size));
 var board3 = Array.from(Array(size), () => new Array(size));
 var board4 = Array.from(Array(size), () => new Array(size));
 var board5 = Array.from(Array(size), () => new Array(size));
+var bank1 = "";
+var bank2 = "";
+var bank3 = "";
+var bank4 = "";
+var bank5 = "";
 
 connection.onmessage = function (evt) {
   var addPlayer = false;
@@ -560,6 +565,48 @@ connection.onmessage = function (evt) {
     for(var i = 0; i < size; i++) { 
       for(var j = 0; j < size; j++) { 
         board5[i][j] = obj.Lobby5.board[i][j]; 
+      }
+    }
+  }
+  if ('word_bank' in obj.Lobby1) { // Message containing board
+    for(var i = 0; i < obj.Lobby1.num_words; i++) { 
+      // if word not in bank
+      console.log("bank: " + bank1 + ", i: " + i + ", " + obj.Lobby1.word_bank[i]);
+      if (bank1.indexOf(obj.Lobby1.word_bank[i]) == -1)
+      {
+        bank1 = bank1 + " " + obj.Lobby1.word_bank[i];
+      }
+    }
+  }
+  if ('word_bank' in obj.Lobby2) { // Message containing board
+    for(var i = 0; i < obj.Lobby2.num_words; i++) { 
+      if (bank2.indexOf(obj.Lobby2.word_bank[i]) == -1)
+      {
+        bank2 = bank2 + " " + obj.Lobby2.word_bank[i];
+      }
+    }
+  }
+  if ('word_bank' in obj.Lobby3) { // Message containing board
+    for(var i = 0; i < obj.Lobby3.num_words; i++) { 
+      if (bank3.indexOf(obj.Lobby3.word_bank[i]) == -1)
+      {
+        bank3 = bank3 + " " + obj.Lobby3.word_bank[i];
+      }
+    }
+  }
+  if ('word_bank' in obj.Lobby4) { // Message containing board
+    for(var i = 0; i < obj.Lobby4.num_words; i++) { 
+      if (bank4.indexOf(obj.Lobby4.word_bank[i]) == -1)
+      {
+        bank4 = bank4 + " " + obj.Lobby4.word_bank[i];
+      }
+    }
+  }
+  if ('word_bank' in obj.Lobby5) { // Message containing board
+    for(var i = 0; i < obj.Lobby5.num_words; i++) { 
+      if (bank5.indexOf(obj.Lobby5.word_bank[i]) == -1)
+      {
+        bank5 = bank5 + " " + obj.Lobby5.word_bank[i];
       }
     }
   }
@@ -1291,7 +1338,26 @@ function determineWinner(){
   } 
 
 function updateWordList(){
-  document.getElementById("wordList").textContent = "insert list here"; 
+  var curr_bank;
+  switch (currentLobby)
+  {
+    case 1:
+      curr_bank = bank1;    
+      break;
+    case 2:
+      curr_bank = bank2;    
+      break;
+    case 3:
+      curr_bank = bank3;    
+      break;
+    case 4:
+      curr_bank = bank4;    
+      break;
+    case 5:
+      curr_bank = bank5;    
+      break;
+  }
+  document.getElementById("wordList").textContent = curr_bank; 
 }
 </script>
 </body>

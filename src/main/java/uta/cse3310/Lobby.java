@@ -20,6 +20,9 @@ public class Lobby {
   public long rand_num = 0;
   public char[][] board;
   private final boolean debug = false;
+  public ArrayList<String> word_bank = new ArrayList<>();
+  public String[] test;
+  public int num_words = 0;
 
   public Lobby(int lobbyNum) {
     this.LobbyNum = lobbyNum; // Initialize LobbyNum with the parameter
@@ -52,6 +55,10 @@ public class Lobby {
       System.out.format("rand_num: %d\n", board_seed);
     }
     board = Generator.createGrid(board_seed);
+    word_bank = Generator.getWords(board_seed);
+    num_words = word_bank.size();
+    System.out.format("word_bank length: %d\n", num_words);
+    //test = word_bank.toArray();
   }
 
   public int getLobbyNum(){

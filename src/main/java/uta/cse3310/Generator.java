@@ -184,7 +184,7 @@ public class Generator {
   {
     ArrayList<String> result = new ArrayList<>();
     boolean debug = false;
-    final int size = 50;
+    final int size = 25;
 
     Random rand_num = new Random(seed);
     char[][] my_array = new char[size][size];
