@@ -17,12 +17,12 @@ import net.freeutils.httpserver.HTTPServer.VirtualHost;
 public class HttpServer {
 
     private static final String HTML = "./html";
-    int port = 9010;
+    int HTTP_PORT = 9010;
     String dirname = HTML;
 
     public HttpServer(int portNum, String dirName) {
         System.out.println("creating http server port " + portNum);
-        port = portNum;
+        HTTP_PORT = portNum;
         dirname = dirName;
     }
 
@@ -33,7 +33,7 @@ public class HttpServer {
             if (!dir.canRead())
                 throw new FileNotFoundException(dir.getAbsolutePath());
             // set up server
-            HTTPServer server = new HTTPServer(port);
+            HTTPServer server = new HTTPServer(HTTP_PORT);
             VirtualHost host = server.getVirtualHost(null); // default host
             host.setAllowGeneratedIndex(true); // with directory index pages
             host.addContext("/", new FileContextHandler(dir));
@@ -46,7 +46,7 @@ public class HttpServer {
                 }
             });
             server.start();
-            System.out.println("HTTPServer is listening on port " + port);
+            System.out.println("HTTPServer is listening on port " + HTTP_PORT);
         } catch (Exception e) {
             System.err.println("error: " + e);
         }
