@@ -24,7 +24,7 @@ public class Generator {
   static boolean has_read = false; // Dirty implementation to read from the file only once
   public static char[][] createGrid(long seed)
   {
-    boolean debug = false;
+    boolean debug = true;
     final int size = 25;
     int overlap = 0;
 
@@ -50,7 +50,8 @@ public class Generator {
 
     int head_x = 0; 
     int head_y = 0; 
-    Point head = new Point(0, 0);
+    //Point head = new Point(0, 0);
+    Point head = new Point(15, 15);
     boolean running = true;
     List<Point> taken_index = new ArrayList<>();
 
@@ -58,6 +59,7 @@ public class Generator {
     while (running)
     {
       List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
+      //List<Integer> valid = new ArrayList<>(Arrays.asList(3, 3, 3, 3));
       // Chance to create word
       if (rand_num.nextInt(2) == 0)
       {
@@ -70,29 +72,38 @@ public class Generator {
         // Loop through the four valid directions
         for (int j = 0; j < valid_size; j ++)
         {
+          System.out.format("valid_size is: %d\n", valid_size);
           runner = new Point(head.x, head.y);
           // For each direction, check if the word position is valid
-          for (int i = 0; i < word_len; i ++)
+          for (int i = 0; i < word_len && valid.contains(j); i ++)
           {
             // Check if current character position occupied 
             if ((taken_index.contains(new Point(runner.x, runner.y))))
             {
               // Check if the word can be an overlap
-              if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+              //if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
+              if (false)
               {
                 overlap ++;
               } else // Invalidate this position
               {
+                System.out.format("invalidated j: %d\n", j);
                 valid.remove(Integer.valueOf(j));
               }
             }
             // Invalid position
             if (runner.y == -1 || runner.x == -1 || runner.x == size || runner.y == size)
             {
+              System.out.format("invalidated j: %d\n", j);
               valid.remove(Integer.valueOf(j));
             }
             switch (j)
             {
+              case 3: // Diagnal up 
+                //runner.x ++;
+                runner.y --;
+                runner.x ++;
+                break;
               case 0: // Horizontal
                 runner.x ++;
                 break; 
@@ -103,16 +114,14 @@ public class Generator {
                 runner.x ++;
                 runner.y ++;
                 break;
-              case 3: // Diagnal up 
-                runner.x ++;
-                runner.y --;
-                break;
               default:
                 break;
             }
             // Special check for diagnal up
             if (runner.x == -1 || runner.y == -1 || runner.x == size || runner.y == size)
+            //if (runner.x == size || runner.y == size)
             {
+              System.out.format("invalidated j: %d\n", j);
               valid.remove(Integer.valueOf(j));
             }
           }
@@ -136,7 +145,18 @@ public class Generator {
 
           for (int i = 0; i < word_len; i ++)
           {
-            my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+            if (direction == 3)
+            {
+              my_array[runner.y][runner.x] = (char) (i + '0');
+              System.out.format("runner.x: %d, runner.y: %d, char: %c, word: %s\n", runner.x, runner.y, words.get(word_index).charAt(i), words.get(word_index));
+              //System.out.format("direction called!\n");
+            } else
+            {
+              my_array[runner.y][runner.x] = words.get(word_index).charAt(i); 
+            }
+            System.out.format("word: %s, dir: %s\n", words.get(word_index), direction);
+            printGrid(my_array);
+            my_array[runner.y][runner.x] = words.get(word_index).charAt(i); 
             taken_index.add(new Point(runner.x, runner.y)); // Add the positions of word chars to used list
             switch (direction)
             {
@@ -153,6 +173,7 @@ public class Generator {
               case 3:
                 runner.x ++;
                 runner.y --;
+                //runner.y --;
                 //System.out.format("runner.x: %d, runner.y: %d, char: %c\n", runner.x, runner.y, words.get(word_index).charAt(i));
                 break;
             }
@@ -389,4 +410,33 @@ public class Generator {
     } 
     has_read = true;
   }
+  public static void printGrid(char[][] my_array)
+  {
+    final boolean formatted = false;
+    for ( int y = 0; y < my_array.length; y ++)
+    {
+      if (formatted)
+      {
+        System.out.format("{");
+      }
+      for ( int x = 0; x < my_array[y].length; x ++)
+      {
+        if (formatted)
+        {
+          System.out.format("'%c', ", my_array[y][x], x, y);
+        } else
+        {
+          System.out.format("%c ", my_array[y][x], x, y);
+        }
+      }
+      if (formatted)
+      {
+        System.out.format("},\n");
+      } else
+      {
+        System.out.format("\n");
+      }
+    }
+  }
 }
+
