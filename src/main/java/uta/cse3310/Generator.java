@@ -27,6 +27,7 @@ public class Generator {
   {
     boolean debug = false;
     final int size = 25;
+    final int dir_usage = 20; // Minimum percent that each direction can be used
     int overlap = 0;
 
     Random rand_num = new Random(seed);
@@ -210,9 +211,20 @@ public class Generator {
         head.y ++;
       }
     }
+    float total_words = stats[0] + stats[1] + stats[2] + stats[3]; 
+    // Regenerate if any of the directions are used less than acceptable minimum
+    for (int i = 0; i < stats.length; i ++)
+    {
+      if ((stats[i] / total_words) * 100 < dir_usage)
+      {
+        System.out.format("Rejected grid\n");
+        createGrid(seed + 1); // Regenerate grid
+      }
+    }
+
     //if (debug)
     {
-      float total_words = stats[0] + stats[1] + stats[2] + stats[3]; 
+      System.out.format("Stats table:\n");
       System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlapping words: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
       System.out.format("Horizontal used: %f, vertical used: %f, diagnal down used: %f, diagnal up used: %f\n", (stats[0] / total_words) * 100, (stats[1] / total_words) * 100, (stats[2] / total_words) * 100, (stats[3] / total_words) * 100);
       //System.out.format("Horizontal used: %d, vertical used: %d, diagnal down used: %d, diagnal up used: %d\n", stats[0], stats[1], stats[2], stats[3]);
