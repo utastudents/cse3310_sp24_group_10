@@ -1037,189 +1037,110 @@ var firstCellId = null;
 var secondCellId = null;
 
 function registerCell(id) {
-  if (firstCellId === null) {
-      firstCellId = id;
-  } else if (secondCellId === null) {
-      secondCellId = id;
-  }
-      // Extract row and column information from cell ids
-      var firstParts = firstCellId.split("_");
-      var firstRow = parseInt(firstParts[0].substr(4));
-      var firstCol = parseInt(firstParts[1]);
-      
-      var secondParts = secondCellId.split("_");
-      var secondRow = parseInt(secondParts[0].substr(4));
-      var secondCol = parseInt(secondParts[1]);
-
-      if(firstCol < secondCol){
-        var colDiff = secondCol - firstCol;
-        }
-      
-      else if(secondCol < firstCol){
-        var colDiff = firstCol - secondCol;
-        }
-    
-      if(firstRow < secondRow){
-          var rowDiff = secondRow - firstRow;
-        }
-      
-      else if(secondRow < firstRow){
-        var rowDiff = firstRow - secondRow;
-        }
-  
-      if(firstRow === secondRow || firstCol === secondCol || rowDiff === colDiff){
-        highlightMiddleCells(firstRow, firstCol, secondRow, secondCol, rowDiff, colDiff);
-      }
-      else{
-        var firstCellId = null;
-        var secondCellId = null;
-      }
-
-      highlightMiddleCells(firstRow, firstCol, secondRow, secondCol, rowDiff, colDiff);
-      
-      // Reset the clicked cell ids
-      firstCellId = null;
-      secondCellId = null;
-  }
-
-  function highlightMiddleCells(firstRow, firstCol, secondRow, secondCol, rowDiff, colDiff){
-    if (firstRow === secondRow){
-      if(firstCol < secondCol){
-        while(firstCol < secondCol + 1){
-          highlight(firstCol, firstRow);
-          firstCol++;
-        }
-      }
-      if(secondCol < firstCol){
-        while(secondCol < firstCol + 1){
-          highlight(secondCol, firstRow);
-          secondCol++;
-        }
-      }
+    if (firstCellId === null) {
+        firstCellId = id;
+    } else if (secondCellId === null) {
+        secondCellId = id;
     }
-    else if(firstCol === secondCol){
-      if(firstRow < secondRow){
-        while(firstRow < secondRow + 1){
-          highlight(firstRow, firstCol);
-          firstRow++;
+
+    if (firstCellId !== null && secondCellId !== null) {
+        // Extract row and column information from cell ids
+        var firstParts = firstCellId.split("_");
+        var firstRow = parseInt(firstParts[0].substr(4));
+        var firstCol = parseInt(firstParts[1]);
+
+        var secondParts = secondCellId.split("_");
+        var secondRow = parseInt(secondParts[0].substr(4));
+        var secondCol = parseInt(secondParts[1]);
+
+        var rowDiff = Math.abs(secondRow - firstRow);
+        var colDiff = Math.abs(secondCol - firstCol);
+
+        if (firstRow === secondRow || firstCol === secondCol || rowDiff === colDiff) {
+            highlightMiddleCells(firstRow, firstCol, secondRow, secondCol, rowDiff, colDiff);
+        } else {
+            resetCells();
         }
-      }
-      if(secondRow < firstRow){
-        while(secondRow < firstRow + 1){
-          highlight(secondRow, firstCol);
-          secondRow++;
-        }
-      }
     }
-    else if(firstCol != secondCol && firstRow != secondCol && rowDiff === colDiff){
-      while(firstRow != secondRow && firstCol != secondCol){
-        if(firstRow < secondRow){
-          if(firstCol < secondCol){
-            highlight(firstRow, firstCol);
-            firstRow++;
-            firstCol++;
-          }
-          else if(secondCol < firstCol){
-            highlight(firstRow, firstCol);
-            firstRow++;
-            firstCol--;
-          }
-        if(secondRow < firstRow){
-          if(firstCol < secondCol){
-            highlight(firstRow, firstCol);
-            firstRow--;
-            firstCol++;
-          }
-          else if(secondCol < firstCol){
-            highlight(firstRow, firstCol);
-            firstRow--;
-            firstCol--;
-            }
-          }
-        else if(firstRow === secondRow && firstCol === secondCol){
-          highlight(secondRow, secondCol);
-        }
-        }
-      }
-    }
-  }
-
-  function highlight(row, col){
-    var cellId = cellId(row, col);
-    getCell(cellId);
-  }
-
-  function cellId(row, col){
-    return "cell" + row + "_" + col;
-  }
-
-
-function giveCell(id){
-  switch(currentLobby){
-    case 1:
-      var playerList = playerIds1;
-      break;
-    case 2:
-      var playerList = playerIds2;
-      break;
-    case 3:
-      var playerList = playerIds3;
-      break;
-    case 4:
-      var playerList = playerIds4;
-      break;
-    case 5:
-      var playerList = playerIds5;
-      break;
-  }
-  var index = 0;
-  for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
-    if(idx == playerList[i]){
-      break;
-    }
-    index++;
-  }
-
-  switch(index){
-    case 0:
-      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
-        document.getElementById(id).className = "red";
-      }
-      else{
-        document.getElementById(id).className = "wordButton";
-      }
-      console.log("Cell clicked: "+id);
-      break;
-    case 1:
-      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
-        document.getElementById(id).className = "blue";
-      }
-      else{
-        document.getElementById(id).className = "wordButton";
-      }
-      console.log("Cell clicked: "+id);
-      break;
-    case 2:
-      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
-        document.getElementById(id).className = "green";
-      }
-      else{
-        document.getElementById(id).className = "wordButton";
-      }
-      console.log("Cell clicked: "+id);
-      break;
-    case 3:
-      if(document.getElementById(id).className == "wordButton" || document.getElementById(id).className == "orange"){
-        document.getElementById(id).className = "purple";
-      }
-      else{
-        document.getElementById(id).className = "wordButton";
-      }
-      console.log("Cell clicked: "+id);
-      break;
-
-  }
 }
+
+function highlightMiddleCells(firstRow, firstCol, secondRow, secondCol, rowDiff, colDiff) {
+    var rowIncrement = firstRow < secondRow ? 1 : -1;
+    var colIncrement = firstCol < secondCol ? 1 : -1;
+
+    var row = firstRow;
+    var col = firstCol;
+
+    while (row !== secondRow || col !== secondCol) {
+        highlight(row, col);
+        row += rowDiff === colDiff ? rowIncrement : 0;
+        col += rowDiff === colDiff ? colIncrement : 0;
+        row += rowDiff !== colDiff && row !== secondRow ? rowIncrement : 0;
+        col += rowDiff !== colDiff && col !== secondCol ? colIncrement : 0;
+    }
+    highlight(secondRow, secondCol);
+    resetCells();
+}
+
+function highlight(row, col) {
+    var cellId = cellIdFromRowCol(row, col);
+    giveCell(cellId);
+}
+
+function resetCells() {
+    firstCellId = null;
+    secondCellId = null;
+}
+
+function cellIdFromRowCol(row, col) {
+    return "cell" + row + "_" + col;
+}
+
+function giveCell(id) {
+    switch (currentLobby) {
+        case 1:
+            var playerList = playerIds1;
+            break;
+        case 2:
+            var playerList = playerIds2;
+            break;
+        case 3:
+            var playerList = playerIds3;
+            break;
+        case 4:
+            var playerList = playerIds4;
+            break;
+        case 5:
+            var playerList = playerIds5;
+            break;
+    }
+    var index = playerList.indexOf(id);
+    if (index !== -1) {
+        var color = "";
+        switch (index) {
+            case 0:
+                color = "red";
+                break;
+            case 1:
+                color = "blue";
+                break;
+            case 2:
+                color = "green";
+                break;
+            case 3:
+                color = "purple";
+                break;
+        }
+        var element = document.getElementById(id);
+        if (element.className === "wordButton" || element.className === "orange") {
+            element.className = color;
+        } else {
+            element.className = "wordButton";
+        }
+        console.log("Cell clicked: " + id);
+    }
+}
+
 
 function submitChatMessage(){
   event.preventDefault();
