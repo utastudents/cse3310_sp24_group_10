@@ -17,6 +17,7 @@ import java.util.Map;
 /* FOR FUTURE
    - Add a flag for word overlapping to only happen once per for loop
    - Remove the getWords method and roll it into the createGrid
+   - Fix syntax having crossed X and Y
  */
 
 public class Generator {
@@ -50,19 +51,20 @@ public class Generator {
 
     int head_x = 0; 
     int head_y = 0; 
-    //Point head = new Point(0, 0);
+
     Point head = new Point(15, 15); // Fix for getting diagnol up generating
     boolean running = true;
     List<Point> taken_index = new ArrayList<>();
     int stats[] = {0, 0, 0, 0};
+    int[] overlap_used = new int[] {0, 0, 0, 0};
 
     /* Populate words */
     while (running)
     {
       List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
-      //List<Integer> valid = new ArrayList<>(Arrays.asList(3, 3, 3, 3));
+
       // Chance to create word
-      if (rand_num.nextInt(2) == 0)
+      if (rand_num.nextInt(1) == 0)
       {
         int word_index = rand_num.nextInt(words.size());
         int word_len = words.get(word_index).length();
@@ -83,7 +85,7 @@ public class Generator {
               // Check if the word can be an overlap
               if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
               {
-                overlap ++;
+                overlap_used[j] = overlap_used[j] + 1;
               } else // Invalidate this position
               {
                 valid.remove(Integer.valueOf(j));
@@ -107,7 +109,6 @@ public class Generator {
                 runner.y ++;
                 break;
               case 3: // Diagnal up 
-                //runner.x ++;
                 runner.y --;
                 runner.x ++;
                 break;
@@ -134,12 +135,21 @@ public class Generator {
         {
           int rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
           int direction;
-          if (valid.contains(3) && rand_num.nextInt(3) != 0 && valid.contains(1)) // Attempt to encourage diagnal up picks
+          if (valid.contains(3) && rand_num.nextInt(15) != 0 && valid.contains(1)) // Attempt to encourage diagnal up picks
           {
              direction = 3;
           } else
           {
              direction = valid.get(rand_dir);
+          }
+          if (overlap_used[direction] > 0)
+          {
+            overlap ++; // An overlapping word was used
+          } 
+          // Reset possible overlapping words
+          for (int i = 0; i < overlap_used.length; i ++)
+          {
+            overlap_used[i] = 0;
           }
 
           Point new_runner = new Point(head.x, head.y);
@@ -202,10 +212,10 @@ public class Generator {
     }
     //if (debug)
     {
-      System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlap attempts: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
       float total_words = stats[0] + stats[1] + stats[2] + stats[3]; 
+      System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlapping words: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
       System.out.format("Horizontal used: %f, vertical used: %f, diagnal down used: %f, diagnal up used: %f\n", (stats[0] / total_words) * 100, (stats[1] / total_words) * 100, (stats[2] / total_words) * 100, (stats[3] / total_words) * 100);
-      System.out.format("Horizontal used: %d, vertical used: %d, diagnal down used: %d, diagnal up used: %d\n", stats[0], stats[1], stats[2], stats[3]);
+      //System.out.format("Horizontal used: %d, vertical used: %d, diagnal down used: %d, diagnal up used: %d\n", stats[0], stats[1], stats[2], stats[3]);
     }
 
     return my_array;
