@@ -239,6 +239,8 @@ public class Generator {
     ArrayList<String> result = new ArrayList<>();
     boolean debug = false;
     final int size = 25;
+    final int dir_usage = 20; // Minimum percent that each direction can be used
+    int overlap = 0;
 
     Random rand_num = new Random(seed);
     char[][] my_array = new char[size][size];
@@ -262,23 +264,23 @@ public class Generator {
 
     int head_x = 0; 
     int head_y = 0; 
-    Point head = new Point(0, 0);
+
+    Point head = new Point(15, 15); // Fix for getting diagnol up generating
     boolean running = true;
     List<Point> taken_index = new ArrayList<>();
+    int stats[] = {0, 0, 0, 0};
+    int[] overlap_used = new int[] {0, 0, 0, 0};
 
     /* Populate words */
     while (running)
     {
       List<Integer> valid = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
+
       // Chance to create word
-      if (rand_num.nextInt(3) == 0)
+      if (rand_num.nextInt(1) == 0)
       {
         int word_index = rand_num.nextInt(words.size());
         int word_len = words.get(word_index).length();
-
-
-
-
 
         Point runner = new Point(head.x, head.y);
 
@@ -288,22 +290,22 @@ public class Generator {
         {
           runner = new Point(head.x, head.y);
           // For each direction, check if the word position is valid
-          for (int i = 0; i < word_len; i ++)
+          for (int i = 0; i < word_len && valid.contains(j); i ++)
           {
-            // Current character position occupied 
+            // Check if current character position occupied 
             if ((taken_index.contains(new Point(runner.x, runner.y))))
             {
               // Check if the word can be an overlap
               if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
               {
-                //overlap ++;
+                overlap_used[j] = overlap_used[j] + 1;
               } else // Invalidate this position
               {
                 valid.remove(Integer.valueOf(j));
               }
             }
             // Invalid position
-            if (runner.y == -1 || runner.x == -1 || runner.x == size - 1 || runner.x == size || runner.y == size)
+            if (runner.y == -1 || runner.x == -1 || runner.x == size || runner.y == size)
             {
               valid.remove(Integer.valueOf(j));
             }
@@ -320,20 +322,19 @@ public class Generator {
                 runner.y ++;
                 break;
               case 3: // Diagnal up 
-                runner.x ++;
                 runner.y --;
+                runner.x ++;
                 break;
               default:
                 break;
             }
             // Special check for diagnal up
-            if (runner.x == -1 || runner.y == -1 || runner.x == size - 1 || runner.y == size - 1)
+            if (runner.x == -1 || runner.y == -1 || runner.x == size || runner.y == size)
             {
               valid.remove(Integer.valueOf(j));
             }
           }
         }
-
 
         if (debug)
         {
@@ -347,51 +348,73 @@ public class Generator {
         {
           boolean flag = true;
           int rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
-          int direction = valid.get(rand_dir);
+          int direction;
+          if (valid.contains(3) && rand_num.nextInt(15) != 0 && valid.contains(1)) // Attempt to encourage diagnal up picks
+          {
+             direction = 3;
+          } else
+          {
+             direction = valid.get(rand_dir);
+          }
+          if (overlap_used[direction] > 0)
+          {
+            overlap ++; // An overlapping word was used
+          } 
+          // Reset possible overlapping words
+          for (int i = 0; i < overlap_used.length; i ++)
+          {
+            overlap_used[i] = 0;
+          }
 
           Point new_runner = new Point(head.x, head.y);
           runner = new Point(head.x, head.y);
 
           for (int i = 0; i < word_len; i ++)
           {
-            my_array[runner.x][runner.y] = words.get(word_index).charAt(i); 
+            if (debug)
+            {
+              my_array[runner.y][runner.x] = (char) (i + '0');
+              System.out.format("runner.x: %d, runner.y: %d, char: %c, word: %s\n", runner.x, runner.y, words.get(word_index).charAt(i), words.get(word_index));
+            System.out.format("word: %s, dir: %s\n", words.get(word_index), direction);
+            }
+            my_array[runner.y][runner.x] = words.get(word_index).charAt(i); 
             taken_index.add(new Point(runner.x, runner.y)); // Add the positions of word chars to used list
             switch (direction)
             {
               case 0:
                 runner.x ++;
+                stats[direction] = stats[direction] + 1;
                 if (flag)
                 {
-                  //System.out.format("%s\n", words.get(word_index));
                   result.add(words.get(word_index));
                   flag = false;
                 }
                 break;
               case 1:
                 runner.y ++;
+                stats[direction] = stats[direction] + 1;
                 if (flag)
                 {
-                  //System.out.format("%s\n", words.get(word_index));
                   result.add(words.get(word_index));
                   flag = false;
                 }
                 break;
               case 2:
                 runner.x ++;
+                runner.y ++;
+                stats[direction] = stats[direction] + 1;
                 if (flag)
                 {
-                  //System.out.format("%s\n", words.get(word_index));
                   result.add(words.get(word_index));
                   flag = false;
                 }
-                runner.y ++;
                 break;
               case 3:
                 runner.x ++;
                 runner.y --;
+                stats[direction] = stats[direction] + 1;
                 if (flag)
                 {
-                  //System.out.format("%s\n", words.get(word_index));
                   result.add(words.get(word_index));
                   flag = false;
                 }
@@ -401,10 +424,17 @@ public class Generator {
         }
       }
       head.x ++;
+      // Fix for generating diagnal up
+      // Generation starts at point (15, 15) then wraps around to (0, 0)
+      if (head.x == 14 && head.y == 14)
+      {
+        running = false;
+      }
       // Check end of array
       if (head.x == size && head.y == size - 1)
       {
-        running = false;
+        head.x = 0; // Fix for generation diagnal up: starts at (15, 15), then wraps to (0, 0)
+        head.y = 0;
       }
       if (head.x == size)
       {
@@ -412,9 +442,14 @@ public class Generator {
         head.y ++;
       }
     }
-    if (debug)
+    float total_words = stats[0] + stats[1] + stats[2] + stats[3]; 
+    // Regenerate if any of the directions are used less than acceptable minimum
+    for (int i = 0; i < stats.length; i ++)
     {
-      System.out.format("Size of taken_index: %d, percentage of word chars: %f\n", taken_index.size(), 100.0 * taken_index.size() / (size * size));
+      if ((stats[i] / total_words) * 100 < dir_usage)
+      {
+        createGrid(seed + 1); // Regenerate grid
+      }
     }
 
     return result;
