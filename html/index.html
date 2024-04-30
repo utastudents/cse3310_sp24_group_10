@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title> id="versionTitle">Loading...</title>
+  <title id="versionTitle">The Word Search Game</title>
   <style>
       table, tr, th, td{
           outline: black solid 1px;
@@ -376,16 +376,7 @@
 </div>
 
 <script>
-  // Fetch the GitHub hash from the environment variable VERSION
-  var version = process.env.VERSION || "Unknown";
-  console.log("Retrieved GitHub hash:", version);
   
-  // Set the fetched hash as the title of the webpage
-  document.getElementById("versionTitle").innerText = "GitHub Hash: " + version;
-
-  // var VERSION = "The Word Search Game ver. 1.44";
-  // document.title = VERSION;
-
   var countdownDuration = 90;
 
   var countdownDisplay = document.getElementById("countdown");
@@ -523,6 +514,7 @@ var bank4 = "";
 var bank5 = "";
 
 connection.onmessage = function (evt) {
+
   var addPlayer = false;
   surrender = false;
   var msg;
@@ -530,6 +522,9 @@ connection.onmessage = function (evt) {
 
   console.log("Message received: " + msg);
   const obj = JSON.parse(msg);
+
+  var version = obj.version;
+  document.getElementById("versionTitle").innerText = "GitHub Hash: " + version;
 
   // Handling different types of messages received from the server
   if ('PlayerIdx' in obj) { // Message containing player information
