@@ -376,7 +376,7 @@
 </div>
 
 <script>
-  
+
   var countdownDuration = 90;
 
   var countdownDisplay = document.getElementById("countdown");
@@ -524,7 +524,7 @@ connection.onmessage = function (evt) {
   const obj = JSON.parse(msg);
 
   var version = obj.version;
-  document.getElementById("versionTitle").innerText = "GitHub Hash: " + version;
+  document.getElementById("versionTitle").innerText = "The Word Search Game| GitHub Hash: " + version;
 
   // Handling different types of messages received from the server
   if ('PlayerIdx' in obj) { // Message containing player information
