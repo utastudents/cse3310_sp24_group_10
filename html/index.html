@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title> id="versionTitle">Loading...</title>
   <style>
       table, tr, th, td{
           outline: black solid 1px;
@@ -376,8 +376,15 @@
 </div>
 
 <script>
-  var VERSION = "The Word Search Game ver. 1.44";
-  document.title = VERSION;
+  // Fetch the GitHub hash from the environment variable VERSION
+  var version = process.env.VERSION || "Unknown";
+  console.log("Retrieved GitHub hash:", version);
+  
+  // Set the fetched hash as the title of the webpage
+  document.getElementById("versionTitle").innerText = "GitHub Hash: " + version;
+
+  // var VERSION = "The Word Search Game ver. 1.44";
+  // document.title = VERSION;
 
   var countdownDuration = 90;
 
