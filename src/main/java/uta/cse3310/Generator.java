@@ -24,7 +24,7 @@ public class Generator {
   static boolean has_read = false; // Dirty implementation to read from the file only once
   public static char[][] createGrid(long seed)
   {
-    boolean debug = true;
+    boolean debug = false;
     final int size = 25;
     int overlap = 0;
 
@@ -51,9 +51,10 @@ public class Generator {
     int head_x = 0; 
     int head_y = 0; 
     //Point head = new Point(0, 0);
-    Point head = new Point(15, 15);
+    Point head = new Point(15, 15); // Fix for getting diagnol up generating
     boolean running = true;
     List<Point> taken_index = new ArrayList<>();
+    int stats[] = {0, 0, 0, 0};
 
     /* Populate words */
     while (running)
@@ -72,7 +73,6 @@ public class Generator {
         // Loop through the four valid directions
         for (int j = 0; j < valid_size; j ++)
         {
-          System.out.format("valid_size is: %d\n", valid_size);
           runner = new Point(head.x, head.y);
           // For each direction, check if the word position is valid
           for (int i = 0; i < word_len && valid.contains(j); i ++)
@@ -81,29 +81,21 @@ public class Generator {
             if ((taken_index.contains(new Point(runner.x, runner.y))))
             {
               // Check if the word can be an overlap
-              //if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
-              if (false)
+              if (my_array[runner.x][runner.y] == words.get(word_index).charAt(i))
               {
                 overlap ++;
               } else // Invalidate this position
               {
-                System.out.format("invalidated j: %d\n", j);
                 valid.remove(Integer.valueOf(j));
               }
             }
             // Invalid position
             if (runner.y == -1 || runner.x == -1 || runner.x == size || runner.y == size)
             {
-              System.out.format("invalidated j: %d\n", j);
               valid.remove(Integer.valueOf(j));
             }
             switch (j)
             {
-              case 3: // Diagnal up 
-                //runner.x ++;
-                runner.y --;
-                runner.x ++;
-                break;
               case 0: // Horizontal
                 runner.x ++;
                 break; 
@@ -114,14 +106,17 @@ public class Generator {
                 runner.x ++;
                 runner.y ++;
                 break;
+              case 3: // Diagnal up 
+                //runner.x ++;
+                runner.y --;
+                runner.x ++;
+                break;
               default:
                 break;
             }
             // Special check for diagnal up
             if (runner.x == -1 || runner.y == -1 || runner.x == size || runner.y == size)
-            //if (runner.x == size || runner.y == size)
             {
-              System.out.format("invalidated j: %d\n", j);
               valid.remove(Integer.valueOf(j));
             }
           }
@@ -138,41 +133,47 @@ public class Generator {
         if (valid.size() != 0)
         {
           int rand_dir = rand_num.nextInt(valid.size()); // Randomly pick an item that is valid
-          int direction = valid.get(rand_dir);
+          int direction;
+          if (valid.contains(3) && rand_num.nextInt(3) != 0 && valid.contains(1)) // Attempt to encourage diagnal up picks
+          {
+             direction = 3;
+          } else
+          {
+             direction = valid.get(rand_dir);
+          }
 
           Point new_runner = new Point(head.x, head.y);
           runner = new Point(head.x, head.y);
 
           for (int i = 0; i < word_len; i ++)
           {
-            if (direction == 3)
+            if (debug)
             {
               my_array[runner.y][runner.x] = (char) (i + '0');
               System.out.format("runner.x: %d, runner.y: %d, char: %c, word: %s\n", runner.x, runner.y, words.get(word_index).charAt(i), words.get(word_index));
-              //System.out.format("direction called!\n");
-            } else
-            {
-              my_array[runner.y][runner.x] = words.get(word_index).charAt(i); 
-            }
             System.out.format("word: %s, dir: %s\n", words.get(word_index), direction);
-            printGrid(my_array);
+            }
             my_array[runner.y][runner.x] = words.get(word_index).charAt(i); 
             taken_index.add(new Point(runner.x, runner.y)); // Add the positions of word chars to used list
             switch (direction)
             {
               case 0:
                 runner.x ++;
+                stats[direction] = stats[direction] + 1;
                 break;
               case 1:
                 runner.y ++;
+                stats[direction] = stats[direction] + 1;
                 break;
               case 2:
                 runner.x ++;
                 runner.y ++;
+                stats[direction] = stats[direction] + 1;
                 break;
               case 3:
                 runner.x ++;
                 runner.y --;
+                stats[direction] = stats[direction] + 1;
                 //runner.y --;
                 //System.out.format("runner.x: %d, runner.y: %d, char: %c\n", runner.x, runner.y, words.get(word_index).charAt(i));
                 break;
@@ -181,10 +182,17 @@ public class Generator {
         }
       }
       head.x ++;
+      // Fix for generating diagnal up
+      // Generation starts at point (15, 15) then wraps around to (0, 0)
+      if (head.x == 14 && head.y == 14)
+      {
+        running = false;
+      }
       // Check end of array
       if (head.x == size && head.y == size - 1)
       {
-        running = false;
+        head.x = 0; // Fix for generation diagnal up: starts at (15, 15), then wraps to (0, 0)
+        head.y = 0;
       }
       if (head.x == size)
       {
@@ -192,9 +200,12 @@ public class Generator {
         head.y ++;
       }
     }
-    if (debug)
+    //if (debug)
     {
       System.out.format("Size of taken_index: %d, percentage of word chars: %f, overlap attempts: %d\n", taken_index.size(), 100.0 * taken_index.size() / (size * size), overlap);
+      float total_words = stats[0] + stats[1] + stats[2] + stats[3]; 
+      System.out.format("Horizontal used: %f, vertical used: %f, diagnal down used: %f, diagnal up used: %f\n", (stats[0] / total_words) * 100, (stats[1] / total_words) * 100, (stats[2] / total_words) * 100, (stats[3] / total_words) * 100);
+      System.out.format("Horizontal used: %d, vertical used: %d, diagnal down used: %d, diagnal up used: %d\n", stats[0], stats[1], stats[2], stats[3]);
     }
 
     return my_array;
