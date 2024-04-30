@@ -30,6 +30,8 @@ public class InitialLobby {
     Lobby Lobby4 = null;
     Lobby Lobby5 = null;
 
+    String version = "not found";
+
     InitialLobby() {
 
         // Takes in envoriment variable as a string.  If VERSION is not given, uses empty string
