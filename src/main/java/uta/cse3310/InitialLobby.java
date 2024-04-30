@@ -35,7 +35,7 @@ public class InitialLobby {
     InitialLobby() {
 
         // Takes in envoriment variable as a string.  If VERSION is not given, uses empty string
-        String version = Optional.ofNullable(System.getenv("VERSION")).orElse("");
+        version = Optional.ofNullable(System.getenv("VERSION")).orElse("");
 
         connectionToPlayerIndexMap = new HashMap<>();
         /* Create new lobby objects */
