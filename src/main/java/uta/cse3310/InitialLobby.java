@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import org.java_websocket.WebSocket;
+import java.util.Optional;
 
 public class InitialLobby {
 
@@ -29,7 +30,13 @@ public class InitialLobby {
     Lobby Lobby4 = null;
     Lobby Lobby5 = null;
 
+    String version = "not found";
+
     InitialLobby() {
+
+        // Takes in envoriment variable as a string.  If VERSION is not given, uses empty string
+        version = Optional.ofNullable(System.getenv("VERSION")).orElse("");
+
         connectionToPlayerIndexMap = new HashMap<>();
         /* Create new lobby objects */
         Lobby1 = new Lobby(1);

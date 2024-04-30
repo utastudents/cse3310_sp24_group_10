@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title id="versionTitle">The Word Search Game</title>
   <style>
       table, tr, th, td{
           outline: black solid 1px;
@@ -223,23 +223,23 @@
   <!-- Buttons for joining lobbies -->
   <div align="left">
     <div class="lobby-container">
-      <button class="lobby-button" id="button0" onclick="joinLobby(1); hide('InitialLobby'); unhide('gameLobby')">0/4</button>
+      <button class="lobby-button" id="button0" onclick="joinLobby(1);">0/4</button>
       <div class="player-names" id="playerNamesInServerDisplay1"></div> <!-- Modified line -->
     </div>
     <div class="lobby-container">
-        <button class="lobby-button" id="button1" onclick="joinLobby(2); hide('InitialLobby'); unhide('gameLobby')">0/4</button>
+        <button class="lobby-button" id="button1" onclick="joinLobby(2);">0/4</button>
         <div class="player-names" id="playerNamesInServerDisplay2"></div> <!-- Modified line -->
     </div>
     <div class="lobby-container">
-        <button class="lobby-button" id="button2" onclick="joinLobby(3);hide('InitialLobby'); unhide('gameLobby')">0/4</button>
+        <button class="lobby-button" id="button2" onclick="joinLobby(3);">0/4</button>
         <div class="player-names" id="playerNamesInServerDisplay3"></div> <!-- Modified line -->
     </div>
     <div class="lobby-container">
-        <button class="lobby-button" id="button3" onclick="joinLobby(4);hide('InitialLobby'); unhide('gameLobby')">0/4</button>
+        <button class="lobby-button" id="button3" onclick="joinLobby(4);">0/4</button>
         <div class="player-names" id="playerNamesInServerDisplay4"></div> <!-- Modified line -->
     </div>
     <div class="lobby-container">
-        <button class="lobby-button" id="button4" onclick="joinLobby(5);hide('InitialLobby'); unhide('gameLobby')">0/4</button>
+        <button class="lobby-button" id="button4" onclick="joinLobby(5);">0/4</button>
         <div class="player-names" id="playerNamesInServerDisplay5"></div> <!-- Modified line -->
     </div>
   </div>
@@ -376,8 +376,6 @@
 </div>
 
 <script>
-  var VERSION = "The Word Search Game ver. 1.44";
-  document.title = VERSION;
 
   var countdownDuration = 90;
 
@@ -516,6 +514,7 @@ var bank4 = "";
 var bank5 = "";
 
 connection.onmessage = function (evt) {
+
   var addPlayer = false;
   surrender = false;
   var msg;
@@ -523,6 +522,9 @@ connection.onmessage = function (evt) {
 
   console.log("Message received: " + msg);
   const obj = JSON.parse(msg);
+
+  var version = obj.version;
+  document.getElementById("versionTitle").innerText = "The Word Search Game| GitHub Hash: " + version;
 
   // Handling different types of messages received from the server
   if ('PlayerIdx' in obj) { // Message containing player information
@@ -774,6 +776,8 @@ function joinLobby(lobby) {
     return;
   }
 
+  hide('InitialLobby');
+  unhide('gameLobby');
 
   addPlayer = true;
 
