@@ -923,6 +923,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
   if((lobbyNumOfPlayers[currentLobby-1] == readyCount) && (lobbyNumOfPlayers[currentLobby-1] >=2)){
     hide("gameLobby");
     unhide("ongoingGame");
+    unhide("timeHighlight");
     genTable("grid");
     timerHighlight();
   }
