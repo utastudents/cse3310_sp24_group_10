@@ -216,7 +216,7 @@ public class Generator {
       if ((stats[i] / total_words) * 100 < dir_usage)
       {
         System.out.format("Rejected grid\n");
-        createGrid(seed + 1); // Regenerate grid
+        return createGrid(seed + 1); // Regenerate grid
       }
     }
 
@@ -446,7 +446,7 @@ public class Generator {
     {
       if ((stats[i] / total_words) * 100 < dir_usage)
       {
-        createGrid(seed + 1); // Regenerate grid
+        return getWords(seed + 1); // Regenerate grid
       }
     }
 
