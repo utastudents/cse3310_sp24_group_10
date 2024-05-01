@@ -185,8 +185,6 @@ public class Generator {
                 runner.x ++;
                 runner.y --;
                 stats[direction] = stats[direction] + 1;
-                //runner.y --;
-                //System.out.format("runner.x: %d, runner.y: %d, char: %c\n", runner.x, runner.y, words.get(word_index).charAt(i));
                 break;
             }
           }
