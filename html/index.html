@@ -1235,25 +1235,155 @@ function updateLeaderboard(){
       break;
   }
 }
+  
+var timer1on = false;
+var timer2on = false;
+var timer3on = false;
+var timer4on = false;
+var timer5on = false;
+  
 /*function counts down 30 seconds to highlight the first letter  
 of an unfound word until it reaches 0 or a word is found*/
 function timerHighlight(){
 
-  var time = 30;
+  var time1 = 30;
+  var time2 = 30;
+  var time3 = 30;
+  var time4 = 30;
+  var time5 = 30;
+
+  var timer1;
+  var timer2;
+  var timer3;
+  var timer4;
+  var timer5;
+  
   var elem = document.getElementById('timeHighlight');
-  var timer = setInterval(count, 1000);
+
+  var curr_board = Array.from(Array(size), () => new Array(size));
+
+  switch(currentLobby){
+    case 1:
+       curr_board = board1;
+       if(!timer1on){
+         var time = time1;
+         timer1on = true;
+         timer1 = setInterval(count, 1000);
+       }
+       break;
+    case 2:
+       curr_board = board2;
+       if(!timer2on){
+         var time = time2;
+         timer2on = true;
+         timer2 = setInterval(count, 1000);
+       }
+       break;
+    case 3:
+       curr_board = board3;
+       if(!timer3on){
+         var time = time3;
+         timer3on = true;
+         timer3 = setInterval(count, 1000);
+       }
+      break;
+    case 4:
+       curr_board = board4;
+       if(!timer4on){
+         var time = time4;
+         timer4on = true;
+         timer4 = setInterval(count, 1000);
+       }
+      break;
+    case 5:
+       curr_board = board5;
+       if(!timer5on){
+         var time = time5;
+         timer5on = true;
+         timer5 = setInterval(count, 1000);
+       }
+       break;
+  }
+
+  var board_size = curr_board.length;
   
   function count(){
-    if (time == -1 || wordFound){
-      clearTimeout(timer);
+    console.log(time);
+    if(document.getElementById("ongoingGame").style.display == "none"){ //checks if a game has stopped
+      console.log("Timer ended);
+                  
+      switch(currentLobby){
+          case 1:
+             timer1on = false;
+             clearInterval(timer1);
+             break;
+          case 2:
+              timer2on = false;
+              clearInterval(timer2);
+             break;
+          case 3:
+              timer3on = false;
+              clearInterval(timer3);
+            break;
+          case 4:
+              timer4on = false;
+              clearInterval(timer4);
+              break;
+          case 5:
+             timer4on = false;
+             clearInterval(timer4);
+             break;
+        }
+    }
+    else if (time == -1 || wordFound){ //checks if a word has been found or if the timer has reached 0
+       switch(currentLobby){
+          case 1:
+             clearInterval(timer1);
+             break;
+          case 2:
+              clearInterval(timer2);
+             break;
+          case 3:
+              clearInterval(timer3);
+            break;
+          case 4:
+              clearInterval(timer4);
+              break;
+          case 5:
+             clearInterval(timer4);
+             break;
+        }
+        if(!wordFound){
+          iHighlight = Math.floor(Math.random() * board_size-1) + 1; //placeholder coordinate
+          jHighlight = Math.floor(Math.random() * board_size-1) + 1; //placeholder coordinate
+            
+          document.getElementById("cell"+iHighlight+"_"+jHighlight).className = "orange"; //highlight cell orange
+        }
+       
+        wordFound = false;
 
-      if(!wordFound){
-      document.getElementById("cell"+iHighlight+"_"+jHighlight).className = "orange";
-      }
-     
-      wordFound = false;
-
-      timerHighlight();
+        switch(currentLobby){
+            case 1:
+               time = time1;
+               timer1 = setInterval(count, 1000);
+               break;
+              case 2:
+                time = time2;
+                timer2 = setInterval(count, 1000);
+                break;
+              case 3:
+                 time = time3;
+                 timer3 = setInterval(count, 1000);
+                 break;
+              case 4:
+                 time = time4;
+                 timer4 = setInterval(count, 1000);
+                 break;
+              case 5:
+                 time = time5;
+                 timer5 = setInterval(count, 1000);
+                 break;
+       }
     } 
     else{
       elem.innerHTML = time + " seconds until next letter highlighted";
