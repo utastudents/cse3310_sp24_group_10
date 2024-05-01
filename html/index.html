@@ -1129,29 +1129,40 @@ function updateChatDisplay(){
   var chatDisplay = document.getElementById("msgLog");
   switch(currentLobby){
     case 1:
-      chatDisplay.textContent = chatLog1;
+      if(chatLog1.length > 0){
+        chatDisplay.textContent = chatDisplay.textContent + chatLog1[chatLog1.length - 1];
+      }
       console.log(chatLog1);
       break;
     case 2:
-      chatDisplay.textContent = chatLog2;
+      if(chatLog2.length > 0){
+        chatDisplay.textContent = chatDisplay.textContent + chatLog2[chatLog2.length - 1];
+      }
       console.log(chatLog2);
       break;
     case 3:
-      chatDisplay.textContent = chatLog3;
+      if(chatLog3.length > 0){
+        chatDisplay.textContent = chatDisplay.textContent + chatLog3[chatLog3.length - 1];
+      }
       console.log(chatLog3);
       break;
     case 4:
-      chatDisplay.textContent = chatLog4;
+      if(chatLog4.length > 0){
+        chatDisplay.textContent = chatDisplay.textContent + chatLog4[chatLog4.length - 1];
+      }
       console.log(chatLog4);
       break;
     case 5:
-      chatDisplay.textContent = chatLog5;
+      if(chatLog5.length > 0){
+        chatDisplay.textContent = chatDisplay.textContent + chatLog5[chatLog5.length - 1];
+      }
       console.log(chatLog5);
       break;
   }
 
   document.getElementById("msgLog").scrollTop = document.getElementById("msgLog").scrollHeight; //prevent scroll up
 }
+
 // execute when the surrender button is clicked
 function surrenderFunction() {
     console.log("surrender button clicked");
