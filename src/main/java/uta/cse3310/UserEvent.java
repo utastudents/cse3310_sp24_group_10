@@ -14,4 +14,6 @@ public class UserEvent {
     boolean Surrender;
     boolean ScoreRequest; //If a update require request has been made
     int Score; //Score to be updated
+    int X; //row cordinate
+    int Y; //column cordinate
 }
