@@ -922,6 +922,7 @@ function checkGameStart(){ //Check if all players are ready; checks every time a
 
   if((lobbyNumOfPlayers[currentLobby-1] == readyCount) && (lobbyNumOfPlayers[currentLobby-1] >=2)){
     hide("gameLobby");
+    hide("stateMessage");
     unhide("ongoingGame");
     unhide("timeHighlight");
     genTable("grid");
@@ -1171,9 +1172,9 @@ function surrenderFunction() {
     surrender = true;
     hide("gameLobby");
     hide("ongoingGame");
-    hide("stateMessage");
     hide("timeHighlight");
     unhide("InitialLobby");
+    determineWinner();
 
     userEvent = {
       PlayerIdx: idx,
@@ -1407,6 +1408,8 @@ function timerHighlight(){
 }
 //function determines winner and outputs respective winner/loser message
 function determineWinner(){
+
+  unhide("stateMessage");
   
   var scores;
   
@@ -1433,8 +1436,6 @@ function determineWinner(){
       break;
   }
 
-  //scores = [3, 20, 30, 70]; //test delete later
-
   var winner = -1;
   var winnerIdx = 0;
   for(var i = 0; i < lobbyNumOfPlayers[currentLobby-1]; i++){
@@ -1454,7 +1455,7 @@ function determineWinner(){
   
   switch(index){
     case 0:
-      if(winnerIdx == 0){
+      if(winnerIdx == 0 && !surrender){
         document.getElementById("stateMessage").innerHTML = "You WIN!!!";
       }
       else{
@@ -1462,7 +1463,7 @@ function determineWinner(){
       }
       break;
     case 1:
-      if(winnerIdx == 1){
+      if(winnerIdx == 1 && !surrender){
         document.getElementById("stateMessage").innerHTML = "You WIN!!!";
       }
       else{
@@ -1470,7 +1471,7 @@ function determineWinner(){
       }
       break;
     case 2:
-      if(winnerIdx == 2){
+      if(winnerIdx == 2 && !surrender){
         document.getElementById("stateMessage").innerHTML = "You WIN!!!";
       }
       else{
@@ -1478,12 +1479,30 @@ function determineWinner(){
       }
       break;
     case 3:
-      if(winnerIdx == 3){
+      if(winnerIdx == 3 && !surrender){
         document.getElementById("stateMessage").innerHTML = "You WIN!!!";
       }
       else{
         document.getElementById("stateMessage").innerHTML = "You LOSE";
       }
+      break;
+    }
+
+    switch(currentLobby){
+    case 1:
+      scores = [0, 0, 0, 0];
+      break;
+    case 2:
+      scores = [0, 0, 0, 0];
+      break;
+    case 3:
+      scores = [0, 0, 0 ,0];
+      break;
+    case 4:
+      scores = [0, 0, 0, 0];
+      break;
+    case 5:
+      scores = [0, 0, 0, 0];
       break;
     }
   } 
